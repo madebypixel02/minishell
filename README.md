@@ -1,2 +1,3 @@
 # minishell
-[42 Madrid] As beautiful as a shell
+
+*As beautiful as a shell*
