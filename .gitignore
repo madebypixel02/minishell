@@ -1,0 +1,17 @@
+libft
+a.out
+obj
+obj_lft
+bin
+*.o
+*.d
+*.so
+*.a
+.DS_Store
+tempCodeRunnerFile.c
+*.swp
+vgcore*
+pipex
+infile
+outfile
+minishell
