@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/22 17:01:19 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:53:04 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "../libft/inc/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
 
 /* C implementation of the cd shell command */
 int	cd(char **argv);
