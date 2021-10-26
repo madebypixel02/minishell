@@ -25,7 +25,7 @@ UNAME = $(shell uname -s)
 
 # Properties for MacOS
 ECHO = echo
-CDEBUG = -g3 -fsanitize=address
+CDEBUG = #-g3 -fsanitize=address
 CHECKER = tests/checker_Mac
 ifeq ($(UNAME), Linux)
 	#Properties for Linux

@@ -14,29 +14,31 @@
 
 void	handle_sigint(int sig, siginfo_t *info, void *context)
 {
-	write(1, "\n",1);
-	rl_replace_line("",0);
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
-	(void) context;
-	//printf("Cakjjk %d", sig);
-	//exit(0);
+	(void)sig;
+	(void)info;
+	(void)context;
 }
 
 int	main(void)
 {
-	char	*str;
-	char	*out;
-	char	**args;
-	struct sigaction sa;
+	char				*str;
+	char				*out;
+	char				**args;
+	struct sigaction	sa;
 
 	out = NULL;
 	str = "minishell$ ";
 	sa.sa_sigaction = handle_sigint;
-	while(1)
+	while (1)
 	{
 		sigaction(SIGINT, &sa, NULL);
 		out = readline(str);
+		if (!out)
+			return (0);
 		add_history(out);
 		args = ft_split(out, ' ');
 		free(out);

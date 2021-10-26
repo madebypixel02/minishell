@@ -48,6 +48,7 @@ int	pwd(int argc)
 
 int	env(int argc, char **envp)
 {
+	(void)argc;
 	ft_putmatrix_fd(envp, 1);
 	return (0);
 }
