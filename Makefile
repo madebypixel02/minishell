@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/10/26 19:11:34 by mbueno-g         ###   ########.fr        #
+#    Updated: 2021/10/26 19:41:21 by mbueno-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ UNAME = $(shell uname -s)
 
 # Properties for MacOS
 ECHO = echo
-CDEBUG = #-g3 -fsanitize=address
+CDEBUG = -g3 -fsanitize=address
 CHECKER = tests/checker_Mac
 ifeq ($(UNAME), Linux)
 	#Properties for Linux
@@ -54,7 +54,7 @@ OBJ_LFT = $(addprefix $(OBJ_LFT_DIR)/, $(SRC_LFT:.c=.o))
 all: $(NAME)
 
 $(NAME): create_dirs compile_libft $(OBJ)
-	@$(CC) -L  ~/.brew/opt/readline/lib -lreadline -I ~/.brew/opt/readline/include $(CFLAGS) $(CDEBUG) $(OBJ) $(LIBFT) -o $@
+	@$(CC) -L  ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include -lreadline $(CFLAGS) $(CDEBUG) $(OBJ) $(LIBFT) -o $@
 	@$(ECHO) "$(GREEN)$(NAME) is up to date!$(DEFAULT)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
