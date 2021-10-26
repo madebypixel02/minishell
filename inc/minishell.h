@@ -20,15 +20,15 @@
 # include <signal.h>
 
 /* C implementation of the cd shell command */
-int	cd(char **argv);
+void	cd(char **argv);
 
 /* Handles all builtin functions */
-int	builtin(int argc, char **argv, char **envp);
+int		builtin(int argc, char **argv, char **envp);
 
 /* C implementation of the pwd shell command */
-int	pwd(int argc);
+int		pwd(int argc);
 
 /* C implementation of the env shell command */
-int	env(int argc, char **envp);
+int		env(int argc, char **envp);
 
 #endif
