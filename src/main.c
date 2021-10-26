@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/26 17:50:43 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/10/26 19:05:00 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	handle_sigint(int sig)//, siginfo_t *info, void *context)
 {
 	write(1, "\n",1);
 	rl_replace_line("",0);
-	rl_display();
+	rl_on_new_line();
+	rl_redisplay();
 	//printf("Cakjjk %d", sig);
 	//exit(0);
 }

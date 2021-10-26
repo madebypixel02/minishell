@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/10/22 15:23:22 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/10/26 19:11:34 by mbueno-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,7 @@ OBJ_LFT = $(addprefix $(OBJ_LFT_DIR)/, $(SRC_LFT:.c=.o))
 all: $(NAME)
 
 $(NAME): create_dirs compile_libft $(OBJ)
-	@$(CC) -lreadline $(CFLAGS) $(CDEBUG) $(OBJ) $(LIBFT) -o $@
+	@$(CC) -L  ~/.brew/opt/readline/lib -lreadline -I ~/.brew/opt/readline/include $(CFLAGS) $(CDEBUG) $(OBJ) $(LIBFT) -o $@
 	@$(ECHO) "$(GREEN)$(NAME) is up to date!$(DEFAULT)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -79,6 +79,7 @@ clean:
 
 fclean: clean
 	@$(ECHO) "$(CYAN)Removed $(NAME)$(DEFAULT)"
+	@$(RM) $(NAME)
 
 norminette:
 	@make norminette -C libft/
