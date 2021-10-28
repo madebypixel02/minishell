@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/10/26 19:41:21 by mbueno-g         ###   ########.fr        #
+#    Updated: 2021/10/28 15:29:03 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ OBJB_DIR = objb
 LIBFT = libft/bin/libft.a
 NAME = minishell
 
-SRC = main.c builtins.c
+SRC = main.c builtins.c ft_cmdtrim.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 

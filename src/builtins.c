@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/26 17:50:44 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/10/28 17:38:56 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	builtin(int argc, char **argv, char **envp)
 		return (0);
 	}
 	if (!ft_strncmp(*argv, "exit", n) && n == 4)
-		return (1);
+		return (-1);
 	if (!ft_strncmp(*argv, "pwd", n) && n == 3)
 		return (pwd(argc));
 	if (!ft_strncmp(*argv, "env", n) && n == 3)
@@ -36,7 +36,6 @@ void	cd(char **argv)
 {
 	char	*user;
 	char	*home_dir;
-	char	*home_with_bar;
 	char	*home_with_path;
 
 	user = getenv("USER");
@@ -50,12 +49,10 @@ void	cd(char **argv)
 		chdir(argv[1]);
 	if (!argv[1])
 		chdir(home_dir);
-	else if (!ft_strncmp("~/", argv[1], 2))
+	else if (argv[1][0] == '~')
 	{
-		home_with_bar = ft_strjoin(home_dir, "/");
-		home_with_path = ft_strjoin(home_with_bar, argv[1] + 2);
+		home_with_path = ft_strjoin(home_dir, argv[1] + 1);
 		chdir(home_with_path);
-		free(home_with_bar);
 		free(home_with_path);
 	}
 	free(home_dir);

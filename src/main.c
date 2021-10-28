@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/26 19:57:40 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/10/28 17:40:13 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int	main(void)
 		if (!out)
 			return (0);
 		add_history(out);
-		args = ft_split(out, ' ');
+		args = ft_cmdtrim(out, ' ');
 		free(out);
-		if (!args || builtin(ft_matrixlen(args), args, NULL))
+		if (args && builtin(ft_matrixlen(args), args, NULL) == -1)
 		{
 			ft_free_matrix(&args);
 			return (printf("exit\n"));
