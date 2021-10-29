@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/28 17:38:56 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/29 11:19:02 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,20 @@ int	builtin(int argc, char **argv, char **envp)
 
 	n = ft_strlen(*argv);
 	if (!ft_strncmp(*argv, "cd", n) && n == 2)
-	{
-		cd(argv);
-		return (0);
-	}
+		return(cd(argv));
 	if (!ft_strncmp(*argv, "exit", n) && n == 4)
 		return (-1);
 	if (!ft_strncmp(*argv, "pwd", n) && n == 3)
 		return (pwd(argc));
+	if (!ft_strncmp(*argv, "echo", n) && n == 4)
+		return (echo(argv));
 	if (!ft_strncmp(*argv, "env", n) && n == 3)
 		return (env(argc, envp));
 	argc = 0;
 	return (argc);
 }
 
-void	cd(char **argv)
+int	cd(char **argv)
 {
 	char	*user;
 	char	*home_dir;
@@ -56,6 +55,7 @@ void	cd(char **argv)
 		free(home_with_path);
 	}
 	free(home_dir);
+	return (0);
 }
 
 int	pwd(int argc)
@@ -67,6 +67,18 @@ int	pwd(int argc)
 	buf = getcwd(NULL, 0);
 	printf("%s\n", buf);
 	free(buf);
+	return (0);
+}
+
+int	echo(char **argv)
+{
+	argv++;
+	while(*argv)
+	{
+		printf("%s ", *argv);
+		argv++;
+	}
+	printf("\n");
 	return (0);
 }
 
