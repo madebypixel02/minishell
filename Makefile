@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/10/28 15:29:03 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/10/29 17:46:17 by mbueno-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,7 @@ $(NAME): create_dirs compile_libft $(OBJ)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(ECHO) "Compiling $(BLUE)$<$(DEFAULT)..."
-	@$(CC) $(CFLAGS) $(CDEBUG) -c $< -o $@
+	@$(CC) -I ~/.brew/opt/readline/include $(CFLAGS) $(CDEBUG) -c $< -o $@
 
 compile_libft:
 	@make -C libft

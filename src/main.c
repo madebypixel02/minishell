@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/29 17:22:44 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/10/29 18:52:07 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(void)
 			break ;
 		add_history(out);
 		args = ft_cmdtrim(out, ' ');
-		parse_args(args);
+		//parse_args(args);
 		free(out);
 		if (args && builtin(ft_matrixlen(args), args, NULL) == -1)
 		{

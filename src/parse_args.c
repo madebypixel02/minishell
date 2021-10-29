@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/10/29 17:22:50 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/10/29 18:52:02 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,55 +27,48 @@
 	m->outfile = 
 }*/
 
-static char	*expand_vars(char *str)
+static char	*expand_vars(char *str, int i)
 {
 	int		len;
-	int		i;
 	int		j;
 	char	*var;
 	char	*exp1;
 	char	*ptr;
+	int		len2;
 
-	i = 0;
 	j = -2;
 	len = ft_strlen(str);
-	printf("str %s\n", str);
 	while (str && str[i])
 	{
 		if (str[i] == '\"' && str[i + 1] == '$')
 		{
-			printf("holaaa222 %d\n", i);
 			j = ft_strchr_i(&str[i + 2], '\"');
 			var = ft_substr(&str[i + 2], 0, j);
-			printf("var %s\n", var);
 			if (!var)
 				return (NULL);
 			exp1  = getenv(var);
-			printf("exp1 %s\n", exp1);
 			len = len - ft_strlen(var) - 1 + ft_strlen(exp1);
 			break;
 		}
 		i++;
 	}
-	printf("ii %d\n", i);
 	if (j == -2)
 		return (ft_strdup(str));
-	printf("hlaaaaaaaaaaaa\n");
-	ptr = malloc(sizeof(char) * (len + 1));
+	ptr = ft_calloc(sizeof(char), (len + 1));
 	if (!ptr)
 	{
 		free(var);
 		return (NULL);
 	}
 	ptr[len] = '\0';
-	strlcat(ptr, str, i + 2);
-	strlcat(ptr, exp1, len + 1);
-	strlcat(ptr, &str[i + ft_strlen(var) + 2], len + 1); 
-	free(str);
-	return (expand_vars(ptr));
+	ft_strlcat(ptr, str, i + 2);
+	ft_strlcat(ptr, exp1, len + 1);
+	len2 = ft_strlen(ptr);
+	ft_strlcat(ptr, &str[i + ft_strlen(var) + 2], len + 1); 
+	return (expand_vars(ptr, len2));
 }
 
-/*static char	**expand_matrix(char ***args)
+static char	**expand_matrix(char ***args)
 {
 	char	**aux;
 	int		i;
@@ -87,7 +80,7 @@ static char	*expand_vars(char *str)
 	aux[ft_matrixlen(*args)] = NULL;
 	while (args[0][i])
 	{
-		aux[i] = expand_vars(args[0][i]);
+		aux[i] = expand_vars(args[0][i], 0);
 		if (!aux[i])
 		{
 			ft_free_matrix(&aux);
@@ -96,9 +89,8 @@ static char	*expand_vars(char *str)
 		i++;
 	}
 	ft_free_matrix(args);
-	args = &aux;
-	return (args);
-}*/
+	return (aux);
+}
 
 /*t_list	*parse_args(char **args)
 {
@@ -140,7 +132,9 @@ static char	*expand_vars(char *str)
 
 int	main()
 {
-	char	*str = strdup("echo \"$PWD\" ggg \"$PWD\" EEE");
-	printf("%s\n", expand_vars(str));
+	char	**str = ft_split("echo \"$PATH\" ggg \"$HOLA\" EEE", ' ');
+	ft_putmatrix_fd(expand_matrix(&str), 1);
+	//char	*ptr = "echo  \"$PWD\" ggg \"$HOLA\" EEE";
+	//printf("%s\n", expand_vars(ptr, 0));
 }
 
