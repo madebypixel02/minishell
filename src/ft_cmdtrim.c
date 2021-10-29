@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 15:28:36 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/29 11:19:03 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/10/29 17:22:47 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static char	**ft_fill_array(char **aux, char const *s, char c)
 			aux[k++] = "\0";
 		else
 			aux[k++] = ft_substr(s, j, i - j);
-		aux[k - 1] = ft_strtrim(aux[k - 1], "\"\'");
+		//aux[k - 1] = ft_strtrim(aux[k - 1], "\"\'");
 	}
 	return (aux);
 }
