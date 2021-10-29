@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+#include <stdlib.h>
 
 int	builtin(int argc, char **argv, char **envp)
 {
@@ -22,40 +23,39 @@ int	builtin(int argc, char **argv, char **envp)
 		cd(argv);
 		return (0);
 	}
-	if (!ft_strncmp(*argv, "exit", n) && n == 4)
+	else if (!ft_strncmp(*argv, "exit", n) && n == 4)
 		return (-1);
-	if (!ft_strncmp(*argv, "pwd", n) && n == 3)
+	else if (!ft_strncmp(*argv, "pwd", n) && n == 3)
 		return (pwd(argc));
-	if (!ft_strncmp(*argv, "env", n) && n == 3)
+	else if (!ft_strncmp(*argv, "env", n) && n == 3)
 		return (env(argc, envp));
+	else
+		printf("minishell: command not found: %s\n", argv[0]);
 	argc = 0;
 	return (argc);
 }
 
 void	cd(char **argv)
 {
-	char	*user;
-	char	*home_dir;
 	char	*home_with_path;
+	char	*home_dir;
 
-	user = getenv("USER");
-	home_dir = ft_strjoin("/Users/", user);
-	if (access(home_dir, F_OK) == -1)
-	{
-		free(home_dir);
-		home_dir = ft_strjoin("/home/", user);
-	}
-	if (argv[1] && access(argv[1], F_OK) != -1)
-		chdir(argv[1]);
+	home_dir = getenv("HOME");
 	if (!argv[1])
 		chdir(home_dir);
 	else if (argv[1][0] == '~')
 	{
 		home_with_path = ft_strjoin(home_dir, argv[1] + 1);
-		chdir(home_with_path);
+		if (access(home_with_path, F_OK) != -1)
+			chdir(home_with_path);
+		else
+			printf("minishell: cd: %s: No such file or directory\n", home_with_path);
 		free(home_with_path);
 	}
-	free(home_dir);
+	else if (access(argv[1], F_OK) != -1)
+		chdir(argv[1]);
+	else
+		printf("minishell: cd: %s: No such file or directory\n", argv[1]);
 }
 
 int	pwd(int argc)
