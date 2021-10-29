@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+#include <stdlib.h>
 
 void	handle_sigint(int sig, siginfo_t *info, void *context)
 {
@@ -23,6 +24,19 @@ void	handle_sigint(int sig, siginfo_t *info, void *context)
 	(void)context;
 }
 
+char	*mini_getuser(void)
+{
+	char	*user;
+	char	*full;
+
+	user = ft_strjoin(getenv("USER"), "@"); 
+	if (!user)
+		return (NULL);
+	full = ft_strjoin(user, "minishell$ ");
+	free(user);
+	return (full);
+}
+
 int	main(void)
 {
 	char				*str;
@@ -32,14 +46,14 @@ int	main(void)
 	char	*arg[2];
 
 	out = NULL;
-	str = "minishell$ ";
+	str = mini_getuser();
 	sa.sa_sigaction = handle_sigint;
 	while (1)
 	{
 		sigaction(SIGINT, &sa, NULL);
 		out = readline(str);
 		if (!out)
-			return (0);
+			break ;
 		add_history(out);
 		args = ft_cmdtrim(out, ' ');
 		//parse_args(args);
@@ -47,8 +61,10 @@ int	main(void)
 		if (args && builtin(ft_matrixlen(args), args, NULL) == -1)
 		{
 			ft_free_matrix(&args);
-			return (printf("exit\n"));
+			printf("exit\n");
+			break ;
 		}
 		ft_free_matrix(&args);
 	}
+	free(str);
 }

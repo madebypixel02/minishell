@@ -31,7 +31,7 @@ static int	ft_count_words(const char *s, char c)
 			while ((s[i] != c || quote) && s[i] != '\0')
 			{
 				if (!type && (s[i] == '\"' || s[i] == '\''))
-					type = s[i]; 
+					type = s[i];
 				quote = (quote + (s[i] == type)) % 2;
 				i++;
 			}
@@ -66,7 +66,7 @@ static char	**ft_fill_array(char **aux, char const *s, char c)
 		while ((s[i] != c || quote) && s[i] != '\0')
 		{	
 			if (!type && (s[i] == '\"' || s[i] == '\''))
-				type = s[i]; 
+				type = s[i];
 			quote = (quote + (s[i] == type)) % 2;
 			i++;
 		}

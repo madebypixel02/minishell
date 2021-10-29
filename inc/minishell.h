@@ -34,7 +34,7 @@ int	echo(char **argv);
 /* C implementation of the env shell command */
 int		env(int argc, char **envp);
 
-/* Splits command and args into a matrix, ignoring quotes and expanding vars */
+/* Splits command and args into a matrix, taking quotes into account */
 char	**ft_cmdtrim(char const *s, char c);
 
 #endif
