@@ -8,7 +8,7 @@ CYAN="\033[36m"
 
 exec_test()
 {
-	TEST1="$(echo $@ | ./minishell | grep -v "mbueno-g@minishell*")"
+	TEST1="$(echo $@ | ./minishell | grep -v "$USER@minishell*")"
 	TEST2="$(echo $@ | /bin/bash)"
 
 	if [ "$TEST1" = "$TEST2" ] ; then
@@ -93,8 +93,3 @@ if [ "$builtin" = "env" ] || [ "$builtin" = "all" ] ; then
 	exec_test $EXPORT_SHOW
 	exec_test 'export TEST="ls       -l     - a" \n echo $TEST \n $LS \n ' $ENV_SHOW
 fi
-
-
-
-
-
