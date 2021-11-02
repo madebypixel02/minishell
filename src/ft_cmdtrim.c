@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 15:28:36 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/29 18:52:04 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/02 16:24:59 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,3 +96,4 @@ char	**ft_cmdtrim(char const *s, char c)
 	aux[nwords] = NULL;
 	return (aux);
 }
+

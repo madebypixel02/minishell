@@ -24,7 +24,7 @@ exec_test()
 	fi
 }
 
-read builtin
+read -p "Enter builtin: " builtin
 
 # CD
 if [ "$builtin" = "cd" ] || [ "$builtin" = "all" ] ; then
@@ -50,6 +50,11 @@ if [ "$builtin" = "echo" ] || [ "$builtin" = "all" ] ; then
 	exec_test	'echo '"$PWD"''
 	exec_test	'echo ""$PWD""'
 	exec_test 'echo $ PWD'
+	exec_test 'echo hola "'$PWD' sfsdf"'
+	exec_test 'echo "   $PWD$PD EE"'
+	exec_test 'echo    "'$HOLA'$PD EE$"'
+	exec_test 'echo "'$PD'"'
+	exec_test 'echo '\$P'"W'D'"'
 fi
 
 # EXIT

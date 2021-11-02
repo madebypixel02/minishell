@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/29 12:04:14 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/02 18:32:20 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,8 @@ int		env(int argc, char **envp);
 
 /* Splits command and args into a matrix, taking quotes into account */
 char	**ft_cmdtrim(char const *s, char c);
+
+/* Strtrim from all occurrences of set */
+char	*ft_strtrim_all(char const *s1);
 
 #endif

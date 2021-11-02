@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/29 18:52:07 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/02 15:42:05 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	main(void)
 	char				*out;
 	char				**args;
 	struct sigaction	sa;
-	char	*arg[2];
 
 	out = NULL;
 	str = mini_getuser();

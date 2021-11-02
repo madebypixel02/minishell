@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/10/29 17:46:17 by mbueno-g         ###   ########.fr        #
+#    Updated: 2021/11/02 18:32:40 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ OBJB_DIR = objb
 LIBFT = libft/bin/libft.a
 NAME = minishell
 
-SRC = main.c builtins.c ft_cmdtrim.c
+SRC = main.c builtins.c ft_cmdtrim.c ft_strtrim_all.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
@@ -54,7 +54,7 @@ OBJ_LFT = $(addprefix $(OBJ_LFT_DIR)/, $(SRC_LFT:.c=.o))
 all: $(NAME)
 
 $(NAME): create_dirs compile_libft $(OBJ)
-	@$(CC) -L  ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include -lreadline $(CFLAGS) $(CDEBUG) $(OBJ) $(LIBFT) -o $@
+	@$(CC) -L  ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include $(CFLAGS) $(CDEBUG) $(OBJ) $(LIBFT) -lreadline -o $@
 	@$(ECHO) "$(GREEN)$(NAME) is up to date!$(DEFAULT)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
