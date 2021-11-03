@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/11/02 18:32:40 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/03 17:06:39 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ UNAME = $(shell uname -s)
 
 # Properties for MacOS
 ECHO = echo
-CDEBUG = -g3 -fsanitize=address
+CDEBUG = #-g3 -fsanitize=address
 CHECKER = tests/checker_Mac
 ifeq ($(UNAME), Linux)
 	#Properties for Linux
@@ -45,7 +45,8 @@ OBJB_DIR = objb
 LIBFT = libft/bin/libft.a
 NAME = minishell
 
-SRC = main.c builtins.c ft_cmdtrim.c ft_strtrim_all.c
+SRC = main.c builtins.c ft_cmdtrim.c ft_strtrim_all.c	\
+	  fill_node.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 

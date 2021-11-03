@@ -6,26 +6,11 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/03 10:12:10 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/04 00:50:35 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <strings.h>
-
-/*static t_mini	*fill_node(char *in, char *out, char *cmd)
-{
-	t_mini *m;
-
-	m = malloc(sizeof(t_mini));
-	if (!m)
-		return (NULL);
-	m->cmd =
-	m->full_cmd = 
-	m->full_path =
-	m->infile = 
-	m->outfile = 
-}*/
 
 static char	*get_substr(char *str, int len[3], int ij[2], int quotes[2])
 {
@@ -82,19 +67,16 @@ static char	*expand_vars(char *str, int ij[2], int quotes[2])
 	return (expand_vars(ptr, ij, quotes));
 }
 
-static char	**expand_matrix(char ***args)
+static char	**expand_matrix(char ***args, int quotes[2])
 {
 	char	**aux;
 	char	*str;
 	int		i;
-	int		quotes[2];
 	int		ij[2];
 
 	i = -1;
 	aux = ft_calloc(sizeof(char *), (ft_matrixlen(*args) + 1));
-	if (!aux)
-		return (NULL);
-	while (++i >= 0 && args[0][i])
+	while (aux && ++i >= 0 && args[0][i])
 	{
 		str = expand_vars(ft_strdup(args[0][i]), ij, quotes);
 		aux[i] = ft_strtrim_all(str, 0, 0);
@@ -102,63 +84,43 @@ static char	**expand_matrix(char ***args)
 		if (!aux[i])
 		{
 			printf("minishell: error while looking for matching quote\n");
-			ft_free_matrix(args);
 			ft_free_matrix(&aux);
-			return (NULL);
+			break ;
 		}
 	}
 	ft_free_matrix(args);
 	return (aux);
 }
 
-/*t_list	*parse_args(char **args)
+t_list	*parse_args(char **args)
 {
 	t_list	*cmds;
-	int		i;
-	char	*in;
-	char	*out;
-	char	*cmd;
-	int		n;
-	char	**
+	t_mini	*node;
+	int		quotes[2];
 
 	cmds = NULL;
-	i = 0;
-	if (!expand_matrix(&args))
+	if (!expand_matrix(&args, quotes))
 		return (NULL);
-	while(args[i])
+	node = fill_node(args);
+	if (!node)
 	{
-		n = ft_countchar(args[i], '<');
-		if (n)
-		{
-			i++;
-			if (n == 1)
-				in = args[i];
-		}
-		i++;
-		cmd = args[i]		
-		n = ft_countchar(args[i], '>');
-		if (n)
-		{
-			i++;
-			if (n == 1)
-				out = args[i];
-		}
-		ft_lstadd_back(&cmds, ft_lstnew(fill_node(in, out, cmd)));
-		i++;
-	}	
-	return (NULL);
-}*/
+		ft_lstclear(&cmds, free);
+		return (NULL);
+	}
+	ft_lstadd_back(&cmds, ft_lstnew(node));
+	return (cmds);
+}
 
 int	main(void)
 {
-	char	**str;
-	char	**matrix;
+	char	*str;
+	char	**matrix1;
+	t_list	*cmds;
 
-	str = ft_cmdtrim("echo    \"\'$HOLA\'$PD EE$\"", ' ');
-	if (str)
-	{
-		matrix = expand_matrix(&str);
-		ft_putmatrix_fd(matrix, 1);
-		ft_free_matrix(&matrix);
-	}
+	str = "echo hello>>hello";
+	matrix1 = ft_cmdtrim(str, " ");
+	cmds = parse_args(matrix1);
+	ft_putmatrix_fd(matrix1, 1);
+	ft_free_matrix(&matrix1);
+	printf("%d\n", ((t_mini *)(cmds->content))->outfile);
 }

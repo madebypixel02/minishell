@@ -31,7 +31,7 @@ if [ "$builtin" = "cd" ] || [ "$builtin" = "all" ] ; then
 	exec_test 'cd .. \npwd'
 	exec_test 'cd -- \npwd'
 	exec_test 'cd \npwd'
-	exec_test	'cd src/ \n pwd'
+	exec_test 'cd src/ \n pwd'
 fi
 
 #ECHO
@@ -42,19 +42,21 @@ if [ "$builtin" = "echo" ] || [ "$builtin" = "all" ] ; then
 	exec_test 'echo $agua' #agua = "hola como     estas"
 	exec_test 'echo "$agua"'
 	exec_test 'echo $PWD'
-	exec_test	'echo '$PWD''
-	exec_test	'echo '   $PWD   ''
-	exec_test	'echo "   $PWD   "'
-	exec_test	'echo "$PWD"'
-	exec_test	'echo "'$PWD'"'
-	exec_test	'echo '"$PWD"''
-	exec_test	'echo ""$PWD""'
+	exec_test 'echo '\$PWD''
+	exec_test 'echo '   \$PWD   ''
+	exec_test 'echo "   $PWD   "'
+	exec_test 'echo "$PWD"'
+	exec_test 'echo "'\$PWD'"'
+	exec_test 'echo '"\$PWD"''
+	exec_test 'echo ""\$PWD""'
 	exec_test 'echo $ PWD'
-	exec_test 'echo hola "'$PWD' sfsdf"'
+	exec_test 'echo hola "'\$PWD' sfsdf"'
 	exec_test 'echo "   $PWD$PD EE"'
-	exec_test 'echo    "'$HOLA'$PD EE$"'
-	exec_test 'echo "'$PD'"'
+	exec_test 'echo    "'\$HOLA'$PD EE$"'
+	exec_test 'echo "'\$PD'"'
 	exec_test 'echo '\$P'"W'D'"'
+	exec_test 'echo "$~"'
+	exec_test '> hola echo hello'
 fi
 
 # EXIT

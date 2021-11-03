@@ -6,41 +6,41 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 15:28:36 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/03 10:02:08 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/03 18:21:24 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static int	ft_count_words(const char *s, char c, int counts[2])
+static int	ft_count_words(const char *s, char *c, int i[2])
 {
 	int		quote;
 	char	type;
 
 	quote = 0;
 	type = 0;
-	while (s[counts[0]] != '\0')
+	while (s[i[0]] != '\0')
 	{
-		if (s[counts[0]] != c)
+		if (!ft_strchr(c, s[i[0]]))
 		{
-			counts[1]++;
-			while ((s[counts[0]] != c || quote) && s[counts[0]] != '\0')
+			i[1]++;
+			while ((!ft_strchr(c, s[i[0]]) || quote) && s[i[0]] != '\0')
 			{
-				if (!type && (s[counts[0]] == '\"' || s[counts[0]] == '\''))
-					type = s[counts[0]];
-				quote = (quote + (s[counts[0]] == type)) % 2;
-				counts[0]++;
+				if (!type && (s[i[0]] == '\"' || s[i[0]] == '\''))
+					type = s[i[0]];
+				quote = (quote + (s[i[0]] == type)) % 2;
+				i[0]++;
 			}
 			if (quote)
 				return (-1);
 		}
 		else
-			counts[0]++;
+			i[0]++;
 	}
-	return (counts[1]);
+	return (i[1]);
 }
 
-static char	**ft_fill_array(char **aux, char const *s, char c, int i[3])
+static char	**ft_fill_array(char **aux, char const *s, char *set, int i[3])
 {
 	int		s_len;
 	int		quote;
@@ -51,11 +51,11 @@ static char	**ft_fill_array(char **aux, char const *s, char c, int i[3])
 	s_len = ft_strlen(s);
 	while (s[i[0]])
 	{
-		while (s[i[0]] == c && s[i[0]] != '\0')
+		while (ft_strchr(set, s[i[0]]) && s[i[0]] != '\0')
 			i[0]++;
 		i[1] = i[0];
-		while ((s[i[0]] != c || quote) && s[i[0]] != '\0')
-		{	
+		while ((!ft_strchr(set, s[i[0]]) || quote) && s[i[0]] != '\0')
+		{
 			if (!type && (s[i[0]] == '\"' || s[i[0]] == '\''))
 				type = s[i[0]];
 			quote = (quote + (s[i[0]] == type)) % 2;
@@ -69,7 +69,7 @@ static char	**ft_fill_array(char **aux, char const *s, char c, int i[3])
 	return (aux);
 }
 
-char	**ft_cmdtrim(char const *s, char c)
+char	**ft_cmdtrim(char const *s, char *set)
 {
 	char	**aux;
 	int		nwords;
@@ -83,13 +83,13 @@ char	**ft_cmdtrim(char const *s, char c)
 	counts[1] = 0;
 	if (!s)
 		return (NULL);
-	nwords = ft_count_words(s, c, counts);
+	nwords = ft_count_words(s, set, counts);
 	if (nwords == -1)
 		return (NULL);
 	aux = malloc((nwords + 1) * sizeof(char *));
 	if (aux == NULL)
 		return (NULL);
-	aux = ft_fill_array(aux, s, c, i);
+	aux = ft_fill_array(aux, s, set, i);
 	aux[nwords] = NULL;
 	return (aux);
 }
