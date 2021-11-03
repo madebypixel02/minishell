@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/29 18:52:06 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/02 23:26:14 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	builtin(int argc, char **argv, char **envp)
 
 	n = ft_strlen(*argv);
 	if (!ft_strncmp(*argv, "cd", n) && n == 2)
-		return(cd(argv));
+		return (cd(argv));
 	else if (!ft_strncmp(*argv, "exit", n) && n == 4)
 		return (-1);
 	else if (!ft_strncmp(*argv, "pwd", n) && n == 3)
@@ -48,7 +48,8 @@ int	cd(char **argv)
 		if (access(home_with_path, F_OK) != -1)
 			chdir(home_with_path);
 		else
-			printf("minishell: cd: %s: No such file or directory\n", home_with_path);
+			printf("minishell: cd: %s: No such file or directory\n", \
+				home_with_path);
 		free(home_with_path);
 	}
 	else if (access(argv[1], F_OK) != -1)
@@ -73,7 +74,7 @@ int	pwd(int argc)
 int	echo(char **argv)
 {
 	argv++;
-	while(*argv)
+	while (*argv)
 	{
 		printf("%s ", *argv);
 		argv++;

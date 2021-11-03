@@ -6,75 +6,65 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 15:28:36 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/02 16:24:59 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/03 10:02:08 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static int	ft_count_words(const char *s, char c)
+static int	ft_count_words(const char *s, char c, int counts[2])
 {
-	int		count;
 	int		quote;
-	int		i;
 	char	type;
 
-	i = 0;
-	count = 0;
 	quote = 0;
 	type = 0;
-	while (s[i] != '\0')
+	while (s[counts[0]] != '\0')
 	{
-		if (s[i] != c)
+		if (s[counts[0]] != c)
 		{
-			count++;
-			while ((s[i] != c || quote) && s[i] != '\0')
+			counts[1]++;
+			while ((s[counts[0]] != c || quote) && s[counts[0]] != '\0')
 			{
-				if (!type && (s[i] == '\"' || s[i] == '\''))
-					type = s[i];
-				quote = (quote + (s[i] == type)) % 2;
-				i++;
+				if (!type && (s[counts[0]] == '\"' || s[counts[0]] == '\''))
+					type = s[counts[0]];
+				quote = (quote + (s[counts[0]] == type)) % 2;
+				counts[0]++;
 			}
 			if (quote)
 				return (-1);
 		}
 		else
-			i++;
+			counts[0]++;
 	}
-	return (count);
+	return (counts[1]);
 }
 
-static char	**ft_fill_array(char **aux, char const *s, char c)
+static char	**ft_fill_array(char **aux, char const *s, char c, int i[3])
 {
-	size_t	i;
-	size_t	j;
-	int		k;
-	size_t	s_len;
+	int		s_len;
 	int		quote;
 	char	type;
 
-	i = 0;
-	k = 0;
 	quote = 0;
 	type = 0;
 	s_len = ft_strlen(s);
-	while (s[i])
+	while (s[i[0]])
 	{
-		while (s[i] == c && s[i] != '\0')
-			i++;
-		j = i;
-		while ((s[i] != c || quote) && s[i] != '\0')
+		while (s[i[0]] == c && s[i[0]] != '\0')
+			i[0]++;
+		i[1] = i[0];
+		while ((s[i[0]] != c || quote) && s[i[0]] != '\0')
 		{	
-			if (!type && (s[i] == '\"' || s[i] == '\''))
-				type = s[i];
-			quote = (quote + (s[i] == type)) % 2;
-			i++;
+			if (!type && (s[i[0]] == '\"' || s[i[0]] == '\''))
+				type = s[i[0]];
+			quote = (quote + (s[i[0]] == type)) % 2;
+			i[0]++;
 		}
-		if (j >= s_len)
-			aux[k++] = "\0";
+		if (i[1] >= s_len)
+			aux[i[2]++] = "\0";
 		else
-			aux[k++] = ft_substr(s, j, i - j);
-		//aux[k - 1] = ft_strtrim(aux[k - 1], "\"\'");
+			aux[i[2]++] = ft_substr(s, i[1], i[0] - i[1]);
 	}
 	return (aux);
 }
@@ -83,17 +73,23 @@ char	**ft_cmdtrim(char const *s, char c)
 {
 	char	**aux;
 	int		nwords;
+	int		i[3];
+	int		counts[2];
 
+	i[0] = 0;
+	i[1] = 0;
+	i[2] = 0;
+	counts[0] = 0;
+	counts[1] = 0;
 	if (!s)
 		return (NULL);
-	nwords = ft_count_words(s, c);
+	nwords = ft_count_words(s, c, counts);
 	if (nwords == -1)
 		return (NULL);
 	aux = malloc((nwords + 1) * sizeof(char *));
 	if (aux == NULL)
 		return (NULL);
-	aux = ft_fill_array(aux, s, c);
+	aux = ft_fill_array(aux, s, c, i);
 	aux[nwords] = NULL;
 	return (aux);
 }
-

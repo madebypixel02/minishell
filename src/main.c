@@ -6,12 +6,11 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/02 15:42:05 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/02 23:25:55 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <stdlib.h>
 
 void	handle_sigint(int sig, siginfo_t *info, void *context)
 {
@@ -29,12 +28,27 @@ char	*mini_getuser(void)
 	char	*user;
 	char	*full;
 
-	user = ft_strjoin(getenv("USER"), "@"); 
+	user = ft_strjoin(getenv("USER"), "@");
 	if (!user)
 		return (NULL);
 	full = ft_strjoin(user, "minishell$ ");
 	free(user);
 	return (full);
+}
+
+char	**check_args(char **args, char **out)
+{
+	if (!args && out)
+		printf("minishell: error while looking for matching quote\n");
+	if (!out || (args && builtin(ft_matrixlen(args), args, NULL) == -1))
+	{
+		ft_free_matrix(&args);
+		printf("exit\n");
+		return (NULL);
+	}
+	ft_free_matrix(&args);
+	free(*out);
+	return (args);
 }
 
 int	main(void)
@@ -52,20 +66,14 @@ int	main(void)
 		sigaction(SIGINT, &sa, NULL);
 		out = readline(str);
 		if (!out)
-			break ;
+		{
+			free(str);
+			return (0);
+		}
 		add_history(out);
 		args = ft_cmdtrim(out, ' ');
-		//parse_args(args);
-		free(out);
-		if (args && builtin(ft_matrixlen(args), args, NULL) == -1)
-		{
-			ft_free_matrix(&args);
-			printf("exit\n");
+		if (!check_args(args, &out))
 			break ;
-		}
-		else if (!args)
-			printf("minishell: unexpected EOF while looking for matching quote\n");
-		ft_free_matrix(&args);
 	}
 	free(str);
 }

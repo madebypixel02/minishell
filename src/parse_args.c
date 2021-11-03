@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/02 20:01:16 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/03 10:12:10 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,50 +27,59 @@
 	m->outfile = 
 }*/
 
-static char	*expand_vars(char *str, int i, int squote, int dquote)
+static char	*get_substr(char *str, int len[3], int ij[2], int quotes[2])
 {
-	int		len;
-	int		j;
 	char	*var;
 	char	*exp1;
-	char	*ptr;
-	int		len2;
 
-
-	j = -2;
-	len = ft_strlen(str);
-	while (str && str[i])
+	ij[0] = -1;
+	exp1 = NULL;
+	while (++ij[0] >= 0 && str && str[ij[0]])
 	{
-		squote = (squote + (str[i] == '\'')) % 2;
-		dquote = (dquote + (str[i] == '\"')) % 2;
-		if ((!squote || dquote) && str[i] == '$' && ft_strchars_i(&str[i + 1], "\"\' $"))
+		quotes[0] = (quotes[0] + (str[ij[0]] == '\'')) % 2;
+		quotes[1] = (quotes[1] + (str[ij[0]] == '\"')) % 2;
+		if ((!quotes[0] || quotes[1]) && str[ij[0]] == '$' && \
+			ft_strchars_i(&str[ij[0] + 1], "\"\' $"))
 		{
-			j = ft_strchars_i(&str[i + 1], "\"\' $");
-			var = ft_substr(&str[i + 1], 0, j);
-			if (!var)
-				return (NULL);
+			ij[1] = ft_strchars_i(&str[ij[0] + 1], "\"\' $");
+			var = ft_substr(&str[ij[0] + 1], 0, ij[1]);
 			exp1 = getenv(var);
 			if (!exp1)
 				exp1 = "";
-			len = len - ft_strlen(var) - 1 + ft_strlen(exp1);
-			break;
+			len[0] = len[0] - ft_strlen(var) - 1 + ft_strlen(exp1);
+			len[2] = ft_strlen(var);
+			free(var);
+			break ;
 		}
-		i++;
 	}
-	if (j == -2)
-		return (ft_strdup(str));
-	ptr = ft_calloc(sizeof(char), (len + 1));
+	return (exp1);
+}
+
+static char	*expand_vars(char *str, int ij[2], int quotes[2])
+{
+	int		len[3];
+	char	*exp1;
+	char	*ptr;
+
+	quotes[0] = 0;
+	quotes[1] = 0;
+	ij[0] = -1;
+	ij[1] = -2;
+	len[0] = ft_strlen(str);
+	len[2] = 0;
+	exp1 = get_substr(str, len, ij, quotes);
+	if (ij[1] == -2)
+		return (str);
+	ptr = ft_calloc(sizeof(char), (len[0] + 1));
 	if (!ptr)
-	{
-		free(var);
 		return (NULL);
-	}
-	ptr[len] = '\0';
-	ft_strlcat(ptr, str, i + 1);
-	ft_strlcat(ptr, exp1, len + 1);
-	len2 = ft_strlen(ptr);
-	ft_strlcat(ptr, &str[i + ft_strlen(var) + 1], len + 1); 
-	return (expand_vars(ptr, len2, squote, dquote));
+	ft_strlcat(ptr, str, ij[0] + 1);
+	ft_strlcat(ptr, exp1, len[0] + 1);
+	len[1] = ft_strlen(ptr);
+	ft_strlcat(ptr, &str[ij[0] + len[2] + 1], len[0] + 1);
+	free(str);
+	ij[1] = len[1];
+	return (expand_vars(ptr, ij, quotes));
 }
 
 static char	**expand_matrix(char ***args)
@@ -78,24 +87,25 @@ static char	**expand_matrix(char ***args)
 	char	**aux;
 	char	*str;
 	int		i;
+	int		quotes[2];
+	int		ij[2];
 
-	i = 0;
-	aux = malloc(sizeof(char *) * (ft_matrixlen(*args) + 1));
+	i = -1;
+	aux = ft_calloc(sizeof(char *), (ft_matrixlen(*args) + 1));
 	if (!aux)
 		return (NULL);
-	aux[ft_matrixlen(*args)] = NULL;
-	while (args[0][i])
+	while (++i >= 0 && args[0][i])
 	{
-		str = expand_vars(args[0][i], 0, 0, 0);
-		aux[i] = ft_strtrim_all(str);
+		str = expand_vars(ft_strdup(args[0][i]), ij, quotes);
+		aux[i] = ft_strtrim_all(str, 0, 0);
 		free(str);
 		if (!aux[i])
 		{
-			printf("minishell: unexpected EOF while looking for matching quote\n");
+			printf("minishell: error while looking for matching quote\n");
+			ft_free_matrix(args);
 			ft_free_matrix(&aux);
 			return (NULL);
 		}
-		i++;
 	}
 	ft_free_matrix(args);
 	return (aux);
@@ -139,11 +149,16 @@ static char	**expand_matrix(char ***args)
 	return (NULL);
 }*/
 
-int	main()
+int	main(void)
 {
-	char	**str = ft_cmdtrim("\'$P\"W\'D\'\"", ' ');
-	ft_putmatrix_fd(expand_matrix(&str), 1);
-	//char	*ptr = "echo  \"$PWD\" ggg \"$HOLA\" EEE";
-	//printf("%s\n", expand_vars(ptr,  0));
-}
+	char	**str;
+	char	**matrix;
 
+	str = ft_cmdtrim("echo    \"\'$HOLA\'$PD EE$\"", ' ');
+	if (str)
+	{
+		matrix = expand_matrix(&str);
+		ft_putmatrix_fd(matrix, 1);
+		ft_free_matrix(&matrix);
+	}
+}

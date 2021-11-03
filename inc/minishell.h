@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/02 18:32:20 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/03 10:11:46 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ int		env(int argc, char **envp);
 char	**ft_cmdtrim(char const *s, char c);
 
 /* Strtrim from all occurrences of set */
-char	*ft_strtrim_all(char const *s1);
+char	*ft_strtrim_all(char const *s1, int squote, int dquote);
 
 #endif
