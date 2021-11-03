@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/03 10:11:46 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/03 10:17:04 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,26 @@
 # include <readline/history.h>
 # include <signal.h>
 
-typedef struct	s_mini
+typedef struct s_mini
 {
 	char	*cmd;
 	char	**full_cmd;
 	char	*full_path;
 	int		infile;
 	int		outfile;
-}				t_mini;
+}			t_mini;
 
 /* C implementation of the cd shell command */
-int	cd(char **argv);
+int		cd(char **argv);
 
 /* Handles all builtin functions */
-int	builtin(int argc, char **argv, char **envp);
+int		builtin(int argc, char **argv, char **envp);
 
 /* C implementation of the pwd shell command */
-int	pwd(int argc);
+int		pwd(int argc);
 
 /* C implementation of the echo shell command */
-int	echo(char **argv);	
+int		echo(char **argv);	
 
 /* C implementation of the env shell command */
 int		env(int argc, char **envp);
