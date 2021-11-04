@@ -6,11 +6,26 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/04 13:43:16 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/04 18:04:35 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+static t_mini	*mini_init(void)
+{
+	t_mini	*mini;
+
+	mini = malloc(sizeof(t_mini));
+	if (!mini)
+		return (NULL);
+	mini->cmd = NULL;
+	mini->full_cmd = NULL;
+	mini->full_path = NULL;
+	mini->infile = STDIN_FILENO;
+	mini->outfile = STDOUT_FILENO;
+	return (mini);
+}
 
 static char	*get_substr(char *str, int len[3], int ij[2], int quotes[2])
 {
@@ -103,8 +118,11 @@ t_list	*parse_args(char **args)
 	args = expand_matrix(&args, quotes);
 	if (!args)
 		return (NULL);
-	node = fill_node(args);
+	node = mini_init();
 	if (!node)
+		return (NULL);
+	fill_node(args, node);
+	if (!(node))
 	{
 		ft_lstclear(&cmds, free);
 		return (NULL);
@@ -120,14 +138,15 @@ int	main(void)
 	char	**matrix1;
 	t_list	*cmds;
 
-	str = "echo abc>> \"hello\'\"\' >> hola";
+	str = "echo hola \"\'adi $PWD   os\' $PWD\" \'ddj\'abc >> \"hello\" < main.c";
 	matrix1 = ft_cmdtrim(str, " ");
 	if (!matrix1)
 		return (0);
 	cmds = parse_args(matrix1);
 	if (!cmds)
 		return (0);
-	printf("%d\n", ((t_mini *)cmds->content)->outfile);
-	close(((t_mini *)cmds->content)->outfile);
+	printf("%d\n", ((t_mini *)cmds->content)->infile);
+	ft_putmatrix_fd(((t_mini *)cmds->content)->full_cmd, 1);
+	close(((t_mini *)cmds->content)->infile);
 	ft_lstclear(&cmds, free);
 }

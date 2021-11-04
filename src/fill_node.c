@@ -6,22 +6,11 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/04 12:38:11 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/04 18:04:34 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <unistd.h>
-
-static t_mini	*mini_init(t_mini *mini)
-{
-	mini->cmd = NULL;
-	mini->full_cmd = NULL;
-	mini->full_path = NULL;
-	mini->infile = STDIN_FILENO;
-	mini->outfile = STDOUT_FILENO;
-	return (mini);
-}
 
 static int	get_fd(int oldfd, char *path, int is_outfile, int append)
 {
@@ -31,7 +20,7 @@ static int	get_fd(int oldfd, char *path, int is_outfile, int append)
 		return (-1);
 	if (oldfd > 2)
 		close(oldfd);
-	printf("Path: %s\n", path);
+	//printf("Path: %s\n", path);
 	if (is_outfile && append)
 		fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0666);
 	if (is_outfile && !append)
@@ -41,46 +30,64 @@ static int	get_fd(int oldfd, char *path, int is_outfile, int append)
 	return (fd);
 }
 
-static	t_mini	*check_arg(t_mini *mini, char **args, int *i)
+static	t_mini	*get_outfile(t_mini *node, char **args, char **arg, int ij[2])
 {
-	char	**arg;
-	int		j;
-
-	j = 0;
-	arg = ft_subsplit(args[*i], "<>");
-	ft_putmatrix_fd(arg, 1);
-	if (!arg)
-		return (NULL);
-	while (arg[j])
+	if (arg[ij[1]][0] == '>' && arg[ij[1] + 1] && arg[ij[1] + 1][0] == '>')
 	{
-		if (arg[j][0] == '>' && arg[j + 1] && arg[j + 1][0] == '>')
-		{
-			if (arg[j + 2])
-				mini->outfile = get_fd(mini->outfile, &arg[j + 2][0], 1, 1);
-			else
-				mini->outfile = get_fd(mini->outfile, args[++(*i)], 1, 1);
-		}
-		j++;
+		if (arg[ij[1] + 2])
+			node->outfile = get_fd(node->outfile, &arg[ij[1] + 2][0], 1, 1);
+		else
+			node->outfile = get_fd(node->outfile, args[++ij[0]], 1, 1);
+		ij[1]++;
 	}
-	ft_free_matrix(&arg);
-	return (mini);
+	else if (arg[ij[1]][0] == '>')
+	{
+		if (arg[ij[1] + 1])
+			node->outfile = get_fd(node->outfile, &arg[ij[1] + 1][0], 1, 0);
+		else
+			node->outfile = get_fd(node->outfile, args[++ij[0]], 1, 0);
+	}
+	else if (arg[ij[1]][0] == '<')
+	{
+		if (arg[ij[1] + 1])
+			node->infile = get_fd(node->infile, &arg[ij[1] + 1][0], 0, 0);
+		else
+			node->infile = get_fd(node->infile, args[++ij[0]], 0, 0);
+	}
+	else if (!node->cmd)
+	{
+		node->cmd = ft_strdup(arg[ij[1]]);
+		node->full_cmd = ft_extend_matrix(node->full_cmd, node->cmd);
+	}
+	else
+		node->full_cmd = ft_extend_matrix(node->full_cmd, ft_strdup(arg[ij[1]]));
+	return (node);
 }
 
-t_mini	*fill_node(char **args)
+static	t_mini	*check_arg(t_mini *node, char **args, char **arg, int ij[2])
 {
-	t_mini	*node;
-	int		i;
+	get_outfile(node, args, arg, ij);
+	return (node);
+}
 
-	i = 0;
-	node = malloc(sizeof(t_mini));
-	if (!node)
-		return (NULL);
-	node = mini_init(node);
-	while (args[i])
+t_mini	*fill_node(char **args, t_mini	*node)
+{
+	int		ij[2];
+	char	**arg;
+
+	ij[0] = 0;
+	while (args[ij[0]])
 	{
-		node = check_arg(node, args, &i);
-		if (args[i])
-			i++;
+		ij[1] = -1;
+		arg = ft_subsplit(args[ij[0]], "<>");
+		printf("------------------\n");
+		ft_putmatrix_fd(arg, 1);
+		if (!arg)
+			return (NULL);
+		while (arg[++ij[1]])
+			check_arg(node, args, arg, ij);
+		ft_free_matrix(&arg);
+		ij[0] += (args[ij[0]] != NULL);
 	}
 	return (node);
 }

@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/03 23:35:53 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/04 16:19:44 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,6 @@ char	**ft_cmdtrim(char const *s, char *set);
 char	*ft_strtrim_all(char const *s1, int squote, int dquote);
 
 /* Parses all necessary stuff for a command matrix */
-t_mini	*fill_node(char **args);
+t_mini	*fill_node(char **args, t_mini *node);
 
 #endif
