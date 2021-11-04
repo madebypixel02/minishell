@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/04 18:04:34 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/04 19:31:56 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static int	get_fd(int oldfd, char *path, int is_outfile, int append)
 		return (-1);
 	if (oldfd > 2)
 		close(oldfd);
-	//printf("Path: %s\n", path);
 	if (is_outfile && append)
 		fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0666);
 	if (is_outfile && !append)
@@ -57,10 +56,10 @@ static	t_mini	*get_outfile(t_mini *node, char **args, char **arg, int ij[2])
 	else if (!node->cmd)
 	{
 		node->cmd = ft_strdup(arg[ij[1]]);
-		node->full_cmd = ft_extend_matrix(node->full_cmd, node->cmd);
+		node->full_cmd = ft_extend_matrix(node->full_cmd, arg[ij[1]]);
 	}
 	else
-		node->full_cmd = ft_extend_matrix(node->full_cmd, ft_strdup(arg[ij[1]]));
+		node->full_cmd = ft_extend_matrix(node->full_cmd, arg[ij[1]]);
 	return (node);
 }
 

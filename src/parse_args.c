@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/04 18:04:35 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/04 19:32:25 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,21 +132,25 @@ t_list	*parse_args(char **args)
 	return (cmds);
 }
 
-int	main(void)
+/*int	main(void)
 {
 	char	*str;
 	char	**matrix1;
 	t_list	*cmds;
 
-	str = "echo hola \"\'adi $PWD   os\' $PWD\" \'ddj\'abc >> \"hello\" < main.c";
+	str = "e\"c\"ho hola \"\'adi $PWD   os\'\" \'ddj\'abc >> \"hello\" < main.c";
 	matrix1 = ft_cmdtrim(str, " ");
 	if (!matrix1)
 		return (0);
 	cmds = parse_args(matrix1);
 	if (!cmds)
 		return (0);
-	printf("%d\n", ((t_mini *)cmds->content)->infile);
+	printf("\nStdin: %d\nStdout: %d\n\n", ((t_mini *)cmds->content)->infile, \
+		((t_mini *)cmds->content)->outfile);
 	ft_putmatrix_fd(((t_mini *)cmds->content)->full_cmd, 1);
 	close(((t_mini *)cmds->content)->infile);
+	close(((t_mini *)cmds->content)->outfile);
+	ft_free_matrix(&((t_mini *)cmds->content)->full_cmd);
+	free(((t_mini *)cmds->content)->cmd);
 	ft_lstclear(&cmds, free);
-}
+}*/
