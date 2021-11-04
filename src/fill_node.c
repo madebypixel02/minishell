@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/04 00:46:23 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/04 10:52:06 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,11 @@ static	t_mini	*check_arg(t_mini *mini, char **args, int i)
 		if (arg[j][0] == '>' && arg[j + 1][0] == '>')
 		{
 			if (arg[j + 2][0])
-				get_fd(&arg[j + 2][0], 1, 1);
+				mini->outfile = get_fd(&arg[j + 2][0], 1, 1);
 			else
-				get_fd(args[i + 1], 1, 1);
+				mini->outfile = get_fd(args[i + 1], 1, 1);
 		}
+		j++;
 	}
 	ft_free_matrix(&arg);
 	return (mini);
@@ -75,7 +76,7 @@ t_mini	*fill_node(char **args)
 	while (args[i])
 	{
 		node = check_arg(node, args, i);
-		break ;
+		i++;
 	}
 	return (node);
 }

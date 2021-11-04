@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/04 00:50:35 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/04 10:51:39 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ t_list	*parse_args(char **args)
 	int		quotes[2];
 
 	cmds = NULL;
-	if (!expand_matrix(&args, quotes))
+	args = expand_matrix(&args, quotes);
+	if (!args)
 		return (NULL);
 	node = fill_node(args);
 	if (!node)
@@ -108,6 +109,7 @@ t_list	*parse_args(char **args)
 		return (NULL);
 	}
 	ft_lstadd_back(&cmds, ft_lstnew(node));
+	ft_free_matrix(&args);
 	return (cmds);
 }
 
@@ -120,7 +122,6 @@ int	main(void)
 	str = "echo hello>>hello";
 	matrix1 = ft_cmdtrim(str, " ");
 	cmds = parse_args(matrix1);
-	ft_putmatrix_fd(matrix1, 1);
-	ft_free_matrix(&matrix1);
 	printf("%d\n", ((t_mini *)(cmds->content))->outfile);
+	ft_lstclear(&cmds, free);
 }
