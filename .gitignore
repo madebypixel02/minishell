@@ -15,3 +15,4 @@ pipex
 infile
 outfile
 minishell
+*.dSYM
