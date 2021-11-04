@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/04 16:19:44 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/04 20:08:48 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,23 @@ char	*ft_strtrim_all(char const *s1, int squote, int dquote);
 
 /* Parses all necessary stuff for a command matrix */
 t_mini	*fill_node(char **args, t_mini *node);
+
+/* Opens a file to a file descriptor with the adequate open flags */
+int		get_fd(int oldfd, char *path, int is_outfile, int append);
+
+/* Checks for redirections and fills a node with all needed info */
+t_mini	*get_params(t_mini *node, char **args, char **arg, int ij[2]);
+
+/* Tries to open proper file as outfile (> case) */
+t_mini	*get_outfile1(t_mini *node, char **args, char **arg, int ij[2]);
+
+/* Tries to open proper file as outfile (>> case) */
+t_mini	*get_outfile2(t_mini *node, char **args, char **arg, int ij[2]);
+
+/* Tries to open proper file as infile (< case) */
+t_mini	*get_infile1(t_mini *node, char **args, char **arg, int ij[2]);
+
+/* Tries to open read heredoc as infile (<< case) */
+t_mini	*get_infile2(t_mini *node, char **args, char **arg, int ij[2]);
 
 #endif
