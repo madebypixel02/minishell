@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/04 12:31:17 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/04 13:34:35 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,10 @@ int	main(void)
 	char	**matrix1;
 	t_list	*cmds;
 
-	str = "echo abc>> hello >> hola";
+	str = "echo abc>> \"hello\" >> hola";
 	matrix1 = ft_cmdtrim(str, " ");
+	if (!matrix1)
+		return (0);
 	cmds = parse_args(matrix1);
 	printf("%d\n", ((t_mini *)cmds->content)->outfile);
 	close(((t_mini *)cmds->content)->outfile);
