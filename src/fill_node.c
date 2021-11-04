@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/04 12:15:19 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/04 12:38:11 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static	t_mini	*check_arg(t_mini *mini, char **args, int *i)
 	int		j;
 
 	j = 0;
-	arg = ft_subsplit(args[*i], ">");
+	arg = ft_subsplit(args[*i], "<>");
 	ft_putmatrix_fd(arg, 1);
 	if (!arg)
 		return (NULL);
