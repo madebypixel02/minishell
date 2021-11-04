@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/04 13:34:35 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/04 13:43:16 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,9 @@ static char	**expand_matrix(char ***args, int quotes[2])
 		if (!aux[i])
 		{
 			printf("minishell: error while looking for matching quote\n");
+			ft_free_matrix(args);
 			ft_free_matrix(&aux);
-			break ;
+			return (NULL);
 		}
 	}
 	ft_free_matrix(args);
@@ -119,11 +120,13 @@ int	main(void)
 	char	**matrix1;
 	t_list	*cmds;
 
-	str = "echo abc>> \"hello\" >> hola";
+	str = "echo abc>> \"hello\'\"\' >> hola";
 	matrix1 = ft_cmdtrim(str, " ");
 	if (!matrix1)
 		return (0);
 	cmds = parse_args(matrix1);
+	if (!cmds)
+		return (0);
 	printf("%d\n", ((t_mini *)cmds->content)->outfile);
 	close(((t_mini *)cmds->content)->outfile);
 	ft_lstclear(&cmds, free);
