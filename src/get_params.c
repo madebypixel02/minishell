@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 15:13:26 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 17:19:33 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,14 @@ t_mini	*get_outfile1(t_mini *node, char **args, char **arg, int ij[2])
 {
 	char	**next;
 
+	printf("HOLA!\n");
 	next = NULL;
 	if (arg[ij[1] + 1])
-		node->outfile = get_fd(node->outfile, &arg[ij[1] + 1][0], 1, 0);
+		node->outfile = get_fd(node->outfile, &arg[++ij[1]][0], 1, 0);
 	else
 	{
-		next = ft_subsplit(args[++ij[0]], "<>");
+		next = ft_subsplit(args[ij[0] + 1], "<>");
+		ij[0] += ft_matrixlen(next) == 1;
 		if (next)
 			node->outfile = get_fd(node->outfile, next[0], 1, 0);
 		else
@@ -65,11 +67,12 @@ t_mini	*get_outfile2(t_mini *node, char **args, char **arg, int ij[2])
 	char	**next;
 
 	next = NULL;
-	if (arg[ij[1] + 2])
-		node->outfile = get_fd(node->outfile, &arg[ij[1] + 2][0], 1, 1);
+	if (arg[++ij[1] + 1])
+		node->outfile = get_fd(node->outfile, &arg[++ij[1]][0], 1, 1);
 	else
 	{
-		next = ft_subsplit(args[++ij[0]], "<>");
+		next = ft_subsplit(args[ij[0] + 1], "<>");
+		ij[0] += ft_matrixlen(next) == 1;
 		if (next)
 			node->outfile = get_fd(node->outfile, next[0], 1, 1);
 		else
@@ -86,10 +89,11 @@ t_mini	*get_infile1(t_mini *node, char **args, char **arg, int ij[2])
 
 	next = NULL;
 	if (arg[ij[1] + 1])
-		node->infile = get_fd(node->infile, &arg[ij[1] + 1][0], 0, 0);
+		node->infile = get_fd(node->infile, &arg[++ij[1]][0], 0, 0);
 	else
 	{
-		next = ft_subsplit(args[++ij[0]], "<>");
+		next = ft_subsplit(args[ij[0] + 1], "<>");
+		ij[0] += ft_matrixlen(next) == 1;
 		if (next)
 			node->infile = get_fd(node->infile, next[0], 0, 0);
 		else
@@ -107,9 +111,10 @@ t_mini	*get_infile2(t_mini *node, char **args, char **arg, int ij[2])
 	char	*temp;
 
 	next = NULL;
+	limiter = NULL;
 	warn = "minishell: warning: here-document delimited by end-of-file";
 	if (arg[++ij[1] + 1])
-		limiter = &arg[ij[1] + 1][0];
+		limiter = &arg[++ij[1]][0];
 	else if (args[ij[0] + 1])
 	{
 		next = ft_subsplit(args[ij[0] + 1], "<>");
@@ -119,10 +124,10 @@ t_mini	*get_infile2(t_mini *node, char **args, char **arg, int ij[2])
 		free(temp);
 		limiter = next[0];
 		ij[0] += ft_matrixlen(next) == 1;
-		get_here_doc(NULL, NULL, limiter, warn);
 	}
 	else
 		node->infile = get_fd(node->infile, NULL, 0, 0);
+	get_here_doc(NULL, NULL, limiter, warn);
 	ft_free_matrix(&next);
 	return (node);
 }

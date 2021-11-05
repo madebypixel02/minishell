@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 15:37:45 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 16:23:50 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,16 @@ char	*mini_getuser(void)
 	return (full);
 }
 
-char	**check_args(char **args, char *out)
+static void	*check_args(char **args, char *out)
 {
 	t_list	*cmds;
 
 	add_history(out);
-	if (!args && out)
+	if (!args)
+	{
 		printf("minishell: error while looking for matching quote\n");
+		return (out);
+	}
 	cmds = parse_args(args);
 	if (args && builtin(ft_lstsize(cmds), cmds, NULL) == -1)
 	{
@@ -51,7 +54,7 @@ char	**check_args(char **args, char *out)
 		return (NULL);
 	}
 	ft_free_matrix(&args);
-	return (args);
+	return (out);
 }
 
 int	main(void)
