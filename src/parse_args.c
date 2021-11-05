@@ -6,11 +6,12 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/04 20:11:29 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 09:14:09 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+#include <unistd.h>
 
 static t_mini	*mini_init(void)
 {
@@ -138,8 +139,10 @@ t_list	*parse_args(char **args)
 	char	**matrix1;
 	t_list	*cmds;
 
-	str = "e\"c\"ho hola \"\'adi $PWD   os\'\" \'ddj\'abc >> \"hello\" < main.c";
+	str = "e\"c\"ho \"\'adi $PWD   os\'\" >> \"hello\" << main.c << hey>out";
 	matrix1 = ft_cmdtrim(str, " ");
+	ft_putmatrix_fd(matrix1, 1);
+	printf("\n*****************\n");
 	if (!matrix1)
 		return (0);
 	cmds = parse_args(matrix1);
@@ -148,6 +151,8 @@ t_list	*parse_args(char **args)
 	printf("\nStdin: %d\nStdout: %d\n\n", ((t_mini *)cmds->content)->infile, \
 		((t_mini *)cmds->content)->outfile);
 	ft_putmatrix_fd(((t_mini *)cmds->content)->full_cmd, 1);
+	dup2(STDIN_FILENO, STDOUT_FILENO);
+	close(STDIN_FILENO);
 	close(((t_mini *)cmds->content)->infile);
 	close(((t_mini *)cmds->content)->outfile);
 	ft_free_matrix(&((t_mini *)cmds->content)->full_cmd);
