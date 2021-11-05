@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/05 16:30:09 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 18:43:42 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static t_mini	*mini_init(void)
 	mini = malloc(sizeof(t_mini));
 	if (!mini)
 		return (NULL);
-	mini->cmd = NULL;
 	mini->full_cmd = NULL;
 	mini->full_path = NULL;
 	mini->infile = STDIN_FILENO;
@@ -39,7 +38,7 @@ static char	*get_substr(char *str, int len[3], int ij[2], int quotes[2])
 		quotes[0] = (quotes[0] + (str[ij[0]] == '\'')) % 2;
 		quotes[1] = (quotes[1] + (str[ij[0]] == '\"')) % 2;
 		if ((!quotes[0] || quotes[1]) && str[ij[0]] == '$' && \
-			ft_strchars_i(&str[ij[0] + 1], "\"\' $"))
+			ft_strchars_i(&str[ij[0] + 1], "\"\' $") && str[ij[0] + 1] != '\0')
 		{
 			ij[1] = ft_strchars_i(&str[ij[0] + 1], "\"\' $");
 			var = ft_substr(&str[ij[0] + 1], 0, ij[1]);

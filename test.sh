@@ -48,7 +48,7 @@ if [ "$builtin" = "echo" ] || [ "$builtin" = "all" ] ; then
 	exec_test 'echo "$PWD"'
 	exec_test 'echo "'\$PWD'"'
 	exec_test 'echo '"\$PWD"''
-	exec_test 'echo ""\$PWD""'
+	exec_test 'echo ""$PWD""'
 	exec_test 'echo $ PWD'
 	exec_test 'echo hola "'\$PWD' sfsdf"'
 	exec_test 'echo "   $PWD$PD EE"'
@@ -57,7 +57,7 @@ if [ "$builtin" = "echo" ] || [ "$builtin" = "all" ] ; then
 	exec_test 'echo '\$P'"W'D'"'
 	exec_test 'echo "$~"'
 	exec_test '> hola echo hello'
-	exec_test 'echo hola \"\'adi $PWD   os\' $PWD\" \'ddj\'abc >> \"hello\" < main.c'
+	exec_test 'echo hola \"'adi \$PWD   os' $PWD\" 'ddj'abc >> \"hello\" < main.c'
 fi
 
 # EXIT
@@ -99,5 +99,5 @@ if [ "$builtin" = "env" ] || [ "$builtin" = "all" ] ; then
 	exec_test 'export TEST=LOL \nexport TEST+=LOL \n echo $TEST \n' $ENV_SHOW
 	exec_test $ENV_SHOW
 	exec_test $EXPORT_SHOW
-	exec_test 'export TEST="ls       -l     - a" \n echo $TEST \n $LS \n ' $ENV_SHOW
+	exec_test 'export TEST="ls       -l     - a" \n echo $TEST \n $LS \n  $ENV_SHOW'
 fi

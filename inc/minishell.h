@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 15:23:56 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 18:52:21 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 
 typedef struct s_mini
 {
-	char	*cmd;
 	char	**full_cmd;
 	char	*full_path;
 	int		infile;
@@ -70,5 +69,8 @@ t_mini	*get_infile2(t_mini *node, char **args, char **arg, int ij[2]);
 
 /* Fills in linked list node with command info */
 t_list	*parse_args(char **args);
+
+/* Executes a command according to the info on our list */
+int		exec_cmd(t_list *cmd, char **envp);
 
 #endif

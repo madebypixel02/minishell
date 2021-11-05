@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 15:57:06 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 18:52:34 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	builtin(int argc, t_list *cmds, char **envp)
 		return (echo(argv));
 	else if (!ft_strncmp(*argv, "env", n) && n == 3)
 		return (env(argc, envp));
+	else if (access(argv[0], F_OK) != -1)
+		return (exec_cmd(cmds, envp));
 	else
 		printf("minishell: command not found: %s\n", argv[0]);
 	argc = 0;

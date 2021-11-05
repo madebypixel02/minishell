@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 17:20:32 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 18:44:03 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,7 @@ static t_mini	*get_params(t_mini *node, char **args, char **arg, int ij[2])
 	else if (arg[ij[1]][0] == '<')
 		node = get_infile1(node, args, arg, ij);
 	else
-	{
-		if (!node->cmd)
-			node->cmd = ft_strdup(arg[ij[1]]);
 		node->full_cmd = ft_extend_matrix(node->full_cmd, arg[ij[1]]);
-	}
 	return (node);
 }
 

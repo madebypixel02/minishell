@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 17:27:42 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 18:37:12 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ t_mini	*get_outfile2(t_mini *node, char **args, char **arg, int ij[2])
 		else
 			node->outfile = get_fd(node->outfile, NULL, 1, 1);
 	}
-	ij[1]++;
 	ft_free_matrix(&next);
 	return (node);
 }
