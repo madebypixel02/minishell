@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 15:41:54 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 15:57:06 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,10 @@ int	builtin(int argc, t_list *cmds, char **envp)
 	int		n;
 	char	**argv;
 
-	if (!cmds)
-		return (0);
 	argv = ((t_mini *)cmds->content)->full_cmd;
+	if (!argv)
+		return (0);
 	n = ft_strlen(*argv);
-	ft_putstr_fd("HOLA!\n", 1);
 	if (!ft_strncmp(*argv, "cd", n) && n == 2)
 		return (cd(argv));
 	else if (!ft_strncmp(*argv, "exit", n) && n == 4)

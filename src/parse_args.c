@@ -6,12 +6,11 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/05 15:24:33 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 16:05:32 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <unistd.h>
 
 static t_mini	*mini_init(void)
 {
@@ -105,7 +104,6 @@ static char	**expand_matrix(char ***args, int quotes[2])
 			return (NULL);
 		}
 	}
-	ft_free_matrix(args);
 	return (aux);
 }
 
