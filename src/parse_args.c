@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/05 09:20:42 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 09:46:29 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	main(void)
 	char	**matrix1;
 	t_list	*cmds;
 
-	str = "e\"c\"ho \"\'adi $PWD   os\'\" >> \"hello\" << main.c << hey>out";
+	str = "e\"c\"ho \"\'adi $PWD   os\'\" << main.c << hey>out";
 	matrix1 = ft_cmdtrim(str, " ");
 	ft_putmatrix_fd(matrix1, 1);
 	printf("\n*****************\n");
