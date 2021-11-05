@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 08:50:23 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 15:23:56 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_mini
 int		cd(char **argv);
 
 /* Handles all builtin functions */
-int		builtin(int argc, char **argv, char **envp);
+int		builtin(int argc, t_list *cmds, char **envp);
 
 /* C implementation of the pwd shell command */
 int		pwd(int argc);
@@ -67,5 +67,8 @@ t_mini	*get_infile1(t_mini *node, char **args, char **arg, int ij[2]);
 
 /* Tries to open read heredoc as infile (<< case) */
 t_mini	*get_infile2(t_mini *node, char **args, char **arg, int ij[2]);
+
+/* Fills in linked list node with command info */
+t_list	*parse_args(char **args);
 
 #endif

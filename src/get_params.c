@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 13:47:08 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 15:13:26 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	get_here_doc(char *str, char *full, char *limit, char *warn)
 {
 	char	*temp;
-	int		len;
+	size_t	len;
 
 	len = 0;
 	while (!str || ft_strncmp(str, limit, len) || ft_strlen(limit) != len)

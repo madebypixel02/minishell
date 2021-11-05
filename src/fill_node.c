@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 09:19:55 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 15:30:27 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ t_mini	*fill_node(char **args, t_mini	*node)
 	{
 		ij[1] = -1;
 		arg = ft_subsplit(args[ij[0]], "<>");
-		printf("------------------\n");
-		ft_putmatrix_fd(arg, 1);
 		if (!arg)
 			return (NULL);
 		while (arg[++ij[1]])

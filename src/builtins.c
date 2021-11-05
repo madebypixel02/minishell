@@ -6,18 +6,22 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/04 17:57:54 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/05 15:41:54 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <stdlib.h>
 
-int	builtin(int argc, char **argv, char **envp)
+int	builtin(int argc, t_list *cmds, char **envp)
 {
-	int	n;
+	int		n;
+	char	**argv;
 
+	if (!cmds)
+		return (0);
+	argv = ((t_mini *)cmds->content)->full_cmd;
 	n = ft_strlen(*argv);
+	ft_putstr_fd("HOLA!\n", 1);
 	if (!ft_strncmp(*argv, "cd", n) && n == 2)
 		return (cd(argv));
 	else if (!ft_strncmp(*argv, "exit", n) && n == 4)

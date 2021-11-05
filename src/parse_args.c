@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/05 13:25:36 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/05 15:24:33 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ t_list	*parse_args(char **args)
 	return (cmds);
 }
 
-int	main(void)
+/*int	main(void)
 {
 	char	*str;
 	char	**matrix1;
@@ -158,4 +158,4 @@ int	main(void)
 	ft_free_matrix(&((t_mini *)cmds->content)->full_cmd);
 	free(((t_mini *)cmds->content)->cmd);
 	ft_lstclear(&cmds, free);
-}
+}*/
