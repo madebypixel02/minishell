@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 16:23:50 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/06 11:40:14 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ char	*mini_getuser(void)
 	return (full);
 }
 
-static void	*check_args(char **args, char *out)
+static void	*check_args(char **args, char *out, char **envp)
 {
 	t_list	*cmds;
+	t_mini	*node;
 
 	add_history(out);
 	if (!args)
@@ -47,13 +48,17 @@ static void	*check_args(char **args, char *out)
 		return (out);
 	}
 	cmds = parse_args(args);
-	if (args && builtin(ft_lstsize(cmds), cmds, NULL) == -1)
+	node = (t_mini *)cmds->content;
+	if (args && builtin(ft_lstsize(cmds), cmds, envp) == -1)
 	{
 		ft_free_matrix(&args);
 		printf("exit\n");
 		return (NULL);
 	}
 	ft_free_matrix(&args);
+	free(node->full_path);
+	ft_free_matrix(&node->full_cmd);
+	ft_lstclear(&cmds, free);
 	return (out);
 }
 
@@ -78,7 +83,7 @@ int	main(void)
 			return (0);
 		}
 		args = ft_cmdtrim(out, " ");
-		if (!check_args(args, out))
+		if (!check_args(args, out, NULL))
 			break ;
 		free(out);
 	}

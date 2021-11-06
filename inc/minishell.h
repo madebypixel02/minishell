@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 18:52:21 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/06 11:20:25 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <sys/wait.h>
+
+# define READ_END 0
+# define WRITE_END 1
 
 typedef struct s_mini
 {
@@ -72,5 +76,8 @@ t_list	*parse_args(char **args);
 
 /* Executes a command according to the info on our list */
 int		exec_cmd(t_list *cmd, char **envp);
+
+/* Checks if a command is in the PATH variable and retrieves the full_path */
+void	get_cmd(t_mini *node);
 
 #endif
