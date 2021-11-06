@@ -58,6 +58,7 @@ if [ "$builtin" = "echo" ] || [ "$builtin" = "all" ] ; then
 	exec_test 'echo "$~"'
 	exec_test '> hola echo hello'
 	exec_test 'echo hola \"'adi \$PWD   os' $PWD\" 'ddj'abc >> \"hello\" < main.c'
+	exec_test 'echo $"PWD"'
 fi
 
 # EXIT
