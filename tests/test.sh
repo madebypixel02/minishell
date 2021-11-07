@@ -6,7 +6,7 @@
 #    By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/07 16:58:45 by mbueno-g          #+#    #+#              #
-#    Updated: 2021/11/07 21:11:54 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/07 21:28:50 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ exec_test()
 {
 	TEST1=$(echo "$@" | ../minishell | grep -v "$USER@minishell*" 2>&1)
 	TEST2=$(echo "$@" | /bin/bash 2>&1)
-	if [[ "$TEST1" != "$TEST2" && ("$TEST1" != *"command not"* || "$TEST2" != *"command not"*) ]]; then
+	if [[ "$TEST1" != "$TEST2" && ("$TEST1" != *"command not"* || "$TEST2" != *"command not"*) && ("$TEST1" != *"No such"* || "$TEST2" != *"No such"*) ]]; then
 		printf $BOLDRED"\n%s %s$RESET\n" "✗" "$@"
 		echo
 		printf $BOLDRED"Your output : \n%.20s\n|$TEST1|\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
