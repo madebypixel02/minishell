@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/11/07 19:02:37 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/07 19:17:58 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,6 +73,9 @@ compare: all
 
 test: all
 	@cd tests && ./test.sh && cd ..
+
+run: all
+	@$(LEAKS)./$(NAME)
 
 clean:
 	@$(ECHO) "$(CYAN)Cleaning up object files in $(OBJ_DIR), and $(OBJ_LFT_DIR)...$(DEFAULT)"
