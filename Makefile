@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/11/06 12:13:49 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/07 19:02:37 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,10 +68,11 @@ compile_libft:
 create_dirs:
 	@mkdir -p $(OBJ_DIR)
 
+compare: all
+	@cd tests && ./compare.sh && cd ..
+
 test: all
-	@$(ECHO) "$(YELLOW)Performing test with custom parameters...$(DEFAULT)\n"
-	@$(ECHO) "Command: $(GRAY)$(LEAKS)./$(NAME) $(DEFAULT)\n"
-	@$(LEAKS)./$(NAME)
+	@cd tests && ./test.sh && cd ..
 
 clean:
 	@$(ECHO) "$(CYAN)Cleaning up object files in $(OBJ_DIR), and $(OBJ_LFT_DIR)...$(DEFAULT)"
