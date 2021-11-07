@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/06 12:03:56 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/07 16:40:58 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ int	builtin(int argc, t_list *cmds, char **envp)
 		return (env(argc, envp));
 	else
 		get_cmd(((t_mini *)cmds->content));
-	return (exec_cmd(cmds, envp));
+	if (((t_mini *)cmds->content)->full_path)
+		return (exec_cmd(cmds, envp));
+	return (0);
 }
 
 int	cd(char **argv)
@@ -79,7 +81,10 @@ int	echo(char **argv)
 	argv++;
 	while (*argv)
 	{
-		printf("%s ", *argv);
+		if (!*(argv + 1))
+			printf("%s", *argv);
+		else
+			printf("%s ", *argv);
 		argv++;
 	}
 	printf("\n");

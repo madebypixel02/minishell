@@ -6,12 +6,11 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/06 12:28:46 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/07 16:20:33 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <unistd.h>
 
 int	find_command(char **env_path, char *cmd, char **full_path)
 {

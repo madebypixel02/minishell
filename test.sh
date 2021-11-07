@@ -12,9 +12,9 @@ exec_test()
 	TEST2="$(echo $@ | /bin/bash)"
 
 	if [ "$TEST1" = "$TEST2" ] ; then
-		printf " $BOLDGREEN%s %s$RESET\n" "✓ " "$@"
+		printf " $BOLDGREEN%s %s$RESET\n" "✓" "$@"
 	else
-		printf " $BOLDRED%s %s$RESET\n" "✗ " "$@"
+		printf " $BOLDRED%s %s$RESET\n" "✗" "$@"
 	fi
 	if [ "$TEST1" != "$TEST2" ]; then
 		echo
