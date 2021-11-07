@@ -6,7 +6,7 @@
 #    By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/07 16:54:53 by mbueno-g          #+#    #+#              #
-#    Updated: 2021/11/07 19:03:57 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/07 21:16:07 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,17 +22,18 @@ read -p "Enter your command: " var
 
 TEST1=$(echo "$var" | ../minishell | grep -v "$USER@minishell*" 2>&1)
 TEST2=$(echo "$var" | /bin/bash 2>&1)
-if [ "$TEST1" != "$TEST2" ]; then
+
+if [[ "$TEST1" != "$TEST2" && ("$TEST1" != *"command not"* || "$TEST2" != *"command not"*) ]]; then
 	printf $BOLDRED"\nError! %s$RESET\n" "✗"
 	echo
 	printf $BOLDRED"Your output : \n%.20s\n|$TEST1|\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
-	printf $BOLDGREEN"Expected output : \n%.20s\n|$TEST2|\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
 	echo
 else
-	printf $BOLDGREEN"\nAll good! %s$RESET\n" "✓"
+	printf $BOLDGREEN"\nAll good! %s$RESET\n\n" "✓"
 fi
 
-if [ "$TEST1" = "$TEST2" ]; then
+printf $BOLDGREEN"Expected output : \n%.20s\n|$TEST2|\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
+if [[ "$TEST1" == "$TEST2" || ("$TEST1" == *"command not"* && "$TEST2" == *"command not"*) ]]; then
 	./starstruck.sh
 else
 	./sad.sh
