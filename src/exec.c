@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/07 16:20:33 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/08 18:05:56 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	exec_cmd(t_list *cmd, char **envp)
 	if (!pid)
 	{
 		dup2(node->infile, STDIN_FILENO);
+		close(node->infile);
 		if (node->outfile != STDOUT_FILENO)
 		{
 			dup2(node->outfile, STDOUT_FILENO);

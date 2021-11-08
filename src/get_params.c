@@ -6,13 +6,33 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/05 18:37:12 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/08 19:35:49 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void	get_here_doc(char *str, char *full, char *limit, char *warn)
+int	pipex_here_fd(char *hdoc_str)
+{
+	int		fd[2];
+	pid_t	pid;
+
+	pipe(fd);
+	pid = fork();
+	if (!pid)
+	{
+		close(fd[READ_END]);
+		write(fd[WRITE_END], hdoc_str, ft_strlen(hdoc_str));
+		close(fd[WRITE_END]);
+		free(hdoc_str);
+		exit(0);
+	}	
+	close(fd[WRITE_END]);
+	free(hdoc_str);
+	return (fd[READ_END]);
+}
+
+static int	get_here_doc(char *str, char *full, char *limit, char *warn)
 {
 	char	*temp;
 	size_t	len;
@@ -33,12 +53,10 @@ static void	get_here_doc(char *str, char *full, char *limit, char *warn)
 		temp = str;
 		str = ft_strjoin(str, "\n");
 		free(temp);
-		add_history(str);
 		len = ft_strlen(str) - 1;
 	}
 	free(str);
-	write(STDIN_FILENO, full, ft_strlen(full));
-	free(full);
+	return (pipex_here_fd(full));
 }
 
 t_mini	*get_outfile1(t_mini *node, char **args, char **arg, int ij[2])
@@ -123,9 +141,7 @@ t_mini	*get_infile2(t_mini *node, char **args, char **arg, int ij[2])
 		limiter = next[0];
 		ij[0] += ft_matrixlen(next) == 1;
 	}
-	else
-		node->infile = get_fd(node->infile, NULL, 0, 0);
-	get_here_doc(NULL, NULL, limiter, warn);
+	node->infile = get_here_doc(NULL, NULL, limiter, warn);
 	ft_free_matrix(&next);
 	return (node);
 }

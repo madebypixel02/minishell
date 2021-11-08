@@ -6,7 +6,7 @@
 #    By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/07 16:58:45 by mbueno-g          #+#    #+#              #
-#    Updated: 2021/11/07 21:28:50 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/08 19:35:58 by mbueno-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,6 @@ done
 # CD
 if [ "$builtin" = "cd" ] || [ "$builtin" = "all" ] ; then
 	exec_test "cd .. \npwd"
-	exec_test "cd -- \npwd"
 	exec_test "cd \npwd"
 	exec_test "cd src/ \n pwd"
 	print_result
@@ -91,6 +90,12 @@ if [ "$builtin" = "echo" ] || [ "$builtin" = "all" ] ; then
 	exec_test "> hola echo hello"
 	exec_test "echo hola \"'adi \$PWD   os' \$PWD\" 'ddj'abc >> \"hello\" < main.c"
 	exec_test "echo $\"PWD\""
+	exec_test "echo \$\$"
+	exec_test "echo \$''"
+	exec_test "echo \$\"\""
+	exec_test "echo \$"
+	exec_test "echo \"\"\$"
+	exec_test "echo \$?"
 	print_result
 fi
 

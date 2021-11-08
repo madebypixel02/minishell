@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/06 11:20:25 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/08 18:35:48 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,11 @@ int		exec_cmd(t_list *cmd, char **envp);
 
 /* Checks if a command is in the PATH variable and retrieves the full_path */
 void	get_cmd(t_mini *node);
+
+/* Expand $-variables*/
+char *expand_vars(char *str, int ij[2], int quotes[2]);
+
+/*Expand ~-variable*/
+char *expand_path(char *str, int ij[2], int quotes[2]);
 
 #endif

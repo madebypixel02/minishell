@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/11/07 19:17:58 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/08 18:23:25 by mbueno-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,8 @@ LIBFT = libft/bin/libft.a
 NAME = minishell
 
 SRC = main.c builtins.c ft_cmdtrim.c ft_strtrim_all.c	\
-	  parse_args.c fill_node.c get_params.c exec.c
+	  parse_args.c fill_node.c get_params.c exec.c \
+	  expand.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
