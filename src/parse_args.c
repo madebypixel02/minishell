@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/08 20:05:22 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/09 10:15:19 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	**expand_matrix(char ***args, int quotes[2])
 	while (aux && ++i >= 0 && args[0][i])
 	{
 		str = expand_vars(ft_strdup(args[0][i]), ij, quotes);
-		str = expand_path(ft_strdup(args[0][i]), ij, quotes);
+		str = expand_path(ft_strdup(str), ij, quotes);
 		aux[i] = ft_strtrim_all(str, 0, 0);
 		free(str);
 		if (!aux[i])

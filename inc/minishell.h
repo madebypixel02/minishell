@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/08 18:35:48 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/09 10:19:25 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,12 @@ int		exec_cmd(t_list *cmd, char **envp);
 void	get_cmd(t_mini *node);
 
 /* Expand $-variables*/
-char *expand_vars(char *str, int ij[2], int quotes[2]);
+char	*expand_vars(char *str, int ij[2], int quotes[2]);
 
 /*Expand ~-variable*/
-char *expand_path(char *str, int ij[2], int quotes[2]);
+char	*expand_path(char *str, int ij[2], int quotes[2]);
+
+/**/
+int  get_here_doc(char *str, char *full, char *limit, char *warn);
 
 #endif
