@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/08 19:35:56 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/09 12:14:24 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,17 @@ char	*mini_getuser(void)
 	return (full);
 }
 
-static void	*check_args(char **args, char *out, char **envp)
+static void	*check_args(char *out, char **envp)
 {
 	t_list	*cmds;
 	t_mini	*node;
+	char	**args;
 
+	args = ft_cmdtrim(out, " ");
 	add_history(out);
 	if (!args)
 	{
-		printf("minishell: error while looking for matching quote\n");
+		mini_perror(QUOTE, NULL);
 		return (out);
 	}
 	cmds = parse_args(args);
@@ -52,7 +54,7 @@ static void	*check_args(char **args, char *out, char **envp)
 	if (args && builtin(ft_lstsize(cmds), cmds, envp) == -1)
 	{
 		ft_free_matrix(&args);
-		printf("exit\n");
+		mini_perror(REXIT, NULL);
 		return (NULL);
 	}
 	ft_free_matrix(&args);
@@ -62,14 +64,15 @@ static void	*check_args(char **args, char *out, char **envp)
 	return (out);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char				*str;
 	char				*out;
-	char				**args;
 	struct sigaction	sa;
 
 	out = NULL;
+	(void)argc;
+	(void)argv;
 	str = mini_getuser();
 	sa.sa_sigaction = handle_sigint;
 	while (1)
@@ -79,11 +82,10 @@ int	main(void)
 		if (!out)
 		{
 			free(str);
-			printf("exit\n");
+			mini_perror(WEXIT, NULL);
 			return (0);
 		}
-		args = ft_cmdtrim(out, " ");
-		if (!check_args(args, out, NULL))
+		if (!check_args(out, envp))
 			break ;
 		free(out);
 	}

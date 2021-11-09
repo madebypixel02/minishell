@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/09 10:19:25 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/09 12:12:33 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,16 @@ typedef struct s_mini
 	int		infile;
 	int		outfile;
 }			t_mini;
+
+enum	e_mini_error
+{
+	QUOTE = 1,
+	NDIR = 2,
+	PWD = 3,
+	NCMD = 4,
+	WEXIT = 5,
+	REXIT = 6
+};
 
 /* C implementation of the cd shell command */
 int		cd(char **argv);
@@ -87,6 +97,9 @@ char	*expand_vars(char *str, int ij[2], int quotes[2]);
 char	*expand_path(char *str, int ij[2], int quotes[2]);
 
 /**/
-int  get_here_doc(char *str, char *full, char *limit, char *warn);
+int		get_here_doc(char *str, char *full, char *limit, char *warn);
+
+/**/
+int		mini_perror(int err, char *param);
 
 #endif

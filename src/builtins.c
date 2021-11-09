@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/08 20:05:20 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/09 11:53:11 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,13 @@ int	cd(char **argv)
 		if (access(home_with_path, F_OK) != -1)
 			chdir(home_with_path);
 		else
-			printf("minishell: cd: %s: No such file or directory\n", \
-				home_with_path);
+			mini_perror(NDIR, home_with_path);
 		free(home_with_path);
 	}
 	else if (access(argv[1], F_OK) != -1)
 		chdir(argv[1]);
 	else
-		printf("minishell: cd: %s: No such file or directory\n", argv[1]);
+		mini_perror(NDIR, argv[1]);
 	return (0);
 }
 
@@ -69,7 +68,7 @@ int	pwd(int argc)
 	char	*buf;
 
 	if (argc != 1)
-		return (printf("pwd: too many arguments\n"));
+		return (mini_perror(PWD, NULL));
 	buf = getcwd(NULL, 0);
 	printf("%s\n", buf);
 	free(buf);

@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/09 10:15:19 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/09 11:58:57 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	**expand_matrix(char ***args, int quotes[2])
 		free(str);
 		if (!aux[i])
 		{
-			printf("minishell: error while looking for matching quote\n");
+			mini_perror(QUOTE, NULL);
 			ft_free_matrix(args);
 			ft_free_matrix(&aux);
 			return (NULL);
@@ -82,7 +82,7 @@ t_list	*parse_args(char **args)
 	char	**matrix1;
 	t_list	*cmds;
 
-	str = "<< hola > out";
+	str = "cat << hola > out";
 	matrix1 = ft_cmdtrim(str, " ");
 	ft_putmatrix_fd(matrix1, 1);
 	if (!matrix1)
@@ -90,8 +90,8 @@ t_list	*parse_args(char **args)
 	cmds = parse_args(matrix1);
 	if (!cmds)
 		return (0);
-	dup2(STDOUT_FILENO, 3);
-	close(STDOUT_FILENO);
+	//dup2(STDOUT_FILENO, 3);
+	//close(STDOUT_FILENO);
 	printf("\nStdin: %d\nStdout: %d\n\n", ((t_mini *)cmds->content)->infile, \
 		((t_mini *)cmds->content)->outfile);
 	ft_putmatrix_fd(((t_mini *)cmds->content)->full_cmd, 1);

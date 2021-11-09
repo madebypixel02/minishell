@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/08 18:05:56 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/09 11:56:36 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	get_cmd(t_mini *node)
 		split_path = ft_split(path, ':');
 		find_command(split_path, *node->full_cmd, &node->full_path);
 		if (!node->full_path)
-			printf("minishell: command not found: %s\n", *node->full_cmd);
+			mini_perror(NCMD, *node->full_cmd);
 	}
 	ft_free_matrix(&split_path);
 }
