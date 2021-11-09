@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/09 12:11:47 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/09 12:38:54 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,5 @@ int	mini_perror(int err, char *param)
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putendl_fd(param, 2);
 	}
-	else if (err == WEXIT)
-		ft_putstr_fd("exit\n", 2);
-	else if (err == REXIT)
-		ft_putstr_fd("exit\n", 1);
 	return (1);
 }

@@ -6,19 +6,19 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/09 11:53:11 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/09 19:37:48 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 #include <stdio.h>
 
-int	builtin(int argc, t_list *cmds, char **envp)
+int	builtin(t_prompt *prompt)
 {
 	int		n;
 	char	**argv;
 
-	argv = ((t_mini *)cmds->content)->full_cmd;
+	argv = ((t_mini *)prompt->cmds->content)->full_cmd;
 	if (!argv)
 		return (0);
 	n = ft_strlen(*argv);
@@ -27,15 +27,17 @@ int	builtin(int argc, t_list *cmds, char **envp)
 	else if (!ft_strncmp(*argv, "exit", n) && n == 4)
 		return (-1);
 	else if (!ft_strncmp(*argv, "pwd", n) && n == 3)
-		return (pwd(argc));
+		return (pwd());
 	else if (!ft_strncmp(*argv, "echo", n) && n == 4)
 		return (echo(argv));
 	else if (!ft_strncmp(*argv, "env", n) && n == 3)
-		return (env(argc, envp));
+		return (env(ft_matrixlen(argv), prompt->envp));
+	else if (!ft_strncmp(*argv, "export", n) && n == 6)
+		return (export(prompt, ft_matrixlen(argv), argv));
 	else
-		get_cmd(((t_mini *)cmds->content));
-	if (((t_mini *)cmds->content)->full_path)
-		return (exec_cmd(cmds, envp));
+		get_cmd(((t_mini *)prompt->cmds->content));
+	if (((t_mini *)prompt->cmds->content)->full_path)
+		return (exec_cmd(prompt->cmds, prompt->envp));
 	return (0);
 }
 
@@ -63,12 +65,10 @@ int	cd(char **argv)
 	return (0);
 }
 
-int	pwd(int argc)
+int	pwd(void)
 {
 	char	*buf;
 
-	if (argc != 1)
-		return (mini_perror(PWD, NULL));
 	buf = getcwd(NULL, 0);
 	printf("%s\n", buf);
 	free(buf);

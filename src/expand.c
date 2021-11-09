@@ -6,38 +6,37 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:17:55 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/09 12:07:48 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/09 16:04:06 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*expand_path(char *str, int ij[2], int quotes[2])
+char	*expand_path(char *str, int i, int quotes[2])
 {	
-	char	*exp1;
 	char	*path;
+	char	*aux;
 
 	quotes[0] = 0;
 	quotes[1] = 0;
-	ij[0] = -1;
-	exp1 = NULL;
-	while (++ij[0] >= 0 && str && str[ij[0]])
+	while (++i >= 0 && str && str[i])
 	{
-		quotes[0] = (quotes[0] + (!quotes[1] && str[ij[0]] == '\'')) % 2;
-		quotes[1] = (quotes[1] + (!quotes[0] && str[ij[0]] == '\"')) % 2;
-		if ((!quotes[0] && !quotes[1]) && ((str[ij[0]] == '~')))
+		quotes[0] = (quotes[0] + (!quotes[1] && str[i] == '\'')) % 2;
+		quotes[1] = (quotes[1] + (!quotes[0] && str[i] == '\"')) % 2;
+		if ((!quotes[0] && !quotes[1]) && ((str[i] == '~')))
 		{
-			path = getenv("HOME");
-			exp1 = ft_strjoin(path, str + 1);
+			aux = ft_substr(str, 0, i);
+			path = ft_strjoin(aux, getenv("HOME"));
+			free(aux);
+			aux = ft_substr(str, i + 1, ft_strlen(str));
+			i = i + ft_strlen(getenv("HOME")) - 1;
 			free(str);
-			if (access(exp1, F_OK) == -1)
-				return (NULL);
-			break ;
+			str = ft_strjoin(path, aux);
+			free(path);
+			return (expand_path(str, i, quotes));
 		}
 	}
-	if (!exp1)
-		return (str);
-	return (exp1);
+	return (str);
 }
 
 static char	*get_substr_vars(char *str, int len[3], int ij[2], int quotes[2])

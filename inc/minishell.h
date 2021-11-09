@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/09 12:12:33 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/09 19:33:02 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@
 # define READ_END 0
 # define WRITE_END 1
 
+typedef struct s_prompt
+{
+	t_list	*cmds;
+	char	**envp;
+}			t_prompt;
+
 typedef struct s_mini
 {
 	char	**full_cmd;
@@ -38,24 +44,25 @@ enum	e_mini_error
 	NDIR = 2,
 	PWD = 3,
 	NCMD = 4,
-	WEXIT = 5,
-	REXIT = 6
 };
 
 /* C implementation of the cd shell command */
 int		cd(char **argv);
 
 /* Handles all builtin functions */
-int		builtin(int argc, t_list *cmds, char **envp);
+int		builtin(t_prompt *prompt);
 
 /* C implementation of the pwd shell command */
-int		pwd(int argc);
+int		pwd(void);
 
 /* C implementation of the echo shell command */
 int		echo(char **argv);
 
 /* C implementation of the env shell command */
 int		env(int argc, char **envp);
+
+/* C implementation of the export shell command */
+int		export(t_prompt *prompt, int argc, char **argv);
 
 /* Splits command and args into a matrix, taking quotes into account */
 char	**ft_cmdtrim(char const *s, char *set);
@@ -94,7 +101,7 @@ void	get_cmd(t_mini *node);
 char	*expand_vars(char *str, int ij[2], int quotes[2]);
 
 /*Expand ~-variable*/
-char	*expand_path(char *str, int ij[2], int quotes[2]);
+char	*expand_path(char *str, int i, int quotes[2]);
 
 /**/
 int		get_here_doc(char *str, char *full, char *limit, char *warn);
