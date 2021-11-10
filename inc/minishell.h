@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/10 17:03:58 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/10 19:15:52 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	exec_custom(char ***out, char *full, char *args, char **envp);
 int		exec_builtin(t_prompt *prompt, int (*func)(t_prompt *));
 
 /* Checks if a command is in the PATH variable and retrieves the full_path */
-void	get_cmd(t_mini *node);
+void	get_cmd(t_prompt *prompt);
 
 /* Expands environment variables in a string if not in quotes */
 char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt);

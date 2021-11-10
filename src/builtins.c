@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/10 17:35:07 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/10 19:17:27 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	builtin(t_prompt *prompt)
 	else if (!ft_strncmp(*argv, "unset", n) && n == 5)
 		return (mini_unset(prompt));
 	else
-		get_cmd(((t_mini *)prompt->cmds->content));
+		get_cmd(prompt);
 	return (exec_cmd(prompt->cmds, prompt->envp));
 }
 

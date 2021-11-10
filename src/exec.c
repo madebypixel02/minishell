@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/10 16:57:27 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/10 19:17:04 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,13 @@ int	find_command(char **env_path, char *cmd, char **full_path)
 	return (0);
 }
 
-void	get_cmd(t_mini *node)
+void	get_cmd(t_prompt *prompt)
 {
 	char	**split_path;
 	char	*path;
+	t_mini	*node;
 
+	node = prompt->cmds->content;
 	if (ft_strchr(*node->full_cmd, '/') && !access(*node->full_cmd, F_OK))
 	{
 		split_path = ft_split(*node->full_cmd, '/');
@@ -55,8 +57,9 @@ void	get_cmd(t_mini *node)
 	}
 	else
 	{
-		path = getenv("PATH");
+		path = mini_getenv("PATH", prompt->envp, 4);
 		split_path = ft_split(path, ':');
+		free(path);
 		find_command(split_path, *node->full_cmd, &node->full_path);
 		if (!node->full_path)
 			mini_perror(NCMD, *node->full_cmd);
