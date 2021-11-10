@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/09 19:37:43 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/10 18:40:39 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,44 +23,42 @@ void	handle_sigint(int sig, siginfo_t *info, void *context)
 	(void)context;
 }
 
-char	*mini_getuser(void)
-{
-	char	*user;
-	char	*full;
-
-	user = ft_strjoin(getenv("USER"), "@");
-	if (!user)
-		return (NULL);
-	full = ft_strjoin(user, "minishell$ ");
-	free(user);
-	return (full);
-}
-
 static void	*check_args(char *out, t_prompt *prompt)
 {
-	//t_mini	*node;
+	t_mini	*node;
+	void	*aux;
 	char	**args;
 
 	args = ft_cmdtrim(out, " ");
 	add_history(out);
+	aux = prompt;
+	free(out);
 	if (!args)
 	{
 		mini_perror(QUOTE, NULL);
-		return (out);
+		return (aux);
 	}
-	prompt->cmds = parse_args(args);
-	//node = (t_mini *)cmds->content;
+	prompt->cmds = parse_args(args, prompt);
+	node = (t_mini *)prompt->cmds->content;
 	if (args && builtin(prompt) == -1)
 	{
-		ft_free_matrix(&args);
+		aux = NULL;
 		printf("exit\n");
-		return (NULL);
 	}
 	ft_free_matrix(&args);
-	//free(node->full_path);
-	//ft_free_matrix(&node->full_cmd);
-	//ft_lstclear(&cmds, free);
-	return (out);
+	free(node->full_path);
+	ft_free_matrix(&node->full_cmd);
+	ft_lstclear(&prompt->cmds, free);
+	return (aux);
+}
+
+static t_prompt	init_prompt(char **envp)
+{
+	t_prompt	prompt;
+
+	prompt.cmds = NULL;
+	prompt.envp = ft_dup_matrix(envp);
+	return (prompt);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -73,23 +71,21 @@ int	main(int argc, char **argv, char **envp)
 	out = NULL;
 	(void)argc;
 	(void)argv;
-	str = mini_getuser();
 	sa.sa_sigaction = handle_sigint;
-	prompt.envp = ft_dup_matrix(envp);
+	prompt = init_prompt(envp);
 	while (1)
 	{
+		str = mini_getprompt(prompt);
 		sigaction(SIGINT, &sa, NULL);
 		out = readline(str);
+		free(str);
 		if (!out)
 		{
-			free(str);
 			printf("exit\n");
-			return (0);
+			break ;
 		}
 		if (!check_args(out, &prompt))
 			break ;
-		free(out);
 	}
-	free(out);
-	free(str);
+	ft_free_matrix(&prompt.envp);
 }

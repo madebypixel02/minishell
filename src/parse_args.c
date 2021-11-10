@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/09 19:37:46 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/10 12:52:20 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,19 @@ static t_mini	*mini_init(void)
 	return (mini);
 }
 
-static char	**expand_matrix(char ***args, int quotes[2])
+static char	**expand_matrix(char ***args, int quotes[2], t_prompt *prompt)
 {
 	char	**aux;
 	char	*str;
 	int		i;
-	int		ij[2];
 
 	i = -1;
 	aux = ft_calloc(sizeof(char *), (ft_matrixlen(*args) + 1));
 	while (aux && ++i >= 0 && args[0][i])
 	{
-		str = expand_vars(ft_strdup(args[0][i]), ij, quotes);
-		str = expand_path(ft_strdup(str), -1, quotes);
+		str = expand_vars(ft_strdup(args[0][i]), -1, quotes, prompt);
+		str = expand_path(str, -1, quotes, \
+			mini_getenv("HOME", prompt->envp, 4));
 		aux[i] = ft_strtrim_all(str, 0, 0);
 		free(str);
 		if (!aux[i])
@@ -52,14 +52,14 @@ static char	**expand_matrix(char ***args, int quotes[2])
 	return (aux);
 }
 
-t_list	*parse_args(char **args)
+t_list	*parse_args(char **args, t_prompt *prompt)
 {
 	t_list	*cmds;
 	t_mini	*node;
 	int		quotes[2];
 
 	cmds = NULL;
-	args = expand_matrix(&args, quotes);
+	args = expand_matrix(&args, quotes, prompt);
 	if (!args)
 		return (NULL);
 	node = mini_init();
@@ -75,28 +75,3 @@ t_list	*parse_args(char **args)
 	ft_free_matrix(&args);
 	return (cmds);
 }
-
-/*int	main(void)
-{
-	char	*str;
-	char	**matrix1;
-	t_list	*cmds;
-
-	str = "cat << hola > out";
-	matrix1 = ft_cmdtrim(str, " ");
-	ft_putmatrix_fd(matrix1, 1);
-	if (!matrix1)
-		return (0);
-	cmds = parse_args(matrix1);
-	if (!cmds)
-		return (0);
-	//dup2(STDOUT_FILENO, 3);
-	//close(STDOUT_FILENO);
-	printf("\nStdin: %d\nStdout: %d\n\n", ((t_mini *)cmds->content)->infile, \
-		((t_mini *)cmds->content)->outfile);
-	ft_putmatrix_fd(((t_mini *)cmds->content)->full_cmd, 1);
-	close(((t_mini *)cmds->content)->infile);
-	close(((t_mini *)cmds->content)->outfile);
-	ft_free_matrix(&((t_mini *)cmds->content)->full_cmd);
-	ft_lstclear(&cmds, free);
-}*/

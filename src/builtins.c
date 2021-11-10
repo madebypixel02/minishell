@@ -6,12 +6,11 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/09 19:37:48 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/10 17:35:07 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <stdio.h>
 
 int	builtin(t_prompt *prompt)
 {
@@ -22,77 +21,104 @@ int	builtin(t_prompt *prompt)
 	if (!argv)
 		return (0);
 	n = ft_strlen(*argv);
-	if (!ft_strncmp(*argv, "cd", n) && n == 2)
-		return (cd(argv));
-	else if (!ft_strncmp(*argv, "exit", n) && n == 4)
+	if (!ft_strncmp(*argv, "exit", n) && n == 4)
 		return (-1);
+	else if (!ft_strncmp(*argv, "cd", n) && n == 2)
+		return (mini_cd(prompt));
 	else if (!ft_strncmp(*argv, "pwd", n) && n == 3)
-		return (pwd());
+		return (mini_pwd(prompt));
 	else if (!ft_strncmp(*argv, "echo", n) && n == 4)
-		return (echo(argv));
+		return (mini_echo(prompt));
 	else if (!ft_strncmp(*argv, "env", n) && n == 3)
-		return (env(ft_matrixlen(argv), prompt->envp));
+		return (mini_env(prompt));
 	else if (!ft_strncmp(*argv, "export", n) && n == 6)
-		return (export(prompt, ft_matrixlen(argv), argv));
+		return (mini_export(prompt));
+	else if (!ft_strncmp(*argv, "unset", n) && n == 5)
+		return (mini_unset(prompt));
 	else
 		get_cmd(((t_mini *)prompt->cmds->content));
-	if (((t_mini *)prompt->cmds->content)->full_path)
-		return (exec_cmd(prompt->cmds, prompt->envp));
-	return (0);
+	return (exec_cmd(prompt->cmds, prompt->envp));
 }
 
-int	cd(char **argv)
+int	mini_cd(t_prompt *prompt)
 {
-	char	*home_with_path;
 	char	*home_dir;
+	char	**argv;
+	char	*pwd;
 
-	home_dir = getenv("HOME");
+	argv = ((t_mini *)prompt->cmds->content)->full_cmd;
+	pwd = getcwd(NULL, 0);
+	home_dir = mini_getenv("HOME", prompt->envp, 4);
 	if (!argv[1])
 		chdir(home_dir);
-	else if (argv[1][0] == '~')
-	{
-		home_with_path = ft_strjoin(home_dir, argv[1] + 1);
-		if (access(home_with_path, F_OK) != -1)
-			chdir(home_with_path);
-		else
-			mini_perror(NDIR, home_with_path);
-		free(home_with_path);
-	}
-	else if (access(argv[1], F_OK) != -1)
+	free(home_dir);
+	if (argv[1] && access(argv[1], F_OK) != -1)
 		chdir(argv[1]);
-	else
+	else if (argv[1])
+	{
 		mini_perror(NDIR, argv[1]);
+		free(pwd);
+		return (1);
+	}
+	mini_setenv("OLDPWD", pwd, prompt->envp, 6);
+	free(pwd);
+	pwd = getcwd(NULL, 0);
+	mini_setenv("PWD", pwd, prompt->envp, 3);
+	free(pwd);
 	return (0);
 }
 
-int	pwd(void)
+int	mini_pwd(t_prompt *prompt)
 {
 	char	*buf;
+	t_mini	*node;
 
+	node = prompt->cmds->content;
 	buf = getcwd(NULL, 0);
-	printf("%s\n", buf);
+	ft_putendl_fd(buf, node->outfile);
 	free(buf);
 	return (0);
 }
 
-int	echo(char **argv)
+int	mini_echo(t_prompt *prompt)
 {
-	argv++;
-	while (*argv)
+	int		newline;
+	int		i;
+	char	**argv;
+	t_mini	*node;
+
+	i = 0;
+	argv = ((t_mini *)prompt->cmds->content)->full_cmd;
+	newline = 1;
+	node = prompt->cmds->content;
+	while (argv && argv[++i])
 	{
-		if (!*(argv + 1))
-			printf("%s", *argv);
+		if (i == 1 && !ft_strncmp(argv[i], "-n", ft_strlen(argv[i])))
+			newline = 0;
 		else
-			printf("%s ", *argv);
-		argv++;
+		{
+			ft_putstr_fd(argv[i], node->outfile);
+			if (argv[i + 1])
+				ft_putchar_fd(' ', node->outfile);
+		}
 	}
-	printf("\n");
+	if (newline)
+		ft_putchar_fd('\n', node->outfile);
 	return (0);
 }
 
-int	env(int argc, char **envp)
+int	mini_env(t_prompt *prompt)
 {
-	(void)argc;
-	ft_putmatrix_fd(envp, 1);
+	int		i;
+	t_mini	*node;
+
+	i = 0;
+	node = prompt->cmds->content;
+	while (prompt->envp[i])
+	{
+		if (prompt->envp[i][ft_strlen(prompt->envp[i]) - 1] != '=')
+			ft_putendl_fd(prompt->envp[i], node->outfile);
+		i++;
+	}
 	return (0);
 }
