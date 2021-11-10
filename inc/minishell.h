@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/09 19:33:02 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/10 17:03:58 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 # define MINISHELL_H
 
 # include "../libft/inc/libft.h"
+# include "colors.h"
+# include "get_next_line.h"
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -46,23 +48,26 @@ enum	e_mini_error
 	NCMD = 4,
 };
 
-/* C implementation of the cd shell command */
-int		cd(char **argv);
-
 /* Handles all builtin functions */
 int		builtin(t_prompt *prompt);
 
+/* C implementation of the cd shell command */
+int		mini_cd(t_prompt *prompt);
+
 /* C implementation of the pwd shell command */
-int		pwd(void);
+int		mini_pwd(t_prompt *prompt);
 
 /* C implementation of the echo shell command */
-int		echo(char **argv);
+int		mini_echo(t_prompt *prompt);
 
 /* C implementation of the env shell command */
-int		env(int argc, char **envp);
+int		mini_env(t_prompt *prompt);
 
 /* C implementation of the export shell command */
-int		export(t_prompt *prompt, int argc, char **argv);
+int		mini_export(t_prompt *prompt);
+
+/* C implementation of the unset shell command */
+int		mini_unset(t_prompt *prompt);
 
 /* Splits command and args into a matrix, taking quotes into account */
 char	**ft_cmdtrim(char const *s, char *set);
@@ -89,24 +94,39 @@ t_mini	*get_infile1(t_mini *node, char **args, char **arg, int ij[2]);
 t_mini	*get_infile2(t_mini *node, char **args, char **arg, int ij[2]);
 
 /* Fills in linked list node with command info */
-t_list	*parse_args(char **args);
+t_list	*parse_args(char **args, t_prompt *prompt);
 
-/* Executes a command according to the info on our list */
+/* Executes a non-builtin command according to the info on our list */
 int		exec_cmd(t_list *cmd, char **envp);
+
+/* Executes a custom command and saves output to string ending in \n */
+void	exec_custom(char ***out, char *full, char *args, char **envp);
+
+/* Executes a non-builtin command according to the info on our list */
+int		exec_builtin(t_prompt *prompt, int (*func)(t_prompt *));
 
 /* Checks if a command is in the PATH variable and retrieves the full_path */
 void	get_cmd(t_mini *node);
 
-/* Expand $-variables*/
-char	*expand_vars(char *str, int ij[2], int quotes[2]);
+/* Expands environment variables in a string if not in quotes */
+char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt);
 
-/*Expand ~-variable*/
-char	*expand_path(char *str, int i, int quotes[2]);
+/* Expands "~" to home directory in a string if not in quotes */
+char	*expand_path(char *str, int i, int quotes[2], char *var);
 
-/**/
+/* Retrieves a string from standard input, expanding vars when needed */
 int		get_here_doc(char *str, char *full, char *limit, char *warn);
 
-/**/
+/* Prints a custom error message to standard error */
 int		mini_perror(int err, char *param);
+
+/* Retrieves a string with malloc containing the value of an env var */
+char	*mini_getenv(char	*var, char **envp, int n);
+
+/* Sets a new environment variable */
+void	*mini_setenv(char *var, char *value, char **envp, int n);
+
+/* Returns a colorized string used as prompt for readline */
+char	*mini_getprompt(t_prompt prompt);
 
 #endif

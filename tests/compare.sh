@@ -6,7 +6,7 @@
 #    By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/07 16:54:53 by mbueno-g          #+#    #+#              #
-#    Updated: 2021/11/09 13:46:26 by mbueno-g         ###   ########.fr        #
+#    Updated: 2021/11/10 18:04:11 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,26 +20,32 @@ RESET="\033[0m"
 
 read -p "Enter your command: " var
 
-TEST1=$(echo "$var" | ../minishell | grep -v "$USER@minishell*" > test1)
-TEST2=$(echo "$var" | /bin/bash > test2)
+touch test1 test2
+
+echo "$var" | ../minishell | grep -v "$USER@minishell"* > test1
+echo "$var" | /bin/bash > test2
 
 test1="test1"
 test2="test2"
-
 
 if (cmp -s "$test1" "$test2") ; then
 	printf $BOLDGREEN"\nAll good! %s$RESET\n\n" "✓"
 else
 	printf $BOLDRED"\nError! %s$RESET\n" "✗"
 	echo
-	printf $BOLDRED"Your output : \n%.20s\n|$(cat test1)|\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
+	printf $BOLDRED"Your output : \n%.20s\n$(cat -e test1)\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
 	echo
 fi
 
-printf $BOLDGREEN"Expected output : \n%.20s\n|$(cat test2)|\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
+printf $BOLDGREEN"Expected output : \n%.20s\n$(cat -e test2)\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
 
 if (cmp -s "$test1" "$test2") ; then
 	./starstruck.sh
 else
+	printf "$BOLDRED\n----------------------------------------- DIFF -----------------------------------------\n\n"
+	diff test1 test2
+	printf $RESET
 	./sad.sh
 fi
+
+rm -f test1 test2

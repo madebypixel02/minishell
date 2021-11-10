@@ -6,13 +6,62 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:02 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/09 19:37:45 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/10 14:22:58 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	var_in_envp(char *argv, char **envp, int ij[2])
+char	*mini_getenv(char	*var, char **envp, int n)
+{
+	int	i;
+	int	n2;
+
+	i = 0;
+	if (n < 0)
+		n = ft_strlen(var);
+	while (!ft_strchr(var, '=') && envp && envp[i])
+	{
+		n2 = n;
+		if (n2 < ft_strchr_i(envp[i], '='))
+			n2 = ft_strchr_i(envp[i], '=');
+		if (!ft_strncmp(envp[i], var, n2))
+			return (ft_substr(envp[i], n2 + 1, ft_strlen(envp[i])));
+		i++;
+	}
+	return (NULL);
+}
+
+void	*mini_setenv(char *var, char *value, char **envp, int n)
+{
+	int		i[2];
+	char	*aux[2];
+
+	if (n < 0)
+		n = ft_strlen(var);
+	i[0] = -1;
+	aux[0] = ft_strjoin(var, "=");
+	aux[1] = ft_strjoin(aux[0], value);
+	free(aux[0]);
+	while (!ft_strchr(var, '=') && envp && envp[++i[0]])
+	{
+		i[1] = n;
+		if (i[1] < ft_strchr_i(envp[i[0]], '='))
+			i[1] = ft_strchr_i(envp[i[0]], '=');
+		if (!ft_strncmp(envp[i[0]], var, i[1]))
+		{
+			aux[0] = envp[i[0]];
+			envp[i[0]] = aux[1];
+			free(aux[0]);
+			return (NULL);
+		}
+	}
+	ft_extend_matrix(envp, aux[1]);
+	free(aux[1]);
+	return (NULL);
+}
+
+static int	var_in_envp(char *argv, char **envp, int ij[2])
 {
 	int	pos;
 
@@ -29,31 +78,52 @@ int	var_in_envp(char *argv, char **envp, int ij[2])
 	return (0);
 }
 
-int	export(t_prompt *prompt, int argc, char **argv)
+int	mini_export(t_prompt *prompt)
 {
 	int		ij[2];
 	int		pos;
+	char	**argv;
 
-	if (argc >= 2)
+	argv = ((t_mini *)prompt->cmds->content)->full_cmd;
+	if (ft_matrixlen(argv) >= 2)
 	{
 		ij[0] = 1;
 		while (argv[ij[0]])
 		{
 			pos = var_in_envp(argv[ij[0]], prompt->envp, ij);
-			if (pos)
+			if (pos == 1)
 			{
 				free(prompt->envp[ij[1]]);
 				prompt->envp[ij[1]] = ft_strdup(argv[ij[0]]);
 			}
 			else if (!pos)
-			{
-				printf("holaa\n");
 				prompt->envp = ft_extend_matrix(prompt->envp, argv[ij[0]]);
-			}
 			ij[0]++;
 		}
 	}
-	ft_putmatrix_fd(prompt->envp, 1);
-	//ft_free_matrix(&aux);
+	return (1);
+}
+
+int	mini_unset(t_prompt *prompt)
+{
+	char	**argv;
+	char	*aux;
+	int		i;
+
+	i = -1;
+	argv = ((t_mini *)prompt->cmds->content)->full_cmd;
+	if (ft_matrixlen(argv) >= 2)
+	{
+		while (argv[++i])
+		{
+			if (argv[i][ft_strlen(argv[i] - 1)] != '=')
+			{
+				aux = ft_strjoin(argv[i], "=");
+				free(argv[i]);
+				argv[i] = aux;
+			}
+		}
+		mini_export(prompt);
+	}
 	return (1);
 }

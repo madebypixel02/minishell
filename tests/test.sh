@@ -6,7 +6,7 @@
 #    By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/07 16:58:45 by mbueno-g          #+#    #+#              #
-#    Updated: 2021/11/09 12:21:32 by mbueno-g         ###   ########.fr        #
+#    Updated: 2021/11/10 18:15:23 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,17 +23,18 @@ CORRECT=0
 clear
 exec_test()
 {
-	TEST1=$(echo "$@" | ../minishell | grep -v "$USER@minishell*" 2>&1)
-	TEST2=$(echo "$@" | /bin/bash 2>&1)
-	if [[ "$TEST1" != "$TEST2" && ("$TEST1" != *"command not"* || "$TEST2" != *"command not"*) && ("$TEST1" != *"No such"* || "$TEST2" != *"No such"*) ]]; then
-		printf $BOLDRED"\n%s %s$RESET\n" "✗" "$@"
-		echo
-		printf $BOLDRED"Your output : \n%.20s\n|$TEST1|\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
-		printf $BOLDGREEN"Expected output : \n%.20s\n|$TEST2|\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
-		echo
-	else
-		printf $BOLDGREEN"%s %s$RESET\n" "✓" "$@"
+	echo "$@" | ../minishell | grep -v "$USER@minishell*" > test1
+	echo "$@" | /bin/bash > test2 
+	test1="test1"
+	test2="test2"
+	if (cmp -s "$test1" "$test2") ; then
+		printf $BOLDGREEN"All good! %s %s$RESET\n" "✓" "$@"
 		CORRECT=$(( $CORRECT + 1 ))
+	else
+		printf $BOLDRED"\nError! %s %s$RESET\n\n" "✗" "$@"
+		printf $BOLDRED"Your output : \n%.20s\n$(cat -e test1)\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
+		printf $BOLDGREEN"Expected output : \n%.20s\n$(cat -e test2)\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
+		echo
 	fi
 	TOTAL=$(( $TOTAL + 1 ))
 }
@@ -66,9 +67,9 @@ fi
 #ECHO
 if [ "$builtin" = "echo" ] || [ "$builtin" = "all" ] ; then
 	exec_test "echo \$PATH"
-	exec_test "echo checking if spaces      	work properly"
-	exec_test "echo \"checking if spaces      	work properly\""
-	exec_test "echo 'checking if spaces      	work properly'"
+	exec_test "echo checking if spaces      work properly"
+	exec_test "echo \"checking if spaces       work properly\""
+	exec_test "echo 'checking if spaces   work properly'"
 	exec_test "echo \$water"
 	exec_test "echo \"\$water\""
 	exec_test "echo '\$water'"
@@ -158,3 +159,5 @@ if [ $CORRECT -eq $TOTAL ]; then
 else
 	./sad.sh
 fi
+
+rm -f test1 test2
