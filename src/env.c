@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:02 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/10 14:22:58 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/11 12:31:29 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,13 +110,13 @@ int	mini_unset(t_prompt *prompt)
 	char	*aux;
 	int		i;
 
-	i = -1;
+	i = 0;
 	argv = ((t_mini *)prompt->cmds->content)->full_cmd;
 	if (ft_matrixlen(argv) >= 2)
 	{
 		while (argv[++i])
 		{
-			if (argv[i][ft_strlen(argv[i] - 1)] != '=')
+			if (argv[i][ft_strlen(argv[i]) - 1] != '=')
 			{
 				aux = ft_strjoin(argv[i], "=");
 				free(argv[i]);

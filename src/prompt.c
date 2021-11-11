@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 17:02:33 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/10 17:12:56 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/11 13:52:52 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	*get_home(t_prompt prompt)
 
 	pwd = getcwd(NULL, 0);
 	home = mini_getenv("HOME", prompt.envp, 4);
-	if (ft_strnstr(pwd, home, ft_strlen(pwd)))
+	if (home && home[0] && ft_strnstr(pwd, home, ft_strlen(pwd)))
 	{
 		temp = pwd;
 		pwd = ft_strjoin("~", &pwd[ft_strlen(home)]);
@@ -45,7 +45,7 @@ static char	*get_user(t_prompt prompt)
 	char	*temp2;
 
 	user = NULL;
-	exec_custom(&user, "/bin/whoami", "whoami", prompt.envp);
+	exec_custom(&user, "/usr/bin/whoami", "whoami", prompt.envp);
 	if (ft_strncmp(*user, "root", 4))
 		temp2 = ft_strjoin(NULL, GREEN);
 	else

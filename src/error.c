@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/09 12:38:54 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/11 13:52:13 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	mini_perror(int err, char *param)
 		ft_putstr_fd(": No such file or directory\n", 2);
 	}
 	else if (err == PWD)
-		ft_putstr_fd("pwd: too many arguments\n", 2);
+		ft_putstr_fd("minishell: pwd: too many arguments\n", 2);
 	else if (err == NCMD)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
@@ -31,3 +31,8 @@ int	mini_perror(int err, char *param)
 	}
 	return (1);
 }
+
+/*void	*mini_exit(t_prompt *prompt, int err)
+{
+	
+}*/
