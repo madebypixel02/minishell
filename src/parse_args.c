@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/11 16:54:44 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/11 18:03:09 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,24 @@ static char	**expand_matrix(char ***args, int quotes[2], t_prompt *prompt)
 	return (aux);
 }
 
+static char	**split_all(char **args)
+{
+	char	**aux;
+	char	**subsplit;
+	int		i;
+
+	i = -1;
+	aux = ft_dup_matrix(args);
+	while (aux[++i])
+	{
+		subsplit = ft_subsplit(args[i], "<|>");
+		ft_matrix_replace_in(&args, subsplit, i);
+		ft_free_matrix(&subsplit);
+	}
+	ft_free_matrix(&aux);
+	return (args);
+}
+
 t_list	*parse_args(char **args, t_prompt *prompt)
 {
 	t_list	*cmds;
@@ -60,7 +78,8 @@ t_list	*parse_args(char **args, t_prompt *prompt)
 
 	cmds = NULL;
 	args = expand_matrix(&args, quotes, prompt);
-	if (!args)
+	args = split_all(args);
+	/*if (!args)
 		return (NULL);
 	node = mini_init();
 	if (!node)
@@ -72,6 +91,8 @@ t_list	*parse_args(char **args, t_prompt *prompt)
 		return (NULL);
 	}
 	ft_lstadd_back(&cmds, ft_lstnew(node));
-	ft_free_matrix(&args);
+	ft_free_matrix(&args);*/
+	ft_putmatrix_fd(args, 1);
+	exit(0);
 	return (cmds);
 }
