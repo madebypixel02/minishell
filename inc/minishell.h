@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/11 16:54:28 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 00:07:52 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,22 +76,22 @@ char	**ft_cmdtrim(char const *s, char *set);
 char	*ft_strtrim_all(char const *s1, int squote, int dquote);
 
 /* Parses all necessary stuff for a command matrix */
-t_mini	*fill_node(char **args, t_mini *node);
+t_list	*fill_nodes(char **args);
 
 /* Opens a file to a file descriptor with the adequate open flags */
 int		get_fd(int oldfd, char *path, int is_outfile, int append);
 
 /* Tries to open proper file as outfile (> case) */
-t_mini	*get_outfile1(t_mini *node, char **args, char **arg, int ij[2]);
+t_mini	*get_outfile1(t_mini *node, char **args, int *i);
 
 /* Tries to open proper file as outfile (>> case) */
-t_mini	*get_outfile2(t_mini *node, char **args, char **arg, int ij[2]);
+t_mini	*get_outfile2(t_mini *node, char **args, int *i);
 
 /* Tries to open proper file as infile (< case) */
-t_mini	*get_infile1(t_mini *node, char **args, char **arg, int ij[2]);
+t_mini	*get_infile1(t_mini *node, char **args, int *i);
 
 /* Tries to open read heredoc as infile (<< case) */
-t_mini	*get_infile2(t_mini *node, char **args, char **arg, int ij[2]);
+t_mini	*get_infile2(t_mini *node, char **args, int *i);
 
 /* Fills in linked list node with command info */
 t_list	*parse_args(char **args, t_prompt *prompt);
@@ -128,5 +128,8 @@ void	*mini_setenv(char *var, char *value, char **envp, int n);
 
 /* Returns a colorized string used as prompt for readline */
 char	*mini_getprompt(t_prompt prompt);
+
+/* Frees all elements in linked list nodes */
+void	free_content(void *content);
 
 #endif

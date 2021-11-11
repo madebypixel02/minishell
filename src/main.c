@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/10 18:40:39 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 00:13:38 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	handle_sigint(int sig, siginfo_t *info, void *context)
 
 static void	*check_args(char *out, t_prompt *prompt)
 {
-	t_mini	*node;
 	void	*aux;
 	char	**args;
 
@@ -39,16 +38,15 @@ static void	*check_args(char *out, t_prompt *prompt)
 		return (aux);
 	}
 	prompt->cmds = parse_args(args, prompt);
-	node = (t_mini *)prompt->cmds->content;
+	if (!prompt->cmds)
+		return (aux);
 	if (args && builtin(prompt) == -1)
 	{
 		aux = NULL;
 		printf("exit\n");
 	}
 	ft_free_matrix(&args);
-	free(node->full_path);
-	ft_free_matrix(&node->full_cmd);
-	ft_lstclear(&prompt->cmds, free);
+	ft_lstclear(&prompt->cmds, free_content);
 	return (aux);
 }
 

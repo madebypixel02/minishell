@@ -6,11 +6,25 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/11 16:54:30 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 00:18:39 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+static t_mini	*mini_init(void)
+{
+	t_mini	*mini;
+
+	mini = malloc(sizeof(t_mini));
+	if (!mini)
+		return (NULL);
+	mini->full_cmd = NULL;
+	mini->full_path = NULL;
+	mini->infile = STDIN_FILENO;
+	mini->outfile = STDOUT_FILENO;
+	return (mini);
+}
 
 int	get_fd(int oldfd, char *path, int is_outfile, int append)
 {
@@ -29,37 +43,75 @@ int	get_fd(int oldfd, char *path, int is_outfile, int append)
 	return (fd);
 }
 
-static t_mini	*get_params(t_mini *node, char **args, char **arg, int ij[2])
+static t_mini	*parse_no_quotes(t_mini *node, char **args, int *i)
 {
-	if (arg[ij[1]][0] == '>' && arg[ij[1] + 1] && arg[ij[1] + 1][0] == '>')
-		node = get_outfile2(node, args, arg, ij);
-	else if (arg[ij[1]][0] == '>')
-		node = get_outfile1(node, args, arg, ij);
-	else if (arg[ij[1]][0] == '<' && arg[ij[1] + 1] && arg[ij[1] + 1][0] == '<')
-		node = get_infile2(node, args, arg, ij);
-	else if (arg[ij[1]][0] == '<')
-		node = get_infile1(node, args, arg, ij);
+	if (args[*i][0] == '>' && args[*i + 1] && args[*i + 1][0] == '>')
+		node = get_outfile2(node, args, i);
+	else if (args[*i][0] == '>')
+		node = get_outfile1(node, args, i);
+	else if (args[*i][0] == '<' && args[*i + 1] && args[*i + 1][0] == '<')
+		node = get_infile2(node, args, i);
+	else if (args[*i][0] == '<')
+		node = get_infile1(node, args, i);
 	else
-		node->full_cmd = ft_extend_matrix(node->full_cmd, arg[ij[1]]);
+		node->full_cmd = ft_extend_matrix(node->full_cmd, args[*i]);
 	return (node);
 }
 
-t_mini	*fill_node(char **args, t_mini	*node)
+static t_mini	*get_params(t_mini *node, char **args, int *i, int quotes[2])
 {
-	int		ij[2];
-	char	**arg;
+	char	*new;
+	char	*aux;
+	char	type;
 
-	ij[0] = 0;
-	while (args[ij[0]])
+	new = NULL;
+	if (!quotes[0] && !quotes[1])
+		node = parse_no_quotes(node, args, i);
+	else
 	{
-		ij[1] = -1;
-		arg = ft_subsplit(args[ij[0]], "<>");
-		if (!arg)
-			return (NULL);
-		while (arg[++ij[1]])
-			get_params(node, args, arg, ij);
-		ft_free_matrix(&arg);
-		ij[0] += (args[ij[0]] != NULL);
+		type = args[*i][0];
+		while (args[++(*i)] && args[*i][0] != type)
+		{
+			aux = ft_strjoin(new, args[*i]);
+			free(new);
+			new = aux;
+		}
+		if (!args[*i])
+		{
+			ft_putstr_fd("Quote error!\n", 2);
+			return (node);
+		}
+		node->full_cmd = ft_extend_matrix(node->full_cmd, new);
+		free(new);
 	}
 	return (node);
+}
+
+t_list	*fill_nodes(char **args)
+{
+	int		i;
+	int		quotes[2];
+	t_list	*aux;
+	t_list	*cmds;
+
+	cmds = NULL;
+	i = -1;
+	quotes[0] = 0;
+	quotes[1] = 0;
+	while (args[++i])
+	{
+		aux = ft_lstlast(cmds);
+		quotes[0] = (quotes[0] + (!quotes[1] && args[i][0] == '\'')) % 2;
+		quotes[1] = (quotes[1] + (!quotes[0] && args[i][0] == '\"')) % 2;
+		if (i == 0 || (!quotes[0] && !quotes[1] && args[i][0] == '|' && \
+			args[i + 1] && args[i + 1][0]))
+		{
+			ft_lstadd_back(&cmds, ft_lstnew(mini_init()));
+			aux = ft_lstlast(cmds);
+		}
+		aux->content = get_params(aux->content, args, &i, quotes);
+		if (!args[i])
+			break ;
+	}
+	return (cmds);
 }

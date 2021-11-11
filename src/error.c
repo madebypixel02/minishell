@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/11 13:52:13 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 00:11:46 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,16 @@ int	mini_perror(int err, char *param)
 		ft_putendl_fd(param, 2);
 	}
 	return (1);
+}
+
+void	free_content(void *content)
+{
+	t_mini	*node;
+
+	node = content;
+	ft_free_matrix(&node->full_cmd);
+	free(node->full_path);
+	free(node);
 }
 
 /*void	*mini_exit(t_prompt *prompt, int err)
