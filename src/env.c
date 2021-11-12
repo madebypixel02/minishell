@@ -6,13 +6,13 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:02 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/12 07:59:58 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 12:50:37 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*mini_getenv(char	*var, char **envp, int n)
+char	*mini_getenv(char *var, char **envp, int n)
 {
 	int	i;
 	int	n2;

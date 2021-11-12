@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/11 23:43:17 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 19:55:38 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,22 @@
 
 t_mini	*get_outfile1(t_mini *node, char **args, int *i)
 {
-	if (args[*i + 1])
-		node->outfile = get_fd(node->outfile, args[++(*i)], 1, 0);
-	else
+	(*i)++;
+	while (args[*i] && args[*i][0] == ' ')
+		(*i)++;
+	node->outfile = get_fd(node->outfile, args[*i], 1, 0);
+	if (!args[*i])
 		ft_putstr_fd("Redir Error!\n", 2);
 	return (node);
 }
 
 t_mini	*get_outfile2(t_mini *node, char **args, int *i)
 {
-	if (args[++(*i) + 1])
-		node->outfile = get_fd(node->outfile, args[++(*i)], 1, 1);
+	(*i)++;
+	while (args[*i] && args[*i][0] == ' ')
+		(*i)++;
+	if (args[*i])
+		node->outfile = get_fd(node->outfile, args[*i], 1, 1);
 	else
 		ft_putstr_fd("Redir Error!\n", 2);
 	return (node);
@@ -32,8 +37,11 @@ t_mini	*get_outfile2(t_mini *node, char **args, int *i)
 
 t_mini	*get_infile1(t_mini *node, char **args, int *i)
 {
-	if (args[*i + 1])
-		node->infile = get_fd(node->infile, args[++(*i)], 0, 0);
+	(*i)++;
+	while (args[*i] && args[*i][0] == ' ')
+		(*i)++;
+	if (args[*i])
+		node->infile = get_fd(node->infile, args[*i], 0, 0);
 	else
 		ft_putstr_fd("Redir Error!\n", 2);
 	return (node);

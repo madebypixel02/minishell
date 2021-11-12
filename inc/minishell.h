@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/12 00:07:52 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 12:06:37 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,10 @@ int		exec_builtin(t_prompt *prompt, int (*func)(t_prompt *));
 void	get_cmd(t_prompt *prompt);
 
 /* Expands environment variables in a string if not in quotes */
-char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt);
+char	**expand_vars(char **str, int i, int quotes[2], t_prompt *prompt);
 
 /* Expands "~" to home directory in a string if not in quotes */
-char	*expand_path(char *str, int i, int quotes[2], char *var);
+char	**expand_path(char **str, int i, int quotes[2], char *var);
 
 /* Retrieves a string from standard input, expanding vars when needed */
 int		get_here_doc(char *str, char *full, char *limit, char *warn);

@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/29 11:57:42 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/12 07:02:48 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 19:55:32 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,22 @@
 static char	**expand_matrix(char **args, int quotes[2], t_prompt *prompt)
 {
 	char	**aux;
-	int		i;
 
-	i = -1;
 	aux = ft_calloc(sizeof(char *), (ft_matrixlen(args) + 1));
-	while (aux && args && args[++i])
+	aux = expand_vars(ft_dup_matrix(args), 0, quotes, prompt);
+	aux = expand_path(aux, -1, quotes, mini_getenv("HOME", prompt->envp, 4));
+	if (!aux)
 	{
-		aux[i] = expand_vars(ft_strdup(args[i]), -1, quotes, prompt);
-		aux[i] = expand_path(aux[i], -1, quotes, \
-			mini_getenv("HOME", prompt->envp, 4));
-		if (!aux[i])
-		{
-			mini_perror(QUOTE, NULL);
-			ft_free_matrix(&args);
-			ft_free_matrix(&aux);
-			return (NULL);
-		}
+		mini_perror(QUOTE, NULL);
+		ft_free_matrix(&args);
+		ft_free_matrix(&aux);
+		return (NULL);
 	}
 	ft_free_matrix(&args);
 	return (aux);
 }
 
-static char	**split_all(char **args)
+/*static char	**split_all(char **args)
 {
 	char	**subsplit;
 	int		i;
@@ -50,7 +44,7 @@ static char	**split_all(char **args)
 		ft_free_matrix(&subsplit);
 	}
 	return (args);
-}
+}*/
 
 t_list	*parse_args(char **args, t_prompt *prompt)
 {
@@ -58,11 +52,15 @@ t_list	*parse_args(char **args, t_prompt *prompt)
 	int		quotes[2];
 
 	cmds = NULL;
+	quotes[0] = 0;
+	quotes[1] = 0;
 	args = expand_matrix(args, quotes, prompt);
-	args = split_all(args);
+	//args = split_all(args);
 	if (!args)
 		return (NULL);
 	cmds = fill_nodes(args);
+	//ft_putmatrix_fd(((t_mini *)cmds->content)->full_cmd, 1);
+	//printf("----------------------------\n");
 	ft_free_matrix(&args);
 	return (cmds);
 }
