@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 17:02:33 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/11 13:52:52 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 09:28:54 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,20 @@ static char	*get_user(t_prompt prompt)
 	char	*temp2;
 
 	user = NULL;
+	temp2 = NULL;
 	exec_custom(&user, "/usr/bin/whoami", "whoami", prompt.envp);
-	if (ft_strncmp(*user, "root", 4))
-		temp2 = ft_strjoin(NULL, GREEN);
-	else
+	if (user && !ft_strncmp(*user, "root", 4))
 		temp2 = ft_strjoin(NULL, RED);
+	else if (user && (int)(*user) % 5 == 0)
+		temp2 = ft_strjoin(NULL, GREEN);
+	else if (user && (int)(*user) % 5 == 1)
+		temp2 = ft_strjoin(NULL, GRAY);
+	else if (user && (int)(*user) % 5 == 2)
+		temp2 = ft_strjoin(NULL, YELLOW);
+	else if (user && (int)(*user) % 5 == 3)
+		temp2 = ft_strjoin(NULL, MAGENTA);
+	else if (user && (int)(*user) % 5 == 4)
+		temp2 = ft_strjoin(NULL, CYAN);
 	temp = ft_strjoin(temp2, *user);
 	free(temp2);
 	ft_free_matrix(&user);
