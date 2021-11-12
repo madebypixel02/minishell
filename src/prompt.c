@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 17:02:33 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/12 09:33:34 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 09:42:22 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,15 @@ static char	*get_user(t_prompt prompt)
 	if (user && !ft_strncmp(*user, "root", 4))
 		temp2 = ft_strjoin(NULL, RED);
 	else if (user && (int)(user[0][0]) % 5 == 0)
-		temp2 = ft_strjoin(NULL, GREEN);
+		temp2 = ft_strjoin(NULL, CYAN);
 	else if (user && (int)(user[0][0]) % 5 == 1)
 		temp2 = ft_strjoin(NULL, GRAY);
 	else if (user && (int)(user[0][0]) % 5 == 2)
-		temp2 = ft_strjoin(NULL, YELLOW);
+		temp2 = ft_strjoin(NULL, GREEN);
 	else if (user && (int)(user[0][0]) % 5 == 3)
 		temp2 = ft_strjoin(NULL, MAGENTA);
 	else if (user && (int)(user[0][0]) % 5 == 4)
-		temp2 = ft_strjoin(NULL, CYAN);
+		temp2 = ft_strjoin(NULL, YELLOW);
 	temp = ft_strjoin(temp2, *user);
 	free(temp2);
 	ft_free_matrix(&user);
