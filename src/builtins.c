@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/10 19:17:27 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 07:49:14 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,7 @@ int	mini_env(t_prompt *prompt)
 	node = prompt->cmds->content;
 	while (prompt->envp[i])
 	{
-		if (prompt->envp[i][ft_strlen(prompt->envp[i]) - 1] != '=')
-			ft_putendl_fd(prompt->envp[i], node->outfile);
+		ft_putendl_fd(prompt->envp[i], node->outfile);
 		i++;
 	}
 	return (0);

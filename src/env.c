@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:02 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/11 12:31:29 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 07:59:58 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	var_in_envp(char *argv, char **envp, int ij[2])
 		return (-1);
 	while (envp[ij[1]])
 	{
-		if (!ft_strncmp(envp[ij[1]], argv, pos))
+		if (!ft_strncmp(envp[ij[1]], argv, pos + 1))
 			return (1);
 		ij[1]++;
 	}
@@ -108,22 +108,23 @@ int	mini_unset(t_prompt *prompt)
 {
 	char	**argv;
 	char	*aux;
-	int		i;
+	int		ij[2];
 
-	i = 0;
+	ij[0] = 0;
 	argv = ((t_mini *)prompt->cmds->content)->full_cmd;
 	if (ft_matrixlen(argv) >= 2)
 	{
-		while (argv[++i])
+		while (argv[++ij[0]])
 		{
-			if (argv[i][ft_strlen(argv[i]) - 1] != '=')
+			if (argv[ij[0]][ft_strlen(argv[ij[0]]) - 1] != '=')
 			{
-				aux = ft_strjoin(argv[i], "=");
-				free(argv[i]);
-				argv[i] = aux;
+				aux = ft_strjoin(argv[ij[0]], "=");
+				free(argv[ij[0]]);
+				argv[ij[0]] = aux;
 			}
+			if (var_in_envp(argv[ij[0]], prompt->envp, ij))
+				ft_matrix_replace_in(&prompt->envp, NULL, ij[1]);
 		}
-		mini_export(prompt);
 	}
 	return (1);
 }

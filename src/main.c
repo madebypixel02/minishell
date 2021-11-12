@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/12 00:13:38 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/12 06:48:03 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ static void	*check_args(char *out, t_prompt *prompt)
 		aux = NULL;
 		printf("exit\n");
 	}
-	ft_free_matrix(&args);
 	ft_lstclear(&prompt->cmds, free_content);
 	return (aux);
 }
