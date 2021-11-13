@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/13 15:53:34 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/13 19:32:34 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,66 +26,75 @@ static t_mini	*mini_init(void)
 	return (mini);
 }
 
-int	get_fd(int oldfd, char *path, int is_outfile, int append)
+static t_mini	*get_params(t_mini *node, char **args, char **temp, int *i)
 {
-	int	fd;
-
-	if (!path)
-		return (-1);
-	if (oldfd > 2)
-		close(oldfd);
-	if (is_outfile && append)
-		fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0666);
-	if (is_outfile && !append)
-		fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0666);
-	if (!is_outfile)
-		fd = open(path, O_RDONLY);
-	return (fd);
+	if (args[*i][0] == '>' && args[*i + 1] && args[*i + 1][0] == '>')
+		node = get_outfile2(node, temp, i);
+	else if (args[*i][0] == '>')
+		node = get_outfile1(node, temp, i);
+	else if (args[*i][0] == '<' && args[*i + 1] && args[*i + 1][0] == '<')
+		node = get_infile2(node, temp, i);
+	else if (args[*i][0] == '<')
+		node = get_infile1(node, temp, i);
+	else if (args[*i][0] != '|')
+		node->full_cmd = ft_extend_matrix(node->full_cmd, temp[*i]);
+	else
+		*i = -2;
+	return (node);
 }
 
-static t_mini	*get_params(t_mini *node, char **args, int *i)
+static char	**get_trimmed(char **args)
 {
+	char	**temp;
 	char	*aux;
+	int		j;
 
-	if (args[*i][0] == '>' && args[*i + 1] && args[*i + 1][0] == '>')
-		node = get_outfile2(node, args, i);
-	else if (args[*i][0] == '>')
-		node = get_outfile1(node, args, i);
-	else if (args[*i][0] == '<' && args[*i + 1] && args[*i + 1][0] == '<')
-		node = get_infile2(node, args, i);
-	else if (args[*i][0] == '<')
-		node = get_infile1(node, args, i);
-	else
+	j = -1;
+	temp = ft_dup_matrix(args);
+	while (temp && temp[++j])
 	{
-		aux = ft_strtrim_all(args[*i], 0, 0);
-		node->full_cmd = ft_extend_matrix(node->full_cmd, aux);
-		free(aux);
+		aux = ft_strtrim_all(temp[j], 0, 0);
+		free(temp[j]);
+		temp[j] = aux;
 	}
-	return (node);
+	return (temp);
+}
+
+static t_list	*stop_fill(t_list *cmds, char **args, char **temp, int i)
+{
+	if (i == -2)
+		mini_perror(PIPERR, NULL);
+	ft_lstclear(&cmds, free_content);
+	ft_free_matrix(&temp);
+	ft_free_matrix(&args);
+	return (NULL);
 }
 
 t_list	*fill_nodes(char **args)
 {
+	t_list	*cmds[2];
+	char	**temp;
 	int		i;
-	t_list	*aux;
-	t_list	*cmds;
 
-	cmds = NULL;
-	i = 0;
-	while (args[i])
+	cmds[0] = NULL;
+	i = -1;
+	temp = get_trimmed(args);
+	while (args[++i])
 	{
-		aux = ft_lstlast(cmds);
+		cmds[1] = ft_lstlast(cmds[0]);
 		if (i == 0 || (args[i][0] == '|' && args[i + 1] && args[i + 1][0]))
 		{
-			ft_lstadd_back(&cmds, ft_lstnew(mini_init()));
-			aux = ft_lstlast(cmds);
+			i += args[i][0] == '|';
+			ft_lstadd_back(&cmds[0], ft_lstnew(mini_init()));
+			cmds[1] = ft_lstlast(cmds[0]);
 		}
-		if (args[i][0] != ' ')
-			aux->content = get_params(aux->content, args, &i);
+		cmds[1]->content = get_params(cmds[1]->content, args, temp, &i);
+		if (i < 0)
+			return (stop_fill(cmds[0], args, temp, i));
 		if (!args[i])
 			break ;
-		i++;
 	}
+	ft_free_matrix(&temp);
 	ft_free_matrix(&args);
-	return (cmds);
+	return (cmds[0]);
 }

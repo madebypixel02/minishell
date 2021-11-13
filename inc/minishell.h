@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/13 14:03:48 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/13 19:01:11 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ enum	e_mini_error
 	NDIR = 2,
 	PWD = 3,
 	NCMD = 4,
+	CMDERR = 5,
+	DUPERR = 6,
+	FORKERR = 7,
+	PIPERR = 8,
+	MEM = 9
 };
 
 /* Handles all builtin functions */
@@ -97,7 +102,7 @@ t_mini	*get_infile1(t_mini *node, char **args, int *i);
 t_mini	*get_infile2(t_mini *node, char **args, int *i);
 
 /* Executes a non-builtin command according to the info on our list */
-int		exec_cmd(t_list *cmd, char **envp);
+int		exec_cmd(t_prompt *prompt);
 
 /* Executes a custom command and saves output to string ending in \n */
 void	exec_custom(char ***out, char *full, char *args, char **envp);
@@ -106,7 +111,7 @@ void	exec_custom(char ***out, char *full, char *args, char **envp);
 int		exec_builtin(t_prompt *prompt, int (*func)(t_prompt *));
 
 /* Checks if a command is in the PATH variable and retrieves the full_path */
-void	get_cmd(t_prompt *prompt);
+void	get_cmd(t_prompt *prompt, t_list *start, char **split_path, char *path);
 
 /* Expands environment variables in a string if not in quotes */
 char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt);

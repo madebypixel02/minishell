@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/13 15:59:55 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/13 19:38:56 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ static void	*check_args(char *out, t_prompt *prompt)
 	args = ft_cmdtrim(out, " ");
 	free(out);
 	if (!args)
-		return (mini_perror(QUOTE, NULL));
+	{
+		mini_perror(QUOTE, NULL);
+		return ("");
+	}
 	prompt->cmds = fill_nodes(split_all(args, prompt));
 	if (!prompt->cmds)
 		return ("");

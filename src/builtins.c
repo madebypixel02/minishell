@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/13 15:58:32 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/13 18:45:41 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ int	builtin(t_prompt *prompt)
 	char	**argv;
 
 	argv = ((t_mini *)prompt->cmds->content)->full_cmd;
-	if (!argv)
-		return (0);
 	n = ft_strlen(*argv);
 	if (!ft_strncmp(*argv, "exit", n) && n == 4)
 		return (-1);
@@ -36,8 +34,8 @@ int	builtin(t_prompt *prompt)
 	else if (!ft_strncmp(*argv, "unset", n) && n == 5)
 		return (mini_unset(prompt));
 	else
-		get_cmd(prompt);
-	return (exec_cmd(prompt->cmds, prompt->envp));
+		get_cmd(prompt, prompt->cmds, NULL, NULL);
+	return (exec_cmd(prompt));
 }
 
 int	mini_cd(t_prompt *prompt)
