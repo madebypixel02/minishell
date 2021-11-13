@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 15:28:36 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/03 18:21:24 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/13 13:09:37 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 
 static int	ft_count_words(const char *s, char *c, int i[2])
 {
-	int		quote;
-	char	type;
+	int		q[2];
 
-	quote = 0;
-	type = 0;
+	q[0] = 0;
+	q[1] = 0;
 	while (s[i[0]] != '\0')
 	{
 		if (!ft_strchr(c, s[i[0]]))
 		{
 			i[1]++;
-			while ((!ft_strchr(c, s[i[0]]) || quote) && s[i[0]] != '\0')
+			while ((!ft_strchr(c, s[i[0]]) || q[0]) && s[i[0]] != '\0')
 			{
-				if (!type && (s[i[0]] == '\"' || s[i[0]] == '\''))
-					type = s[i[0]];
-				quote = (quote + (s[i[0]] == type)) % 2;
+				if (!q[1] && (s[i[0]] == '\"' || s[i[0]] == '\''))
+					q[1] = s[i[0]];
+				q[0] = (q[0] + (s[i[0]] == q[1])) % 2;
+				q[1] *= q[0] != 0;
 				i[0]++;
 			}
-			if (quote)
+			if (q[0])
 				return (-1);
 		}
 		else
@@ -43,22 +43,20 @@ static int	ft_count_words(const char *s, char *c, int i[2])
 static char	**ft_fill_array(char **aux, char const *s, char *set, int i[3])
 {
 	int		s_len;
-	int		quote;
-	char	type;
+	int		q[2];
 
-	quote = 0;
-	type = 0;
+	q[0] = 0;
+	q[1] = 0;
 	s_len = ft_strlen(s);
 	while (s[i[0]])
 	{
 		while (ft_strchr(set, s[i[0]]) && s[i[0]] != '\0')
 			i[0]++;
 		i[1] = i[0];
-		while ((!ft_strchr(set, s[i[0]]) || quote) && s[i[0]] != '\0')
+		while ((!ft_strchr(set, s[i[0]]) || q[0] || q[1]) && s[i[0]])
 		{
-			if (!type && (s[i[0]] == '\"' || s[i[0]] == '\''))
-				type = s[i[0]];
-			quote = (quote + (s[i[0]] == type)) % 2;
+			q[0] = (q[0] + (!q[1] && s[i[0]] == '\'')) % 2;
+			q[1] = (q[1] + (!q[0] && s[i[0]] == '\"')) % 2;
 			i[0]++;
 		}
 		if (i[1] >= s_len)

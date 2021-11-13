@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/12 19:55:34 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/13 15:53:34 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,10 @@ int	get_fd(int oldfd, char *path, int is_outfile, int append)
 	return (fd);
 }
 
-static t_mini	*parse_no_quotes(t_mini *node, char **args, int *i)
+static t_mini	*get_params(t_mini *node, char **args, int *i)
 {
+	char	*aux;
+
 	if (args[*i][0] == '>' && args[*i + 1] && args[*i + 1][0] == '>')
 		node = get_outfile2(node, args, i);
 	else if (args[*i][0] == '>')
@@ -53,38 +55,11 @@ static t_mini	*parse_no_quotes(t_mini *node, char **args, int *i)
 		node = get_infile2(node, args, i);
 	else if (args[*i][0] == '<')
 		node = get_infile1(node, args, i);
-	else if (args[*i][0] && args[*i][0] != ' ')
-		node->full_cmd = ft_extend_matrix(node->full_cmd, args[*i]);
-	return (node);
-}
-
-static t_mini	*get_params(t_mini *node, char **args, int *i, int quotes[2])
-{
-	char	*new;
-	char	*aux;
-
-	new = ft_strdup("");
-	if (!quotes[0] && !quotes[1])
-		node = parse_no_quotes(node, args, i);
 	else
 	{
-		while ((!quotes[0] || !quotes[1]) && args[*i])
-		{
-			quotes[0] = (quotes[0] + (!quotes[1] && args[*i][0] == '\'')) % 2;
-			quotes[1] = (quotes[1] + (!quotes[0] && args[*i][0] == '\"')) % 2;
-			aux = ft_strjoin(new, args[*i]);
-			free(new);
-			new = aux;
-			(*i)++;
-		}
-		aux = ft_strtrim_all(new, 0, 0);
-		if (!aux || !aux[0])
-		{
-			free(aux);
-			aux = NULL;
-		}
+		aux = ft_strtrim_all(args[*i], 0, 0);
 		node->full_cmd = ft_extend_matrix(node->full_cmd, aux);
-		free(new);
+		free(aux);
 	}
 	return (node);
 }
@@ -92,29 +67,25 @@ static t_mini	*get_params(t_mini *node, char **args, int *i, int quotes[2])
 t_list	*fill_nodes(char **args)
 {
 	int		i;
-	int		quotes[2];
 	t_list	*aux;
 	t_list	*cmds;
 
 	cmds = NULL;
 	i = 0;
-	quotes[0] = 0;
-	quotes[1] = 0;
 	while (args[i])
 	{
 		aux = ft_lstlast(cmds);
-		quotes[0] = (quotes[0] + (!quotes[1] && args[i][0] == '\'')) % 2;
-		quotes[1] = (quotes[1] + (!quotes[0] && args[i][0] == '\"')) % 2;
-		if (i == 0 || (!quotes[0] && !quotes[1] && args[i][0] == '|' && \
-			args[i + 1] && args[i + 1][0]))
+		if (i == 0 || (args[i][0] == '|' && args[i + 1] && args[i + 1][0]))
 		{
 			ft_lstadd_back(&cmds, ft_lstnew(mini_init()));
 			aux = ft_lstlast(cmds);
 		}
-		aux->content = get_params(aux->content, args, &i, quotes);
+		if (args[i][0] != ' ')
+			aux->content = get_params(aux->content, args, &i);
 		if (!args[i])
 			break ;
 		i++;
 	}
+	ft_free_matrix(&args);
 	return (cmds);
 }

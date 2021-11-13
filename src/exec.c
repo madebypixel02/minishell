@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/10 19:17:04 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/13 15:58:25 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	get_cmd(t_prompt *prompt)
 		split_path = ft_split(path, ':');
 		free(path);
 		find_command(split_path, *node->full_cmd, &node->full_path);
-		if (!node->full_path)
+		if (!node->full_path || !node->full_cmd[0] || !node->full_cmd[0][0])
 			mini_perror(NCMD, *node->full_cmd);
 	}
 	ft_free_matrix(&split_path);

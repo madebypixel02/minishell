@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/12 19:55:43 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/13 15:59:55 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,39 +23,46 @@ void	handle_sigint(int sig, siginfo_t *info, void *context)
 	(void)context;
 }
 
-static void	*check_args(char *out, t_prompt *prompt)
+static char	**split_all(char **args, t_prompt *prompt)
 {
-	void	*aux;
-	char	**args;
+	char	**subsplit;
+	int		i;
+	int		quotes[2];
 
-	args = ft_subsplit(out, "\"\'<|> ");
-	add_history(out);
-	aux = prompt;
-	free(out);
-	if (!args)
+	i = -1;
+	while (args && args[++i])
 	{
-		mini_perror(QUOTE, NULL);
-		return (aux);
+		args[i] = expand_vars(args[i], -1, quotes, prompt);
+		args[i] = expand_path(args[i], -1, quotes, \
+			mini_getenv("HOME", prompt->envp, 4));
+		subsplit = ft_cmdsubsplit(args[i], "<|>");
+		ft_matrix_replace_in(&args, subsplit, i);
+		i += ft_matrixlen(subsplit) - 1;
+		ft_free_matrix(&subsplit);
 	}
-	prompt->cmds = parse_args(args, prompt);
-	if (!prompt->cmds)
-		return (aux);
-	if (args && builtin(prompt) == -1)
-	{
-		aux = NULL;
-		printf("exit\n");
-	}
-	ft_lstclear(&prompt->cmds, free_content);
-	return (aux);
+	return (args);
 }
 
-static t_prompt	init_prompt(char **envp)
+static void	*check_args(char *out, t_prompt *prompt)
 {
-	t_prompt	prompt;
+	char	**args;
 
-	prompt.cmds = NULL;
-	prompt.envp = ft_dup_matrix(envp);
-	return (prompt);
+	add_history(out);
+	args = ft_cmdtrim(out, " ");
+	free(out);
+	if (!args)
+		return (mini_perror(QUOTE, NULL));
+	prompt->cmds = fill_nodes(split_all(args, prompt));
+	if (!prompt->cmds)
+		return ("");
+	if (args && builtin(prompt) == -1)
+	{
+		printf("exit\n");
+		ft_lstclear(&prompt->cmds, free_content);
+		return (NULL);
+	}
+	ft_lstclear(&prompt->cmds, free_content);
+	return ("");
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -65,12 +72,10 @@ int	main(int argc, char **argv, char **envp)
 	struct sigaction	sa;
 	t_prompt			prompt;
 
-	out = NULL;
-	(void)argc;
-	(void)argv;
 	sa.sa_sigaction = handle_sigint;
-	prompt = init_prompt(envp);
-	while (1)
+	prompt.cmds = NULL;
+	prompt.envp = ft_dup_matrix(envp);
+	while (argv && argc)
 	{
 		str = mini_getprompt(prompt);
 		sigaction(SIGINT, &sa, NULL);
@@ -81,8 +86,10 @@ int	main(int argc, char **argv, char **envp)
 			printf("exit\n");
 			break ;
 		}
-		if (!check_args(out, &prompt))
+		if (!check_args(ft_strdup(out), &prompt))
 			break ;
+		free(out);
 	}
+	free(out);
 	ft_free_matrix(&prompt.envp);
 }

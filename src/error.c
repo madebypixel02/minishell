@@ -6,13 +6,13 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/12 00:11:46 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/13 13:36:34 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	mini_perror(int err, char *param)
+void	*mini_perror(int err, char *param)
 {
 	if (err == QUOTE)
 		ft_putstr_fd("minishell: error while looking for matching quote\n", 2);
@@ -29,7 +29,7 @@ int	mini_perror(int err, char *param)
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putendl_fd(param, 2);
 	}
-	return (1);
+	return (NULL);
 }
 
 void	free_content(void *content)

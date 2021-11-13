@@ -6,81 +6,75 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:17:55 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/12 19:55:30 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/13 14:33:32 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	**expand_path(char **str, int i, int quotes[2], char *var)
+char	*expand_path(char *str, int i, int quotes[2], char *var)
 {
-	char	*aux[2];
-	int		pos;
+	char	*path;
+	char	*aux;
 
 	quotes[0] = 0;
 	quotes[1] = 0;
 	while (str && str[++i])
 	{
-		quotes[0] = (quotes[0] + (!quotes[1] && str[i][0] == '\'')) % 2;
-		quotes[1] = (quotes[1] + (!quotes[0] && str[i][0] == '\"')) % 2;
-		if (!quotes[0] && !quotes[1] && ft_strchr(str[i], '~'))
+		quotes[0] = (quotes[0] + (!quotes[1] && str[i] == '\'')) % 2;
+		quotes[1] = (quotes[1] + (!quotes[0] && str[i] == '\"')) % 2;
+		if ((!quotes[0] && !quotes[1]) && ((str[i] == '~')))
 		{
-			pos = ft_strchr_i(str[i], '~');
-			aux[1] = ft_substr(str[i], 0, pos);
-			aux[0] = ft_strjoin(aux[1], var);
-			free(aux[1]);
-			aux[1] = ft_substr(str[i], pos + 1, ft_strlen(str[i]));
-			free(str[i]);
-			str[i] = ft_strjoin(aux[0], aux[1]);
-			free(aux[1]);
-			free(aux[0]);
-			return (expand_path(str, --i, quotes, var));
+			aux = ft_substr(str, 0, i);
+			path = ft_strjoin(aux, var);
+			free(aux);
+			aux = ft_substr(str, i + 1, ft_strlen(str));
+			free(str);
+			str = ft_strjoin(path, aux);
+			free(aux);
+			free(path);
+			return (expand_path(str, i + ft_strlen(var) - 1, quotes, var));
 		}
 	}
 	free(var);
 	return (str);
 }
 
-static char	**get_substr_var(char **str, int i, t_prompt *prompt)
+static char	*get_substr_var(char *str, int i, t_prompt *prompt)
 {
 	char	*aux;
 	int		pos;
 	char	*path;
 	char	*var;
-	int		pos2;
 
-	pos = ft_strchars_i(str[i], "$");
+	pos = ft_strchars_i(&str[i], "\"\'$ ");
 	if (pos == -1)
-		pos = ft_strlen(str[i]) - 1;
-	pos2 = ft_strchars_i(&str[i][pos + 1], "$ ");
-	if (pos2 == -1)
-		pos2 = ft_strlen(&str[i][pos + 1]);
-	aux = ft_substr(str[i], 0, pos);
-	var = mini_getenv(&str[i][pos + 1], prompt->envp, pos2);
+		pos = ft_strlen(str) - 1;
+	aux = ft_substr(str, 0, i - 1);
+	var = mini_getenv(&str[i], prompt->envp, \
+		ft_strchars_i(&str[i], "\"\'$ "));
 	path = ft_strjoin(aux, var);
 	free(aux);
-	aux = ft_strjoin(path, &str[i][pos2 + pos + 1]);
+	aux = ft_strjoin(path, &str[i + pos]);
 	free(var);
-	free(str[i]);
-	str[i] = aux;
 	free(path);
-	return (str);
+	free(str);
+	return (aux);
 }
 
-char	**expand_vars(char **str, int i, int quotes[2], t_prompt *prompt)
+char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt)
 {
-	int	pos;
-	
-	while (str && str[i])
+	quotes[0] = 0;
+	quotes[1] = 0;
+	while (str && str[++i])
 	{
-		quotes[0] = (quotes[0] + (!quotes[1] && str[i][0] == '\'')) % 2;
-		quotes[1] = (quotes[1] + (!quotes[0] && str[i][0] == '\"')) % 2;
-		pos = ft_strchr_i(str[i], '$');
-		if (!quotes[0] && pos != -1 && ((quotes[1] && ft_strchars_i(str[i + 1], " \"")) || (!quotes[1] && !str[i][pos + 1] && (!str[i + 1] || str[i + 1][0] != ' '))))
-		{
-			return (expand_vars(get_substr_var(str, i, prompt), i, quotes, prompt));
-		}
-		i++;
+		quotes[0] = (quotes[0] + (!quotes[1] && str[i] == '\'')) % 2;
+		quotes[1] = (quotes[1] + (!quotes[0] && str[i] == '\"')) % 2;
+		if (!quotes[0] && str[i] == '$' && str[i + 1] && \
+			((ft_strchars_i(&str[i + 1], "$ ") && !quotes[1]) || \
+			(ft_strchars_i(&str[i + 1], "\"") && quotes[1])))
+			return (expand_vars(get_substr_var(str, ++i, prompt), -1, \
+				quotes, prompt));
 	}
 	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/12 12:06:37 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/13 14:03:48 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@ int		mini_unset(t_prompt *prompt);
 /* Splits command and args into a matrix, taking quotes into account */
 char	**ft_cmdtrim(char const *s, char *set);
 
+/* Copy of ft_split but includes separators and takes quotes into account */
+char	**ft_cmdsubsplit(char const *s, char *set);
+
 /* Strtrim from all occurrences of set */
 char	*ft_strtrim_all(char const *s1, int squote, int dquote);
 
@@ -93,9 +96,6 @@ t_mini	*get_infile1(t_mini *node, char **args, int *i);
 /* Tries to open read heredoc as infile (<< case) */
 t_mini	*get_infile2(t_mini *node, char **args, int *i);
 
-/* Fills in linked list node with command info */
-t_list	*parse_args(char **args, t_prompt *prompt);
-
 /* Executes a non-builtin command according to the info on our list */
 int		exec_cmd(t_list *cmd, char **envp);
 
@@ -109,16 +109,16 @@ int		exec_builtin(t_prompt *prompt, int (*func)(t_prompt *));
 void	get_cmd(t_prompt *prompt);
 
 /* Expands environment variables in a string if not in quotes */
-char	**expand_vars(char **str, int i, int quotes[2], t_prompt *prompt);
+char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt);
 
 /* Expands "~" to home directory in a string if not in quotes */
-char	**expand_path(char **str, int i, int quotes[2], char *var);
+char	*expand_path(char *str, int i, int quotes[2], char *var);
 
 /* Retrieves a string from standard input, expanding vars when needed */
 int		get_here_doc(char *str, char *full, char *limit, char *warn);
 
 /* Prints a custom error message to standard error */
-int		mini_perror(int err, char *param);
+void	*mini_perror(int err, char *param);
 
 /* Retrieves a string with malloc containing the value of an env var */
 char	*mini_getenv(char	*var, char **envp, int n);

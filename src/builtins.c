@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/12 07:49:14 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/13 15:58:32 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	mini_echo(t_prompt *prompt)
 	node = prompt->cmds->content;
 	while (argv && argv[++i])
 	{
-		if (i == 1 && !ft_strncmp(argv[i], "-n", ft_strlen(argv[i])))
+		if (i == 1 && !ft_strncmp(argv[i], "-n", 3))
 			newline = 0;
 		else
 		{
