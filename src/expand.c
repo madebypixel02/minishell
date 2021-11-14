@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:17:55 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/14 14:35:41 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 20:51:50 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ static char	*get_substr_var(char *str, int i, t_prompt *prompt)
 	char	*path;
 	char	*var;
 
-	pos = ft_strchars_i(&str[i], "\"\'$? ") + (ft_strchr("$?", str[i]) != 0);
+	pos = ft_strchars_i(&str[i], "|\"\'$?>< ") + (ft_strchr("$?", str[i]) != 0);
 	if (pos == -1)
 		pos = ft_strlen(str) - 1;
 	aux = ft_substr(str, 0, i - 1);
 	var = mini_getenv(&str[i], prompt->envp, \
-		ft_strchars_i(&str[i], "\"\'$ "));
+		ft_strchars_i(&str[i], "\"\'$|>< "));
 	if (!var && str[i] == '$')
 		var = ft_itoa(getpid());
 	else if (!var && str[i] == '?')
