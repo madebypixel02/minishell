@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 13:45:17 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 18:27:37 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void	get_cmd(t_prompt *prompt, t_list *cmd, char **split_path, char *path)
 	t_mini	*node;
 
 	node = cmd->content;
-	if (ft_strchr(*node->full_cmd, '/') && !access(*node->full_cmd, X_OK))
+	if (node->full_cmd && ft_strchr(*node->full_cmd, '/') && \
+		!access(*node->full_cmd, X_OK))
 	{
 		split_path = ft_split(*node->full_cmd, '/');
 		node->full_path = ft_strdup(*node->full_cmd);
@@ -53,7 +54,7 @@ void	get_cmd(t_prompt *prompt, t_list *cmd, char **split_path, char *path)
 		node->full_cmd[0] = \
 			ft_strdup(split_path[ft_matrixlen(split_path) - 1]);
 	}
-	else
+	else if (node->full_cmd)
 	{
 		path = mini_getenv("PATH", prompt->envp, 4);
 		split_path = ft_split(path, ':');
@@ -108,8 +109,9 @@ static void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2])
 	else
 	{
 		get_cmd(prompt, cmd, NULL, NULL);
-		if (node->full_path)
+		if (node->full_cmd && node->full_path)
 			execve(node->full_path, node->full_cmd, prompt->envp);
+		prompt->e_status = 1;
 	}
 	ft_lstclear(&prompt->cmds, free_content);
 	exit(prompt->e_status);
@@ -121,13 +123,17 @@ void	exec_cmd(t_prompt *prompt, t_list *cmd)
 	int		fd[2];
 
 	pipe(fd);
-	if (((t_mini *)cmd->content)->infile != -1)
+	if (((t_mini *)cmd->content)->infile != -1 && \
+		((t_mini *)cmd->content)->outfile != -1 && \
+		((t_mini *)cmd->content)->full_cmd)
 	{
 		pid = fork();
 		if (!pid)
 			child_process(prompt, cmd, fd);
 		waitpid(pid, &prompt->e_status, 0);
 	}
+	else
+		prompt->e_status = 1;
 	close(fd[WRITE_END]);
 	if (cmd->next && !((t_mini *)cmd->next->content)->infile)
 		((t_mini *)cmd->next->content)->infile = fd[READ_END];
