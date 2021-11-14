@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/11/14 12:22:30 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/14 13:36:40 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ UNAME = $(shell uname -s)
 
 # Properties for MacOS
 ECHO = echo
-CDEBUG = -g3 -fsanitize=address
+CDEBUG = -fsanitize=address
 CHECKER = tests/checker_Mac
 ifeq ($(UNAME), Linux)
 	#Properties for Linux
@@ -35,7 +35,7 @@ endif
 
 # Make variables
 AR = ar rcs
-CFLAGS = -Wall -Wextra -Werror -MD
+CFLAGS = -Wall -Wextra -Werror -MD -g3 
 RM = rm -f
 CC = gcc
 SRC_DIR = src

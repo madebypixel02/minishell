@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:02 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/13 15:42:12 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 14:17:56 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*mini_getenv(char *var, char **envp, int n)
 	return (NULL);
 }
 
-void	*mini_setenv(char *var, char *value, char **envp, int n)
+char	**mini_setenv(char *var, char *value, char **envp, int n)
 {
 	int		i[2];
 	char	*aux[2];
@@ -53,12 +53,12 @@ void	*mini_setenv(char *var, char *value, char **envp, int n)
 			aux[0] = envp[i[0]];
 			envp[i[0]] = aux[1];
 			free(aux[0]);
-			return (NULL);
+			return (envp);
 		}
 	}
-	ft_extend_matrix(envp, aux[1]);
+	envp = ft_extend_matrix(envp, aux[1]);
 	free(aux[1]);
-	return (NULL);
+	return (envp);
 }
 
 static int	var_in_envp(char *argv, char **envp, int ij[2])
@@ -101,7 +101,7 @@ int	mini_export(t_prompt *prompt)
 			ij[0]++;
 		}
 	}
-	return (1);
+	return (0);
 }
 
 int	mini_unset(t_prompt *prompt)
@@ -126,5 +126,5 @@ int	mini_unset(t_prompt *prompt)
 				ft_matrix_replace_in(&prompt->envp, NULL, ij[1]);
 		}
 	}
-	return (1);
+	return (0);
 }

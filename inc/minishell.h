@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 12:18:18 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 14:13:33 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void	*mini_perror(t_prompt *prompt, int err, char *param);
 char	*mini_getenv(char	*var, char **envp, int n);
 
 /* Sets a new environment variable */
-void	*mini_setenv(char *var, char *value, char **envp, int n);
+char	**mini_setenv(char *var, char *value, char **envp, int n);
 
 /* Returns a colorized string used as prompt for readline */
 char	*mini_getprompt(t_prompt prompt);

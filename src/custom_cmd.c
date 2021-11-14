@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 13:04:57 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 14:20:01 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,6 @@ void	exec_custom(char ***out, char *full, char *args, char **envp)
 		close(fd[WRITE_END]);
 		if (!access(full, F_OK))
 			execve(full, matrix, envp);
-		ft_free_matrix(&matrix);
-		if (!access(full, F_OK))
-			free(full);
-		ft_free_matrix(&envp);
 		exit (1);
 	}
 	close(fd[WRITE_END]);

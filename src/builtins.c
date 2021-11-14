@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 12:40:02 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 14:22:01 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ int	mini_cd(t_prompt *prompt)
 		free(pwd);
 		return (1);
 	}
-	mini_setenv("OLDPWD", pwd, prompt->envp, 6);
+	prompt->envp = mini_setenv("OLDPWD", pwd, prompt->envp, 6);
 	free(pwd);
 	pwd = getcwd(NULL, 0);
-	mini_setenv("PWD", pwd, prompt->envp, 3);
+	prompt->envp = mini_setenv("PWD", pwd, prompt->envp, 3);
 	free(pwd);
 	return (0);
 }

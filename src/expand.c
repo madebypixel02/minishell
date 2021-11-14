@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:17:55 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/14 12:09:12 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 14:35:41 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ char	*expand_path(char *str, int i, int quotes[2], char *var)
 	{
 		quotes[0] = (quotes[0] + (!quotes[1] && str[i] == '\'')) % 2;
 		quotes[1] = (quotes[1] + (!quotes[0] && str[i] == '\"')) % 2;
-		if ((!quotes[0] && !quotes[1]) && ((str[i] == '~')))
+		if (!quotes[0] && !quotes[1] && str[i] == '~' && (i == 0 || \
+			str[i - 1] != '$'))
 		{
 			aux = ft_substr(str, 0, i);
 			path = ft_strjoin(aux, var);
@@ -75,8 +76,8 @@ char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt)
 		quotes[0] = (quotes[0] + (!quotes[1] && str[i] == '\'')) % 2;
 		quotes[1] = (quotes[1] + (!quotes[0] && str[i] == '\"')) % 2;
 		if (!quotes[0] && str[i] == '$' && str[i + 1] && \
-			((ft_strchars_i(&str[i + 1], " ") && !quotes[1]) || \
-			(ft_strchars_i(&str[i + 1], "\"") && quotes[1])))
+			((ft_strchars_i(&str[i + 1], "~%^{}:; ") && !quotes[1]) || \
+			(ft_strchars_i(&str[i + 1], "~%^{}:;\"") && quotes[1])))
 			return (expand_vars(get_substr_var(str, ++i, prompt), -1, \
 				quotes, prompt));
 	}

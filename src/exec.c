@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 12:48:11 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 13:45:17 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,12 @@ static void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2])
 		prompt->e_status = mini_echo(cmd);
 	else if (node->full_cmd && !ft_strncmp(*node->full_cmd, "env", n) && n == 3)
 		prompt->e_status = mini_env(prompt, cmd);
-	else if (node->full_path && node->full_cmd)
-		execve(node->full_path, node->full_cmd, prompt->envp);
+	else
+	{
+		get_cmd(prompt, cmd, NULL, NULL);
+		if (node->full_path)
+			execve(node->full_path, node->full_cmd, prompt->envp);
+	}
 	ft_lstclear(&prompt->cmds, free_content);
 	exit(prompt->e_status);
 }
@@ -116,8 +120,6 @@ void	exec_cmd(t_prompt *prompt, t_list *cmd)
 	pid_t	pid;
 	int		fd[2];
 
-	if (((t_mini *)cmd->content)->full_cmd)
-		get_cmd(prompt, cmd, NULL, NULL);
 	pipe(fd);
 	if (((t_mini *)cmd->content)->infile != -1)
 	{
