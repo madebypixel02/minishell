@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/13 18:54:13 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 13:04:57 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,15 @@ void	exec_custom(char ***out, char *full, char *args, char **envp)
 	pid = fork();
 	if (!pid)
 	{
-		matrix = ft_split(args, ' ');
 		close(fd[READ_END]);
+		matrix = ft_split(args, ' ');
 		dup2(fd[WRITE_END], STDOUT_FILENO);
 		close(fd[WRITE_END]);
-		execve(full, matrix, envp);
+		if (!access(full, F_OK))
+			execve(full, matrix, envp);
 		ft_free_matrix(&matrix);
-		free(full);
+		if (!access(full, F_OK))
+			free(full);
 		ft_free_matrix(&envp);
 		exit (1);
 	}
