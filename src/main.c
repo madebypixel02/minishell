@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/13 19:38:56 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 12:17:32 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,32 @@ static void	*check_args(char *out, t_prompt *prompt)
 	free(out);
 	if (!args)
 	{
-		mini_perror(QUOTE, NULL);
+		mini_perror(prompt, QUOTE, NULL);
 		return ("");
 	}
-	prompt->cmds = fill_nodes(split_all(args, prompt));
+	prompt->cmds = fill_nodes(prompt, split_all(args, prompt), -1);
 	if (!prompt->cmds)
 		return ("");
-	if (args && builtin(prompt) == -1)
+	prompt->e_status = builtin(prompt, prompt->cmds);
+	if (args && prompt->e_status == -1)
 	{
+		prompt->e_status = prompt->e_status != -1;
 		printf("exit\n");
 		ft_lstclear(&prompt->cmds, free_content);
 		return (NULL);
 	}
 	ft_lstclear(&prompt->cmds, free_content);
 	return ("");
+}
+
+static t_prompt	init_prompt(char **envp)
+{
+	t_prompt	prompt;
+
+	prompt.cmds = NULL;
+	prompt.envp = ft_dup_matrix(envp);
+	prompt.e_status = 0;
+	return (prompt);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -76,8 +88,7 @@ int	main(int argc, char **argv, char **envp)
 	t_prompt			prompt;
 
 	sa.sa_sigaction = handle_sigint;
-	prompt.cmds = NULL;
-	prompt.envp = ft_dup_matrix(envp);
+	prompt = init_prompt(envp);
 	while (argv && argc)
 	{
 		str = mini_getprompt(prompt);
@@ -89,10 +100,9 @@ int	main(int argc, char **argv, char **envp)
 			printf("exit\n");
 			break ;
 		}
-		if (!check_args(ft_strdup(out), &prompt))
+		if (!check_args(out, &prompt))
 			break ;
-		free(out);
 	}
-	free(out);
 	ft_free_matrix(&prompt.envp);
+	exit(prompt.e_status);
 }

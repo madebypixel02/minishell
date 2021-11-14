@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/13 19:32:34 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 11:39:11 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,24 @@ static t_mini	*mini_init(void)
 	return (mini);
 }
 
-static t_mini	*get_params(t_mini *node, char **args, char **temp, int *i)
+static t_mini	*get_params(t_prompt *p, t_mini *node, char **args[2], int *i)
 {
-	if (args[*i][0] == '>' && args[*i + 1] && args[*i + 1][0] == '>')
-		node = get_outfile2(node, temp, i);
-	else if (args[*i][0] == '>')
-		node = get_outfile1(node, temp, i);
-	else if (args[*i][0] == '<' && args[*i + 1] && args[*i + 1][0] == '<')
-		node = get_infile2(node, temp, i);
-	else if (args[*i][0] == '<')
-		node = get_infile1(node, temp, i);
-	else if (args[*i][0] != '|')
-		node->full_cmd = ft_extend_matrix(node->full_cmd, temp[*i]);
+	if (args[0][*i][0] == '>' && args[0][*i + 1] && args[0][*i + 1][0] == '>')
+		node = get_outfile2(p, node, args[1], i);
+	else if (args[0][*i][0] == '>')
+		node = get_outfile1(p, node, args[1], i);
+	else if (args[0][*i][0] == '<' && args[0][*i + 1] && \
+		args[0][*i + 1][0] == '<')
+		node = get_infile2(p, node, args[1], i);
+	else if (args[0][*i][0] == '<')
+		node = get_infile1(p, node, args[1], i);
+	else if (args[0][*i][0] != '|')
+		node->full_cmd = ft_extend_matrix(node->full_cmd, args[1][*i]);
 	else
+	{
+		mini_perror(p, PIPERR, NULL);
 		*i = -2;
+	}
 	return (node);
 }
 
@@ -60,25 +64,21 @@ static char	**get_trimmed(char **args)
 	return (temp);
 }
 
-static t_list	*stop_fill(t_list *cmds, char **args, char **temp, int i)
+static t_list	*stop_fill(t_list *cmds, char **args, char **temp)
 {
-	if (i == -2)
-		mini_perror(PIPERR, NULL);
 	ft_lstclear(&cmds, free_content);
 	ft_free_matrix(&temp);
 	ft_free_matrix(&args);
 	return (NULL);
 }
 
-t_list	*fill_nodes(char **args)
+t_list	*fill_nodes(t_prompt *prompt, char **args, int i)
 {
 	t_list	*cmds[2];
-	char	**temp;
-	int		i;
+	char	**temp[2];
 
 	cmds[0] = NULL;
-	i = -1;
-	temp = get_trimmed(args);
+	temp[1] = get_trimmed(args);
 	while (args[++i])
 	{
 		cmds[1] = ft_lstlast(cmds[0]);
@@ -88,13 +88,14 @@ t_list	*fill_nodes(char **args)
 			ft_lstadd_back(&cmds[0], ft_lstnew(mini_init()));
 			cmds[1] = ft_lstlast(cmds[0]);
 		}
-		cmds[1]->content = get_params(cmds[1]->content, args, temp, &i);
+		temp[0] = args;
+		cmds[1]->content = get_params(prompt, cmds[1]->content, temp, &i);
 		if (i < 0)
-			return (stop_fill(cmds[0], args, temp, i));
+			return (stop_fill(cmds[0], args, temp[1]));
 		if (!args[i])
 			break ;
 	}
-	ft_free_matrix(&temp);
+	ft_free_matrix(&temp[1]);
 	ft_free_matrix(&args);
 	return (cmds[0]);
 }

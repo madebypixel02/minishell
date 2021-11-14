@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/11/13 18:54:24 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/14 12:22:30 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ CHECKER = tests/checker_Mac
 ifeq ($(UNAME), Linux)
 	#Properties for Linux
 	ECHO = echo -e
-	LEAKS = valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes -s -q 
+	LEAKS = valgrind --leak-check=full --track-fds=yes --trace-children=yes -s -q 
 endif
 
 # Make variables
@@ -47,9 +47,9 @@ NAME = minishell
 
 SRC = main.c builtins.c ft_strtrim_all.c exec.c			\
 	  fill_node.c get_params.c ft_cmdtrim.c				\
-	  expand.c utils_here_doc.c error.c env.c			\
+	  expand.c heredoc.c error.c env.c custom_cmd.c		\
 	  get_next_line.c get_next_line_utils.c prompt.c	\
-	  ft_cmdsubsplit.c custom_cmd.c
+	  ft_cmdsubsplit.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 

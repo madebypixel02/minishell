@@ -6,38 +6,36 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/13 19:47:12 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 12:40:02 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	builtin(t_prompt *prompt)
+int	builtin(t_prompt *prompt, t_list *cmd)
 {
 	int		n;
-	char	**argv;
+	char	**a;
 
-	argv = ((t_mini *)prompt->cmds->content)->full_cmd;
-	if (!argv)
-		return (0);
-	n = ft_strlen(*argv);
-	if (!ft_strncmp(*argv, "exit", n) && n == 4)
-		return (-1);
-	else if (!ft_strncmp(*argv, "cd", n) && n == 2)
-		return (mini_cd(prompt));
-	else if (!ft_strncmp(*argv, "pwd", n) && n == 3)
-		return (mini_pwd(prompt));
-	else if (!ft_strncmp(*argv, "echo", n) && n == 4)
-		return (mini_echo(prompt));
-	else if (!ft_strncmp(*argv, "env", n) && n == 3)
-		return (mini_env(prompt));
-	else if (!ft_strncmp(*argv, "export", n) && n == 6)
-		return (mini_export(prompt));
-	else if (!ft_strncmp(*argv, "unset", n) && n == 5)
-		return (mini_unset(prompt));
-	else
-		get_cmd(prompt, prompt->cmds, NULL, NULL);
-	return (exec_cmd(prompt));
+	while (cmd)
+	{
+		a = ((t_mini *)cmd->content)->full_cmd;
+		n = 0;
+		if (a)
+			n = ft_strlen(*a);
+		if (a && !ft_strncmp(*a, "exit", n) && n == 4)
+			return (-1);
+		else if (a && !ft_strncmp(*a, "cd", n) && n == 2)
+			prompt->e_status = mini_cd(prompt);
+		else if (a && !ft_strncmp(*a, "export", n) && n == 6)
+			prompt->e_status = mini_export(prompt);
+		else if (a && !ft_strncmp(*a, "unset", n) && n == 5)
+			prompt->e_status = mini_unset(prompt);
+		else
+			exec_cmd(prompt, cmd);
+		cmd = cmd->next;
+	}
+	return (prompt->e_status);
 }
 
 int	mini_cd(t_prompt *prompt)
@@ -56,7 +54,7 @@ int	mini_cd(t_prompt *prompt)
 		chdir(argv[1]);
 	else if (argv[1])
 	{
-		mini_perror(NDIR, argv[1]);
+		mini_perror(prompt, NDIR, argv[1]);
 		free(pwd);
 		return (1);
 	}
@@ -68,19 +66,19 @@ int	mini_cd(t_prompt *prompt)
 	return (0);
 }
 
-int	mini_pwd(t_prompt *prompt)
+int	mini_pwd(t_list *cmd)
 {
 	char	*buf;
 	t_mini	*node;
 
-	node = prompt->cmds->content;
+	node = cmd->content;
 	buf = getcwd(NULL, 0);
 	ft_putendl_fd(buf, node->outfile);
 	free(buf);
 	return (0);
 }
 
-int	mini_echo(t_prompt *prompt)
+int	mini_echo(t_list *cmd)
 {
 	int		newline;
 	int		i;
@@ -88,9 +86,9 @@ int	mini_echo(t_prompt *prompt)
 	t_mini	*node;
 
 	i = 0;
-	argv = ((t_mini *)prompt->cmds->content)->full_cmd;
 	newline = 1;
-	node = prompt->cmds->content;
+	node = cmd->content;
+	argv = node->full_cmd;
 	while (argv && argv[++i])
 	{
 		if (i == 1 && !ft_strncmp(argv[i], "-n", 3))
@@ -107,13 +105,13 @@ int	mini_echo(t_prompt *prompt)
 	return (0);
 }
 
-int	mini_env(t_prompt *prompt)
+int	mini_env(t_prompt *prompt, t_list *cmd)
 {
 	int		i;
 	t_mini	*node;
 
 	i = 0;
-	node = prompt->cmds->content;
+	node = cmd->content;
 	while (prompt->envp[i])
 	{
 		ft_putendl_fd(prompt->envp[i], node->outfile);

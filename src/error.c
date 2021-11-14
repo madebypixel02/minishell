@@ -6,19 +6,20 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/13 19:24:10 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 11:37:39 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	*mini_perror(int err, char *param)
+void	*mini_perror(t_prompt *prompt, int err, char *param)
 {
+	prompt->e_status = 1;
 	if (err == QUOTE)
 		ft_putstr_fd("minishell: error while looking for matching quote\n", 2);
 	else if (err == NDIR)
 	{
-		ft_putstr_fd("minishell: cd: No such file or directory: ", 2);
+		ft_putstr_fd("minishell: No such file or directory: ", 2);
 		ft_putendl_fd(param, 2);
 	}
 	else if (err == PWD)
@@ -28,8 +29,6 @@ void	*mini_perror(int err, char *param)
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putendl_fd(param, 2);
 	}
-	else if (err == CMDERR)
-		ft_putstr_fd("minishell: execve failed\n", 2);
 	else if (err == DUPERR)
 		ft_putstr_fd("minishell: dup2 failed\n", 2);
 	else if (err == FORKERR)

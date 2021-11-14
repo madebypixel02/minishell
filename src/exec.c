@@ -6,77 +6,71 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/13 19:24:55 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 12:48:11 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <unistd.h>
 
-int	find_command(char **env_path, char *cmd, char **full_path)
+char	*find_command(char **env_path, char *cmd, char *full_path)
 {
 	char	*temp;
 	int		i;
 
 	i = -1;
-	*full_path = NULL;
+	full_path = NULL;
 	while (env_path && env_path[++i])
 	{
-		free(*full_path);
+		free(full_path);
 		temp = ft_strjoin(env_path[i], "/");
 		if (!temp)
-			return (-2);
-		*full_path = ft_strjoin(temp, cmd);
+			return (NULL);
+		full_path = ft_strjoin(temp, cmd);
 		free(temp);
 		if (!full_path)
-			return (-2);
-		if (access(*full_path, F_OK) == 0)
+			return (NULL);
+		if (access(full_path, F_OK) == 0)
 			break ;
 	}
 	if (!env_path || !env_path[i])
 	{
-		free(*full_path);
-		*full_path = NULL;
-		return (-1);
+		free(full_path);
+		return (NULL);
 	}
-	return (0);
+	return (full_path);
 }
 
-void	get_cmd(t_prompt *prompt, t_list *start, char **split_path, char *path)
-{
-	t_mini	*node;
-
-	while (start)
-	{
-		node = start->content;
-		if (ft_strchr(*node->full_cmd, '/') && !access(*node->full_cmd, X_OK))
-		{
-			split_path = ft_split(*node->full_cmd, '/');
-			node->full_path = ft_strdup(*node->full_cmd);
-			free(node->full_cmd[0]);
-			node->full_cmd[0] = \
-				ft_strdup(split_path[ft_matrixlen(split_path) - 1]);
-		}
-		else
-		{
-			path = mini_getenv("PATH", prompt->envp, 4);
-			split_path = ft_split(path, ':');
-			free(path);
-			find_command(split_path, *node->full_cmd, &node->full_path);
-			if (!node->full_path || !node->full_cmd[0] || !node->full_cmd[0][0])
-				mini_perror(NCMD, *node->full_cmd);
-		}
-		start = start->next;
-		ft_free_matrix(&split_path);
-	}
-}
-
-static void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2])
+void	get_cmd(t_prompt *prompt, t_list *cmd, char **split_path, char *path)
 {
 	t_mini	*node;
 
 	node = cmd->content;
-	close(fd[READ_END]);
+	if (ft_strchr(*node->full_cmd, '/') && !access(*node->full_cmd, X_OK))
+	{
+		split_path = ft_split(*node->full_cmd, '/');
+		node->full_path = ft_strdup(*node->full_cmd);
+		free(node->full_cmd[0]);
+		node->full_cmd[0] = \
+			ft_strdup(split_path[ft_matrixlen(split_path) - 1]);
+	}
+	else
+	{
+		path = mini_getenv("PATH", prompt->envp, 4);
+		split_path = ft_split(path, ':');
+		free(path);
+		node->full_path = find_command(split_path, *node->full_cmd, \
+			node->full_path);
+		if (!node->full_path || !node->full_cmd[0] || !node->full_cmd[0][0])
+			mini_perror(prompt, NCMD, *node->full_cmd);
+	}
+	ft_free_matrix(&split_path);
+}
+
+static void	*child_redir(t_list *cmd, int fd[2])
+{
+	t_mini	*node;
+
+	node = cmd->content;
 	if (node->infile != STDIN_FILENO)
 	{
 		dup2(node->infile, STDIN_FILENO);
@@ -88,35 +82,53 @@ static void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2])
 		close(node->outfile);
 	}
 	else if (cmd->next)
-	{
 		dup2(fd[WRITE_END], STDOUT_FILENO);
-		close(fd[WRITE_END]);
-	}
-	execve(node->full_path, node->full_cmd, prompt->envp);
-	mini_perror(CMDERR, NULL);
-	exit(1);
+	close(fd[WRITE_END]);
+	return ("");
 }
 
-int	exec_cmd(t_prompt *prompt)
+static void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2])
+{
+	t_mini	*node;
+	int		n;
+
+	node = cmd->content;
+	n = 0;
+	if (node->full_cmd)
+		n = ft_strlen(*node->full_cmd);
+	child_redir(cmd, fd);
+	close(fd[READ_END]);
+	if (node->full_cmd && !ft_strncmp(*node->full_cmd, "pwd", n) && n == 3)
+		prompt->e_status = mini_pwd(cmd);
+	else if (node->full_cmd && !ft_strncmp(*node->full_cmd, "echo", n) \
+		&& n == 4)
+		prompt->e_status = mini_echo(cmd);
+	else if (node->full_cmd && !ft_strncmp(*node->full_cmd, "env", n) && n == 3)
+		prompt->e_status = mini_env(prompt, cmd);
+	else if (node->full_path && node->full_cmd)
+		execve(node->full_path, node->full_cmd, prompt->envp);
+	ft_lstclear(&prompt->cmds, free_content);
+	exit(prompt->e_status);
+}
+
+void	exec_cmd(t_prompt *prompt, t_list *cmd)
 {
 	pid_t	pid;
 	int		fd[2];
-	t_list	*cmd;
 
-	cmd = prompt->cmds;
-	while (cmd)
+	if (((t_mini *)cmd->content)->full_cmd)
+		get_cmd(prompt, cmd, NULL, NULL);
+	pipe(fd);
+	if (((t_mini *)cmd->content)->infile != -1)
 	{
-		pipe(fd);
 		pid = fork();
 		if (!pid)
 			child_process(prompt, cmd, fd);
-		close(fd[WRITE_END]);
-		if (cmd->next && !((t_mini *)cmd->next->content)->infile)
-			((t_mini *)cmd->next->content)->infile = fd[READ_END];
-		else
-			close(fd[READ_END]);
-		waitpid(pid, NULL, 0);
-		cmd = cmd->next;
+		waitpid(pid, &prompt->e_status, 0);
 	}
-	return (0);
+	close(fd[WRITE_END]);
+	if (cmd->next && !((t_mini *)cmd->next->content)->infile)
+		((t_mini *)cmd->next->content)->infile = fd[READ_END];
+	else
+		close(fd[READ_END]);
 }

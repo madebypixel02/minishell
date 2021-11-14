@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/13 19:01:11 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 12:18:18 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_prompt
 {
 	t_list	*cmds;
 	char	**envp;
+	int		e_status;
 }			t_prompt;
 
 typedef struct s_mini
@@ -46,27 +47,26 @@ enum	e_mini_error
 	NDIR = 2,
 	PWD = 3,
 	NCMD = 4,
-	CMDERR = 5,
-	DUPERR = 6,
-	FORKERR = 7,
-	PIPERR = 8,
-	MEM = 9
+	DUPERR = 5,
+	FORKERR = 6,
+	PIPERR = 7,
+	MEM = 8
 };
 
 /* Handles all builtin functions */
-int		builtin(t_prompt *prompt);
+int		builtin(t_prompt *prompt, t_list *cmd);
 
 /* C implementation of the cd shell command */
 int		mini_cd(t_prompt *prompt);
 
 /* C implementation of the pwd shell command */
-int		mini_pwd(t_prompt *prompt);
+int		mini_pwd(t_list *cmd);
 
 /* C implementation of the echo shell command */
-int		mini_echo(t_prompt *prompt);
+int		mini_echo(t_list *cmd);
 
 /* C implementation of the env shell command */
-int		mini_env(t_prompt *prompt);
+int		mini_env(t_prompt *prompt, t_list *cmd);
 
 /* C implementation of the export shell command */
 int		mini_export(t_prompt *prompt);
@@ -84,25 +84,25 @@ char	**ft_cmdsubsplit(char const *s, char *set);
 char	*ft_strtrim_all(char const *s1, int squote, int dquote);
 
 /* Parses all necessary stuff for a command matrix */
-t_list	*fill_nodes(char **args);
+t_list	*fill_nodes(t_prompt *prompt, char **args, int i);
 
 /* Opens a file to a file descriptor with the adequate open flags */
-int		get_fd(int oldfd, char *path, int is_outfile, int append);
+int		get_fd(t_prompt *prompt, int oldfd, char *path, int flags[2]);
 
 /* Tries to open proper file as outfile (> case) */
-t_mini	*get_outfile1(t_mini *node, char **args, int *i);
+t_mini	*get_outfile1(t_prompt *prompt, t_mini *node, char **args, int *i);
 
 /* Tries to open proper file as outfile (>> case) */
-t_mini	*get_outfile2(t_mini *node, char **args, int *i);
+t_mini	*get_outfile2(t_prompt *prompt, t_mini *node, char **args, int *i);
 
 /* Tries to open proper file as infile (< case) */
-t_mini	*get_infile1(t_mini *node, char **args, int *i);
+t_mini	*get_infile1(t_prompt *prompt, t_mini *node, char **args, int *i);
 
 /* Tries to open read heredoc as infile (<< case) */
-t_mini	*get_infile2(t_mini *node, char **args, int *i);
+t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i);
 
 /* Executes a non-builtin command according to the info on our list */
-int		exec_cmd(t_prompt *prompt);
+void	exec_cmd(t_prompt *prompt, t_list *cmd);
 
 /* Executes a custom command and saves output to string ending in \n */
 void	exec_custom(char ***out, char *full, char *args, char **envp);
@@ -123,7 +123,7 @@ char	*expand_path(char *str, int i, int quotes[2], char *var);
 int		get_here_doc(char *str, char *full, char *limit, char *warn);
 
 /* Prints a custom error message to standard error */
-void	*mini_perror(int err, char *param);
+void	*mini_perror(t_prompt *prompt, int err, char *param);
 
 /* Retrieves a string with malloc containing the value of an env var */
 char	*mini_getenv(char	*var, char **envp, int n);

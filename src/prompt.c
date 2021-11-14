@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 17:02:33 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/12 09:42:22 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 12:29:33 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,19 @@ static char	*get_user(t_prompt prompt)
 	user = NULL;
 	temp2 = NULL;
 	exec_custom(&user, "/usr/bin/whoami", "whoami", prompt.envp);
-	if (user && !ft_strncmp(*user, "root", 4))
+	if (!user)
+		user = ft_extend_matrix(user, "guest");
+	if (!ft_strncmp(user[0], "root", 4))
 		temp2 = ft_strjoin(NULL, RED);
-	else if (user && (int)(user[0][0]) % 5 == 0)
+	else if ((int)(user[0][0]) % 5 == 0)
 		temp2 = ft_strjoin(NULL, CYAN);
-	else if (user && (int)(user[0][0]) % 5 == 1)
+	else if ((int)(user[0][0]) % 5 == 1)
 		temp2 = ft_strjoin(NULL, GRAY);
-	else if (user && (int)(user[0][0]) % 5 == 2)
+	else if ((int)(user[0][0]) % 5 == 2)
 		temp2 = ft_strjoin(NULL, GREEN);
-	else if (user && (int)(user[0][0]) % 5 == 3)
+	else if ((int)(user[0][0]) % 5 == 3)
 		temp2 = ft_strjoin(NULL, MAGENTA);
-	else if (user && (int)(user[0][0]) % 5 == 4)
+	else
 		temp2 = ft_strjoin(NULL, YELLOW);
 	temp = ft_strjoin(temp2, *user);
 	free(temp2);
@@ -78,7 +80,10 @@ char	*mini_getprompt(t_prompt prompt)
 	temp = ft_strjoin(temp2, aux);
 	free(aux);
 	free(temp2);
-	temp2 = ft_strjoin(temp, DEFAULT);
+	if (!prompt.e_status || prompt.e_status == -1)
+		temp2 = ft_strjoin(temp, BLUE);
+	else
+		temp2 = ft_strjoin(temp, RED);
 	free(temp);
 	temp = ft_strjoin(temp2, "$ ");
 	free(temp2);

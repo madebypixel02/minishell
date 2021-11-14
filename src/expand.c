@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:17:55 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/13 14:33:32 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 12:09:12 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,16 @@ static char	*get_substr_var(char *str, int i, t_prompt *prompt)
 	char	*path;
 	char	*var;
 
-	pos = ft_strchars_i(&str[i], "\"\'$ ");
+	pos = ft_strchars_i(&str[i], "\"\'$? ") + (ft_strchr("$?", str[i]) != 0);
 	if (pos == -1)
 		pos = ft_strlen(str) - 1;
 	aux = ft_substr(str, 0, i - 1);
 	var = mini_getenv(&str[i], prompt->envp, \
 		ft_strchars_i(&str[i], "\"\'$ "));
+	if (!var && str[i] == '$')
+		var = ft_itoa(getpid());
+	else if (!var && str[i] == '?')
+		var = ft_itoa(prompt->e_status);
 	path = ft_strjoin(aux, var);
 	free(aux);
 	aux = ft_strjoin(path, &str[i + pos]);
@@ -71,7 +75,7 @@ char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt)
 		quotes[0] = (quotes[0] + (!quotes[1] && str[i] == '\'')) % 2;
 		quotes[1] = (quotes[1] + (!quotes[0] && str[i] == '\"')) % 2;
 		if (!quotes[0] && str[i] == '$' && str[i + 1] && \
-			((ft_strchars_i(&str[i + 1], "$ ") && !quotes[1]) || \
+			((ft_strchars_i(&str[i + 1], " ") && !quotes[1]) || \
 			(ft_strchars_i(&str[i + 1], "\"") && quotes[1])))
 			return (expand_vars(get_substr_var(str, ++i, prompt), -1, \
 				quotes, prompt));
