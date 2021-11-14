@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 14:13:33 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 21:27:29 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,13 @@ int		builtin(t_prompt *prompt, t_list *cmd);
 int		mini_cd(t_prompt *prompt);
 
 /* C implementation of the pwd shell command */
-int		mini_pwd(t_list *cmd);
+int		mini_pwd(void);
 
 /* C implementation of the echo shell command */
 int		mini_echo(t_list *cmd);
 
 /* C implementation of the env shell command */
-int		mini_env(t_prompt *prompt, t_list *cmd);
+int		mini_env(t_prompt *prompt);
 
 /* C implementation of the export shell command */
 int		mini_export(t_prompt *prompt);

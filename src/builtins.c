@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 21:03:42 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 21:27:16 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,12 @@ int	mini_cd(t_prompt *prompt)
 	return (0);
 }
 
-int	mini_pwd(t_list *cmd)
+int	mini_pwd(void)
 {
 	char	*buf;
-	t_mini	*node;
 
-	node = cmd->content;
 	buf = getcwd(NULL, 0);
-	ft_putendl_fd(buf, node->outfile);
+	ft_putendl_fd(buf, 1);
 	free(buf);
 	return (0);
 }
@@ -95,26 +93,24 @@ int	mini_echo(t_list *cmd)
 			newline = 0;
 		else
 		{
-			ft_putstr_fd(argv[i], node->outfile);
+			ft_putstr_fd(argv[i], 1);
 			if (argv[i + 1])
-				ft_putchar_fd(' ', node->outfile);
+				ft_putchar_fd(' ', 1);
 		}
 	}
 	if (newline)
-		ft_putchar_fd('\n', node->outfile);
+		ft_putchar_fd('\n', 1);
 	return (0);
 }
 
-int	mini_env(t_prompt *prompt, t_list *cmd)
+int	mini_env(t_prompt *prompt)
 {
 	int		i;
-	t_mini	*node;
 
 	i = 0;
-	node = cmd->content;
 	while (prompt->envp[i])
 	{
-		ft_putendl_fd(prompt->envp[i], node->outfile);
+		ft_putendl_fd(prompt->envp[i], 1);
 		i++;
 	}
 	return (0);

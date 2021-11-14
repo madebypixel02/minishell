@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 21:02:36 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/14 21:27:42 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,22 +97,21 @@ static void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2])
 	l = 0;
 	if (n->full_cmd)
 		l = ft_strlen(*n->full_cmd);
+	child_redir(cmd, fd);
 	close(fd[READ_END]);
 	if (n->full_cmd && !ft_strncmp(*n->full_cmd, "pwd", l) && l == 3)
-		prompt->e_status = mini_pwd(cmd);
+		prompt->e_status = mini_pwd();
 	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "echo", l) && l == 4)
 		prompt->e_status = mini_echo(cmd);
 	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "env", l) && l == 3)
-		prompt->e_status = mini_env(prompt, cmd);
+		prompt->e_status = mini_env(prompt);
 	else
 	{
-		child_redir(cmd, fd);
 		get_cmd(prompt, cmd, NULL, NULL);
 		if (n->full_cmd && n->full_path)
 			execve(n->full_path, n->full_cmd, prompt->envp);
 		prompt->e_status = 1;
 	}
-	close(fd[WRITE_END]);
 	ft_lstclear(&prompt->cmds, free_content);
 	exit(prompt->e_status);
 }
