@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 21:27:42 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/17 20:07:16 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,19 +99,7 @@ static void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2])
 		l = ft_strlen(*n->full_cmd);
 	child_redir(cmd, fd);
 	close(fd[READ_END]);
-	if (n->full_cmd && !ft_strncmp(*n->full_cmd, "pwd", l) && l == 3)
-		prompt->e_status = mini_pwd();
-	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "echo", l) && l == 4)
-		prompt->e_status = mini_echo(cmd);
-	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "env", l) && l == 3)
-		prompt->e_status = mini_env(prompt);
-	else
-	{
-		get_cmd(prompt, cmd, NULL, NULL);
-		if (n->full_cmd && n->full_path)
-			execve(n->full_path, n->full_cmd, prompt->envp);
-		prompt->e_status = 1;
-	}
+	child_builtin(prompt, n, l, cmd);
 	ft_lstclear(&prompt->cmds, free_content);
 	exit(prompt->e_status);
 }

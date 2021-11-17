@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 20:49:20 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/17 19:24:25 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ static void	*check_args(char *out, t_prompt *prompt)
 {
 	char	**args;
 
-	add_history(out);
+	if (out[0] != '\0')
+		add_history(out);
 	args = ft_cmdtrim(out, " ");
 	free(out);
 	if (!args)

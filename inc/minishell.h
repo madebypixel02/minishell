@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 21:27:29 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/17 20:06:52 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,6 @@ int		mini_pwd(void);
 /* C implementation of the echo shell command */
 int		mini_echo(t_list *cmd);
 
-/* C implementation of the env shell command */
-int		mini_env(t_prompt *prompt);
-
 /* C implementation of the export shell command */
 int		mini_export(t_prompt *prompt);
 
@@ -103,6 +100,9 @@ t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i);
 
 /* Executes a non-builtin command according to the info on our list */
 void	exec_cmd(t_prompt *prompt, t_list *cmd);
+
+/* Execute commands inside child process */
+void    child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd);
 
 /* Executes a custom command and saves output to string ending in \n */
 void	exec_custom(char ***out, char *full, char *args, char **envp);
