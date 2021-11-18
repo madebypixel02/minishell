@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 11:34:25 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:01:15 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_mini	*get_infile1(t_prompt *prompt, t_mini *node, char **args, int *i)
 	(*i)++;
 	if (args[*i])
 		node->infile = get_fd(prompt, node->infile, args[*i], flags);
-	if (!args[*i] || node->outfile == -1)
+	if (!args[*i] || node->infile == -1)
 	{
 		*i = -1;
 		ft_putendl_fd(nl, 2);
@@ -108,7 +108,7 @@ t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i)
 		limiter = args[*i];
 		node->infile = get_here_doc(NULL, NULL, limiter, warn);
 	}
-	if (!args[*i] || node->outfile == -1)
+	if (!args[*i] || node->infile == -1)
 	{
 		*i = -1;
 		ft_putendl_fd(nl, 2);

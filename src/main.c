@@ -6,22 +6,11 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/17 19:24:25 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:21:19 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-void	handle_sigint(int sig, siginfo_t *info, void *context)
-{
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-	(void)sig;
-	(void)info;
-	(void)context;
-}
 
 static char	**split_all(char **args, t_prompt *prompt)
 {
@@ -88,13 +77,15 @@ int	main(int argc, char **argv, char **envp)
 	struct sigaction	sa;
 	t_prompt			prompt;
 
-	sa.sa_sigaction = handle_sigint;
 	prompt = init_prompt(envp);
 	while (argv && argc)
 	{
 		str = mini_getprompt(prompt);
+		sa.sa_sigaction = handle_sigint;
 		sigaction(SIGINT, &sa, NULL);
 		out = readline(str);
+		sa.sa_sigaction = handle_sigint_child;
+		sigaction(SIGINT, &sa, NULL);
 		free(str);
 		if (!out)
 		{

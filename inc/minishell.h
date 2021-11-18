@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/17 20:06:52 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/18 15:47:55 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,5 +136,11 @@ char	*mini_getprompt(t_prompt prompt);
 
 /* Frees all elements in linked list nodes */
 void	free_content(void *content);
+
+/* Function to handle SIGINT signals for main process */
+void	handle_sigint(int sig, siginfo_t *info, void *context);
+
+/* Function to handle SIGINT signals for child process */
+void	handle_sigint_child(int sig, siginfo_t *info, void *context);
 
 #endif

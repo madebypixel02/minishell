@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 10:17:00 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/14 09:30:45 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:26:41 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	minishell_here_fd(char *hdoc_str)
 	if (!pid)
 	{
 		close(fd[READ_END]);
-		write(fd[WRITE_END], hdoc_str, ft_strlen(hdoc_str));
+		if (hdoc_str)
+			write(fd[WRITE_END], hdoc_str, ft_strlen(hdoc_str));
 		close(fd[WRITE_END]);
 		free(hdoc_str);
 		exit(0);
@@ -34,8 +35,9 @@ int	minishell_here_fd(char *hdoc_str)
 
 int	get_here_doc(char *str, char *full, char *limit, char *warn)
 {
-	char	*temp;
-	size_t	len;
+	char				*temp;
+	size_t				len;
+	struct sigaction	sa;
 
 	len = 0;
 	while (!str || ft_strncmp(str, limit, len) || ft_strlen(limit) != len)
@@ -44,7 +46,11 @@ int	get_here_doc(char *str, char *full, char *limit, char *warn)
 		full = ft_strjoin(full, str);
 		free(temp);
 		free(str);
+		sa.sa_sigaction = handle_sigint;
+		sigaction(SIGINT, &sa, NULL);
 		str = readline("> ");
+		sa.sa_sigaction = handle_sigint_child;
+		sigaction(SIGINT, &sa, NULL);
 		if (!str)
 		{
 			printf("%s (wanted `%s\')\n", warn, limit);
