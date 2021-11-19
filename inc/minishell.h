@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 17:13:55 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/19 18:26:19 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,13 @@ enum	e_mini_error
 {
 	QUOTE = 1,
 	NDIR = 2,
-	PWD = 3,
-	NCMD = 4,
-	DUPERR = 5,
-	FORKERR = 6,
-	PIPERR = 7,
-	MEM = 8
+	NPERM = 3,
+	PWD = 4,
+	NCMD = 5,
+	DUPERR = 6,
+	FORKERR = 7,
+	PIPERR = 8,
+	MEM = 9
 };
 
 /* Handles all builtin functions */
@@ -103,7 +104,7 @@ t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i);
 void	exec_cmd(t_prompt *prompt, t_list *cmd);
 
 /* Execute commands inside child process */
-void    child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd);
+void	child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd);
 
 /* Executes a custom command and saves output to string ending in \n */
 void	exec_custom(char ***out, char *full, char *args, char **envp);

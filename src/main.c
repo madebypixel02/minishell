@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 18:01:38 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/19 18:17:14 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	**split_all(char **args, t_prompt *prompt)
 	return (args);
 }
 
-static void	*check_args(char *out, t_prompt *prompt)
+static void	*check_args(char *out, t_prompt *p)
 {
 	char	**args;
 
@@ -42,22 +42,22 @@ static void	*check_args(char *out, t_prompt *prompt)
 	free(out);
 	if (!args)
 	{
-		mini_perror(prompt, QUOTE, NULL);
+		mini_perror(p, QUOTE, NULL);
 		return ("");
 	}
-	prompt->cmds = fill_nodes(prompt, split_all(args, prompt), -1);
-	if (!prompt->cmds)
+	p->cmds = fill_nodes(p, split_all(args, p), -1);
+	if (!p->cmds)
 		return ("");
-	prompt->e_status = builtin(prompt, prompt->cmds);
-	waitpid((((t_mini *)ft_lstlast(prompt->cmds)->content))->pid, &prompt->e_status, 0);
-	if (args && prompt->e_status == -1)
+	p->e_status = builtin(p, p->cmds);
+	waitpid((((t_mini *)ft_lstlast(p->cmds)->content))->pid, &p->e_status, 0);
+	if (args && p->e_status == -1)
 	{
-		prompt->e_status = prompt->e_status != -1;
+		p->e_status = p->e_status != -1;
 		printf("exit\n");
-		ft_lstclear(&prompt->cmds, free_content);
+		ft_lstclear(&p->cmds, free_content);
 		return (NULL);
 	}
-	ft_lstclear(&prompt->cmds, free_content);
+	ft_lstclear(&p->cmds, free_content);
 	return ("");
 }
 
