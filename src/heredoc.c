@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 10:17:00 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/18 16:26:41 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/19 13:43:21 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	get_here_doc(char *str, char *full, char *limit, char *warn)
 {
 	char				*temp;
 	size_t				len;
-	struct sigaction	sa;
 
 	len = 0;
 	while (!str || ft_strncmp(str, limit, len) || ft_strlen(limit) != len)
@@ -46,11 +45,10 @@ int	get_here_doc(char *str, char *full, char *limit, char *warn)
 		full = ft_strjoin(full, str);
 		free(temp);
 		free(str);
-		sa.sa_sigaction = handle_sigint;
-		sigaction(SIGINT, &sa, NULL);
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
 		str = readline("> ");
-		sa.sa_sigaction = handle_sigint_child;
-		sigaction(SIGINT, &sa, NULL);
+		signal(SIGINT, handle_sigint_child);
 		if (!str)
 		{
 			printf("%s (wanted `%s\')\n", warn, limit);
