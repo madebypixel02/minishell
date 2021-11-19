@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 17:13:55 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/19 18:31:45 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i);
 void	exec_cmd(t_prompt *prompt, t_list *cmd);
 
 /* Execute commands inside child process */
-void    child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd);
+void	child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd);
 
 /* Executes a custom command and saves output to string ending in \n */
 void	exec_custom(char ***out, char *full, char *args, char **envp);
@@ -121,7 +121,7 @@ char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt);
 char	*expand_path(char *str, int i, int quotes[2], char *var);
 
 /* Retrieves a string from standard input, expanding vars when needed */
-int		get_here_doc(char *str, char *full, char *limit, char *warn);
+int		get_here_doc(char *str[2], size_t len, char *limit, char *warn);
 
 /* Prints a custom error message to standard error */
 void	*mini_perror(t_prompt *prompt, int err, char *param);
