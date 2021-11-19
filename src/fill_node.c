@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_node.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/14 20:48:47 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/19 17:29:23 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,27 @@ static t_mini	*mini_init(void)
 	return (mini);
 }
 
-static t_mini	*get_params(t_prompt *p, t_mini *node, char **args[2], int *i)
+static t_mini	*get_params(t_prompt *p, t_mini *node, char **a[2], int *i)
 {
-	if (args[0][*i][0] == '>' && args[0][*i + 1] && args[0][*i + 1][0] == '>')
-		node = get_outfile2(p, node, args[1], i);
-	else if (args[0][*i][0] == '>')
-		node = get_outfile1(p, node, args[1], i);
-	else if (args[0][*i][0] == '<' && args[0][*i + 1] && \
-		args[0][*i + 1][0] == '<')
-		node = get_infile2(p, node, args[1], i);
-	else if (args[0][*i][0] == '<')
-		node = get_infile1(p, node, args[1], i);
-	else if (args[0][*i][0] != '|')
-		node->full_cmd = ft_extend_matrix(node->full_cmd, args[1][*i]);
+	if (a[0][*i])
+	{
+		if (a[0][*i][0] == '>' && a[0][*i + 1] && a[0][*i + 1][0] == '>')
+			node = get_outfile2(p, node, a[1], i);
+		else if (a[0][*i][0] == '>')
+			node = get_outfile1(p, node, a[1], i);
+		else if (a[0][*i][0] == '<' && a[0][*i + 1] && \
+			a[0][*i + 1][0] == '<')
+			node = get_infile2(p, node, a[1], i);
+		else if (a[0][*i][0] == '<')
+			node = get_infile1(p, node, a[1], i);
+		else if (a[0][*i][0] != '|')
+			node->full_cmd = ft_extend_matrix(node->full_cmd, a[1][*i]);
+		else
+		{
+			mini_perror(p, PIPERR, NULL);
+			*i = -2;
+		}
+	}
 	else
 	{
 		mini_perror(p, PIPERR, NULL);

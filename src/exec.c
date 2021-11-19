@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 13:46:25 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/19 17:33:54 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ void	exec_cmd(t_prompt *prompt, t_list *cmd)
 	t_mini	*node;
 
 	node = cmd->content;
-	signal(SIGQUIT, handle_sigint_child);
 	pipe(fd);
 	pipe(pidfd);
 	if (((t_mini *)cmd->content)->infile != -1 && \

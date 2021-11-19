@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 13:45:44 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/19 17:44:22 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static char	**split_all(char **args, t_prompt *prompt)
 static void	*check_args(char *out, t_prompt *prompt)
 {
 	char	**args;
-//	t_list	*aux;
 
 	if (out[0] != '\0')
 		add_history(out);
@@ -50,12 +49,7 @@ static void	*check_args(char *out, t_prompt *prompt)
 	if (!prompt->cmds)
 		return ("");
 	prompt->e_status = builtin(prompt, prompt->cmds);
-//	aux = prompt->cmds;
-	//while (aux && aux->next)
-	//{
-		waitpid((((t_mini *)ft_lstlast(prompt->cmds)->content))->pid, &prompt->e_status, 0);
-//		aux = aux->next;
-//	}
+	waitpid((((t_mini *)ft_lstlast(prompt->cmds)->content))->pid, &prompt->e_status, 0);
 	if (args && prompt->e_status == -1)
 	{
 		prompt->e_status = prompt->e_status != -1;
@@ -70,9 +64,19 @@ static void	*check_args(char *out, t_prompt *prompt)
 static t_prompt	init_prompt(char **envp)
 {
 	t_prompt	prompt;
+//	char		*str;
+//	char		*num;
 
 	prompt.cmds = NULL;
 	prompt.envp = ft_dup_matrix(envp);
+//	str = mini_getenv("SHLVL", envp, 5);
+//	if (!str)
+//		num = ft_strdup("1");
+//	else
+//		num = ft_itoa(ft_atoi(str) + 1);
+//	free(str);
+//	prompt.envp = mini_setenv("SHLVL", num, prompt.envp, 5);
+//	free(num);
 	prompt.e_status = 0;
 	return (prompt);
 }
@@ -84,7 +88,6 @@ int	main(int argc, char **argv, char **envp)
 	t_prompt			prompt;
 
 	prompt = init_prompt(envp);
-	ioctl(1, 0x03);
 	while (argv && argc)
 	{
 		str = mini_getprompt(prompt);

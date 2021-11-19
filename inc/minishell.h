@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 13:46:55 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/19 17:13:55 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <sys/wait.h>
-#include <sys/ioctl.h>
 
 # define READ_END 0
 # define WRITE_END 1
