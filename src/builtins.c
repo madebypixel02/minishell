@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 17:32:59 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/19 18:56:31 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,6 @@ void	child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd)
 		get_cmd(prompt, cmd, NULL, NULL);
 		if (n->full_cmd && n->full_path)
 			execve(n->full_path, n->full_cmd, prompt->envp);
-		prompt->e_status = 1;
+		prompt->e_status = 2;
 	}
 }

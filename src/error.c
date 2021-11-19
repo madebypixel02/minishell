@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/19 18:25:01 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/19 18:35:11 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,3 @@ void	free_content(void *content)
 		close(node->outfile);
 	free(node);
 }
-
-/*void	*mini_exit(t_prompt *prompt, int err)
-{
-	
-}*/
