@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 18:26:19 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/19 18:34:07 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt);
 char	*expand_path(char *str, int i, int quotes[2], char *var);
 
 /* Retrieves a string from standard input, expanding vars when needed */
-int		get_here_doc(char *str, char *full, char *limit, char *warn);
+int		get_here_doc(char *str[2], size_t len, char *limit, char *warn);
 
 /* Prints a custom error message to standard error */
 void	*mini_perror(t_prompt *prompt, int err, char *param);

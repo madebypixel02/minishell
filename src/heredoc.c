@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 10:17:00 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/19 13:43:21 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/19 18:31:26 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,32 +33,30 @@ int	minishell_here_fd(char *hdoc_str)
 	return (fd[READ_END]);
 }
 
-int	get_here_doc(char *str, char *full, char *limit, char *warn)
+int	get_here_doc(char *str[2], size_t len, char *limit, char *warn)
 {
 	char				*temp;
-	size_t				len;
 
-	len = 0;
-	while (!str || ft_strncmp(str, limit, len) || ft_strlen(limit) != len)
+	while (!str[0] || ft_strncmp(str[0], limit, len) || ft_strlen(limit) != len)
 	{
-		temp = full;
-		full = ft_strjoin(full, str);
+		temp = str[1];
+		str[1] = ft_strjoin(str[1], str[0]);
 		free(temp);
-		free(str);
+		free(str[0]);
 		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
-		str = readline("> ");
+		str[0] = readline("> ");
 		signal(SIGINT, handle_sigint_child);
-		if (!str)
+		if (!str[0])
 		{
 			printf("%s (wanted `%s\')\n", warn, limit);
 			break ;
 		}
-		temp = str;
-		str = ft_strjoin(str, "\n");
+		temp = str[0];
+		str[0] = ft_strjoin(str[0], "\n");
 		free(temp);
-		len = ft_strlen(str) - 1;
+		len = ft_strlen(str[0]) - 1;
 	}
-	free(str);
-	return (minishell_here_fd(full));
+	free(str[0]);
+	return (minishell_here_fd(str[1]));
 }

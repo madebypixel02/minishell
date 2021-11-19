@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 18:23:27 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/19 18:33:48 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i)
 	char	*limiter;
 	char	*warn;
 	char	*nl;
+	char	*str[2];
 
+	str[0] = NULL;
+	str[1] = NULL;
 	limiter = NULL;
 	warn = "minishell: warning: here-document delimited by end-of-file";
 	nl = "minishell: syntax error near unexpected token `newline'";
@@ -110,7 +113,7 @@ t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i)
 	if (args[++(*i)])
 	{
 		limiter = args[*i];
-		node->infile = get_here_doc(NULL, NULL, limiter, warn);
+		node->infile = get_here_doc(str, 0, limiter, warn);
 	}
 	else if (!args[*i] || node->infile == -1)
 	{

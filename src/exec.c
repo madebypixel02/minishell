@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 17:33:54 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/19 18:12:06 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static void	*child_redir(t_list *cmd, int fd[2])
 	return ("");
 }
 
-static void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
+void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
 {
 	t_mini	*n;
 	int		l;
@@ -111,7 +111,6 @@ static void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2
 
 void	exec_cmd(t_prompt *prompt, t_list *cmd)
 {
-	pid_t	pid;
 	int		fd[2];
 	int		pidfd[2];
 	t_mini	*node;
@@ -123,8 +122,7 @@ void	exec_cmd(t_prompt *prompt, t_list *cmd)
 		((t_mini *)cmd->content)->outfile != -1 && \
 		((t_mini *)cmd->content)->full_cmd)
 	{
-		pid = fork();
-		if (!pid)
+		if (!fork())
 			child_process(prompt, cmd, fd, pidfd);
 	}
 	else
