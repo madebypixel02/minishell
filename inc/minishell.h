@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/18 19:18:06 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/19 13:46:55 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <sys/wait.h>
+#include <sys/ioctl.h>
 
 # define READ_END 0
 # define WRITE_END 1
@@ -139,9 +140,9 @@ char	*mini_getprompt(t_prompt prompt);
 void	free_content(void *content);
 
 /* Function to handle SIGINT signals for main process */
-void	handle_sigint(int sig, siginfo_t *info, void *context);
+void	handle_sigint(int sig);
 
 /* Function to handle SIGINT signals for child process */
-void	handle_sigint_child(int sig, siginfo_t *info, void *context);
+void	handle_sigint_child(int sig);
 
 #endif

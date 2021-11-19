@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 11:32:12 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/19 13:45:44 by mbueno-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,18 +81,17 @@ int	main(int argc, char **argv, char **envp)
 {
 	char				*str;
 	char				*out;
-	struct sigaction	sa;
 	t_prompt			prompt;
 
 	prompt = init_prompt(envp);
+	ioctl(1, 0x03);
 	while (argv && argc)
 	{
 		str = mini_getprompt(prompt);
-		sa.sa_sigaction = handle_sigint;
-		sigaction(SIGINT, &sa, NULL);
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
 		out = readline(str);
-		sa.sa_sigaction = handle_sigint_child;
-		sigaction(SIGINT, &sa, NULL);
+		signal(SIGINT, handle_sigint_child);
 		free(str);
 		if (!out)
 		{
