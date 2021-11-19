@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/18 15:19:50 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/19 10:44:47 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,17 +88,22 @@ static void	*child_redir(t_list *cmd, int fd[2])
 	return ("");
 }
 
-static void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2])
+static void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
 {
 	t_mini	*n;
 	int		l;
+	pid_t	pid;
 
+	pid = getpid();
 	n = cmd->content;
 	l = 0;
 	if (n->full_cmd)
 		l = ft_strlen(*n->full_cmd);
 	child_redir(cmd, fd);
 	close(fd[READ_END]);
+	close(pidfd[READ_END]);
+	write(pidfd[WRITE_END], &pid, sizeof(int));
+	close(pidfd[WRITE_END]);
 	child_builtin(prompt, n, l, cmd);
 	ft_lstclear(&prompt->cmds, free_content);
 	exit(prompt->e_status);
@@ -108,19 +113,25 @@ void	exec_cmd(t_prompt *prompt, t_list *cmd)
 {
 	pid_t	pid;
 	int		fd[2];
+	int		pidfd[2];
+	t_mini	*node;
 
+	node = cmd->content;
 	pipe(fd);
+	pipe(pidfd);
 	if (((t_mini *)cmd->content)->infile != -1 && \
 		((t_mini *)cmd->content)->outfile != -1 && \
 		((t_mini *)cmd->content)->full_cmd)
 	{
 		pid = fork();
 		if (!pid)
-			child_process(prompt, cmd, fd);
-		waitpid(pid, &prompt->e_status, 0);
+			child_process(prompt, cmd, fd, pidfd);
 	}
 	else
 		prompt->e_status = 1;
+	close(pidfd[WRITE_END]);
+	read(pidfd[READ_END], &node->pid, sizeof(int));
+	close(pidfd[READ_END]);
 	close(fd[WRITE_END]);
 	if (cmd->next && !((t_mini *)cmd->next->content)->infile)
 		((t_mini *)cmd->next->content)->infile = fd[READ_END];

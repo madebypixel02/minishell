@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/18 16:21:19 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/19 11:32:12 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static char	**split_all(char **args, t_prompt *prompt)
 static void	*check_args(char *out, t_prompt *prompt)
 {
 	char	**args;
+//	t_list	*aux;
 
 	if (out[0] != '\0')
 		add_history(out);
@@ -49,6 +50,12 @@ static void	*check_args(char *out, t_prompt *prompt)
 	if (!prompt->cmds)
 		return ("");
 	prompt->e_status = builtin(prompt, prompt->cmds);
+//	aux = prompt->cmds;
+	//while (aux && aux->next)
+	//{
+		waitpid((((t_mini *)ft_lstlast(prompt->cmds)->content))->pid, &prompt->e_status, 0);
+//		aux = aux->next;
+//	}
 	if (args && prompt->e_status == -1)
 	{
 		prompt->e_status = prompt->e_status != -1;

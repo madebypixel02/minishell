@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/18 15:47:55 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/18 19:18:06 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_mini
 {
 	char	**full_cmd;
 	char	*full_path;
+	pid_t	pid;
 	int		infile;
 	int		outfile;
 }			t_mini;
