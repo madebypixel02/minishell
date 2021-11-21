@@ -6,7 +6,7 @@
 /*   By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/21 22:11:04 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/21 23:44:00 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,10 @@ static t_mini	*get_params(t_prompt *p, t_mini *node, char **a[2], int *i)
 			mini_perror(p, PIPENDERR, NULL);
 			*i = -2;
 		}
+		return (node);
 	}
-	else
-	{
-		mini_perror(p, PIPENDERR, NULL);
-		*i = -2;
-	}
+	mini_perror(p, PIPENDERR, NULL);
+	*i = -2;
 	return (node);
 }
 
