@@ -6,7 +6,7 @@
 /*   By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 17:29:23 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/21 22:11:04 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static t_mini	*mini_init(void)
 	mini->full_path = NULL;
 	mini->infile = STDIN_FILENO;
 	mini->outfile = STDOUT_FILENO;
+	mini->pid = -1;
 	return (mini);
 }
 
@@ -43,13 +44,13 @@ static t_mini	*get_params(t_prompt *p, t_mini *node, char **a[2], int *i)
 			node->full_cmd = ft_extend_matrix(node->full_cmd, a[1][*i]);
 		else
 		{
-			mini_perror(p, PIPERR, NULL);
+			mini_perror(p, PIPENDERR, NULL);
 			*i = -2;
 		}
 	}
 	else
 	{
-		mini_perror(p, PIPERR, NULL);
+		mini_perror(p, PIPENDERR, NULL);
 		*i = -2;
 	}
 	return (node);

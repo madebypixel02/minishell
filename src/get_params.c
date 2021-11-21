@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 18:33:48 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/21 22:47:08 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@ int	get_fd(t_prompt *prompt, int oldfd, char *path, int flags[2])
 {
 	int	fd;
 
-	if (!path)
-		return (-1);
-	if (access(path, F_OK) == -1)
-		mini_perror(prompt, NDIR, path);
-	else if (access(path, R_OK) == -1)
-		mini_perror(prompt, NPERM, path);
-	else if (access(path, W_OK) == -1 && flags[1])
-		mini_perror(prompt, NPERM, path);
 	if (oldfd > 2)
 		close(oldfd);
+	if (!path)
+		return (-1);
+	if (access(path, F_OK) == -1 && !flags[0])
+		mini_perror(prompt, NDIR, path);
+	else if (!flags[0] && access(path, R_OK) == -1)
+		mini_perror(prompt, NPERM, path);
+	else if (flags[0] && access(path, W_OK) == -1 && access(path, F_OK) == 0)
+		mini_perror(prompt, NPERM, path);
 	if (flags[0] && flags[1])
 		fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0666);
 	else if (flags[0] && !flags[1])
@@ -48,10 +48,11 @@ t_mini	*get_outfile1(t_prompt *prompt, t_mini *node, char **args, int *i)
 	(*i)++;
 	if (args[*i])
 		node->outfile = get_fd(prompt, node->outfile, args[*i], flags);
-	else if (!args[*i] || node->outfile == -1)
+	if (!args[*i] || node->outfile == -1)
 	{
 		*i = -1;
-		ft_putendl_fd(nl, 2);
+		if (node->outfile != -1)
+			ft_putendl_fd(nl, 2);
 		prompt->e_status = 1;
 	}
 	return (node);
@@ -68,10 +69,11 @@ t_mini	*get_outfile2(t_prompt *prompt, t_mini *node, char **args, int *i)
 	(*i)++;
 	if (args[++(*i)])
 		node->outfile = get_fd(prompt, node->outfile, args[*i], flags);
-	else if (!args[*i] || node->outfile == -1)
+	if (!args[*i] || node->outfile == -1)
 	{
 		*i = -1;
-		ft_putendl_fd(nl, 2);
+		if (node->outfile != -1)
+			ft_putendl_fd(nl, 2);
 		prompt->e_status = 1;
 	}
 	return (node);
@@ -88,10 +90,11 @@ t_mini	*get_infile1(t_prompt *prompt, t_mini *node, char **args, int *i)
 	(*i)++;
 	if (args[*i])
 		node->infile = get_fd(prompt, node->infile, args[*i], flags);
-	else if (!args[*i] || node->infile == -1)
+	if (!args[*i] || node->infile == -1)
 	{
 		*i = -1;
-		ft_putendl_fd(nl, 2);
+		if (node->infile != -1)
+			ft_putendl_fd(nl, 2);
 		prompt->e_status = 1;
 	}
 	return (node);
@@ -115,10 +118,11 @@ t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i)
 		limiter = args[*i];
 		node->infile = get_here_doc(str, 0, limiter, warn);
 	}
-	else if (!args[*i] || node->infile == -1)
+	if (!args[*i] || node->infile == -1)
 	{
 		*i = -1;
-		ft_putendl_fd(nl, 2);
+		if (node->infile != -1)
+			ft_putendl_fd(nl, 2);
 		prompt->e_status = 1;
 	}
 	return (node);

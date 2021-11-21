@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 18:56:31 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/21 15:46:38 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,6 @@ void	child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd)
 		prompt->e_status = mini_export(prompt);
 	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "unset", l) && l == 5)
 		prompt->e_status = mini_unset(prompt);
-	else
-	{
-		get_cmd(prompt, cmd, NULL, NULL);
-		if (n->full_cmd && n->full_path)
-			execve(n->full_path, n->full_cmd, prompt->envp);
-		prompt->e_status = 2;
-	}
+	else if (n->full_cmd)
+		execve(n->full_path, n->full_cmd, prompt->envp);
 }

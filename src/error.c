@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/19 18:35:11 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/21 19:11:23 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,13 @@ void	*mini_perror(t_prompt *prompt, int err, char *param)
 		ft_putstr_fd("minishell: dup2 failed\n", 2);
 	else if (err == FORKERR)
 		ft_putstr_fd("minishell: fork failed\n", 2);
+	else if (err == PIPERR)
+		ft_putstr_fd("minishell: error creating pipe\n", 2);
+	else if (err == PIPENDERR)
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 	else if (err == MEM)
 		ft_putstr_fd("minishell: no memory left on device\n", 2);
-	else if (err == PIPERR)
-		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-	if (param)
-		ft_putendl_fd(param, 2);
+	ft_putendl_fd(param, 2);
 	return (NULL);
 }
 

@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/11/18 15:48:36 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/21 15:52:18 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ SRC = main.c builtins.c ft_strtrim_all.c exec.c			\
 	  fill_node.c get_params.c ft_cmdtrim.c				\
 	  expand.c heredoc.c error.c env.c custom_cmd.c		\
 	  get_next_line.c get_next_line_utils.c prompt.c	\
-	  ft_cmdsubsplit.c signal.c
+	  ft_cmdsubsplit.c signal.c parse_args.c get_cmd.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 

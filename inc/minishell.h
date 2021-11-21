@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/19 18:34:07 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/21 19:10:39 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ enum	e_mini_error
 	DUPERR = 6,
 	FORKERR = 7,
 	PIPERR = 8,
-	MEM = 9
+	PIPENDERR = 9,
+	MEM = 10
 };
 
 /* Handles all builtin functions */
@@ -73,13 +74,16 @@ int		mini_export(t_prompt *prompt);
 /* C implementation of the unset shell command */
 int		mini_unset(t_prompt *prompt);
 
+/* Splits command string into manageable matrix to store & exec commands */
+void	*check_args(char *out, t_prompt *p);
+
 /* Splits command and args into a matrix, taking quotes into account */
 char	**ft_cmdtrim(char const *s, char *set);
 
 /* Copy of ft_split but includes separators and takes quotes into account */
 char	**ft_cmdsubsplit(char const *s, char *set);
 
-/* Strtrim from all occurrences of set */
+/* Strtrim from all needed quotes in s1 */
 char	*ft_strtrim_all(char const *s1, int squote, int dquote);
 
 /* Parses all necessary stuff for a command matrix */
@@ -101,7 +105,7 @@ t_mini	*get_infile1(t_prompt *prompt, t_mini *node, char **args, int *i);
 t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i);
 
 /* Executes a non-builtin command according to the info on our list */
-void	exec_cmd(t_prompt *prompt, t_list *cmd);
+void	*exec_cmd(t_prompt *prompt, t_list *cmd);
 
 /* Execute commands inside child process */
 void	child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd);
