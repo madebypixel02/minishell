@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/21 23:43:31 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/22 14:55:39 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	*mini_perror(t_prompt *prompt, int err, char *param)
 {
 	prompt->e_status = 1;
+	if (err == PIPENDERR)
+		prompt->e_status = 2;
 	if (err == QUOTE)
 		ft_putstr_fd("minishell: error while looking for matching quote\n", 2);
 	else if (err == NDIR)
