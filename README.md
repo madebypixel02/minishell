@@ -4,18 +4,23 @@
 
 ### Table of Contents
 
-🚧 WARNING Area under Construction 🚧
+🚧 WARNING: Area under Construction! 🚧
 
 Here's a small demo of our progress so far:
 
-* ``1.0``
+* ``1.0: Basic stuff working``
 
 ![minishell](https://user-images.githubusercontent.com/40824677/141175675-41b940ba-7080-4f1f-add5-edaf79ed6b8d.gif)
 
 
-* ``2.0``
+* ``2.0: Pipes working, plus some exit statuses``
 
 ![minishell](https://user-images.githubusercontent.com/40824677/141684153-e2748818-8a01-4cf8-88a6-5ed2624e2ce6.gif)
+
+
+``3.0: Mostly done, yay :)``
+
+* ![minishell](https://user-images.githubusercontent.com/40824677/142918764-a3fc68c6-aa5e-4f95-91b7-e4878e4248d0.gif)
 
 
 Available in six different colors:
