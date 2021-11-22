@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/21 19:10:39 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/22 18:33:20 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@ enum	e_mini_error
 	PIPENDERR = 9,
 	MEM = 10
 };
+
+/* Uses readline inside a child process and returns the read line */
+char	*mini_readline(t_prompt *prompt, char *str);
+
+/* Opens two sets of pipes and checks if they are opened correctly */
+void	*mini_here_fd(t_prompt *prompt, int fd[2], int auxfd[2]);
 
 /* Handles all builtin functions */
 int		builtin(t_prompt *prompt, t_list *cmd);
@@ -126,7 +132,7 @@ char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt);
 char	*expand_path(char *str, int i, int quotes[2], char *var);
 
 /* Retrieves a string from standard input, expanding vars when needed */
-int		get_here_doc(char *str[2], size_t len, char *limit, char *warn);
+int		get_here_doc(t_prompt *prompt, char *str[2], size_t len, char *aux[2]);
 
 /* Prints a custom error message to standard error */
 void	*mini_perror(t_prompt *prompt, int err, char *param);
@@ -148,5 +154,8 @@ void	handle_sigint(int sig);
 
 /* Function to handle SIGINT signals for child process */
 void	handle_sigint_child(int sig);
+
+/* Function to handle SIGQUIT signals for child process */
+void	handle_sigquit(int sig);
 
 #endif

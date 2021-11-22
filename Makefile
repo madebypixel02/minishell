@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/11/21 15:52:18 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/22 18:54:06 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ OBJ_LFT = $(addprefix $(OBJ_LFT_DIR)/, $(SRC_LFT:.c=.o))
 all: $(NAME)
 
 $(NAME): create_dirs compile_libft $(OBJ)
-	@$(CC) -L  ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include $(CFLAGS) $(CDEBUG) $(OBJ) $(LIBFT) -lreadline -o $@
+	@$(CC) $(CFLAGS) $(CDEBUG) $(OBJ) $(LIBFT) -lreadline -o $@
 	@$(ECHO) "$(GREEN)$(NAME) is up to date!$(DEFAULT)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c

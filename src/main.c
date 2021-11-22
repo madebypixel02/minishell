@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/21 22:08:38 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/22 18:52:58 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,14 @@ int	main(int argc, char **argv, char **envp)
 	while (argv && argc)
 	{
 		str = mini_getprompt(prompt);
-		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, SIG_IGN);
 		if (str)
-			out = readline(str);
+			out = mini_readline(&prompt, str);
 		else
-			out = readline("guest@minishell $ ");
+			out = mini_readline(&prompt, "guest@minishell $ ");
 		signal(SIGINT, handle_sigint_child);
+		signal(SIGQUIT, handle_sigquit);
 		free(str);
 		if (!check_args(out, &prompt))
 			break ;

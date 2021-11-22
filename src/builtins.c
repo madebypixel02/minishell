@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/21 15:46:38 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/22 18:48:58 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,7 @@ int	builtin(t_prompt *prompt, t_list *cmd)
 		else if (!cmd->next && a && !ft_strncmp(*a, "unset", n) && n == 5)
 			prompt->e_status = mini_unset(prompt);
 		else
-		{
-			signal(SIGQUIT, handle_sigint_child);
 			exec_cmd(prompt, cmd);
-		}
 		cmd = cmd->next;
 	}
 	return (prompt->e_status);

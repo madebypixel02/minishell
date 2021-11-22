@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/22 13:27:14 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/22 17:55:18 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,29 +114,29 @@ t_mini	*get_infile1(t_prompt *prompt, t_mini *node, char **args, int *i)
 
 t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i)
 {
-	char	*limiter;
-	char	*warn;
+	char	*aux[2];
 	char	*nl;
 	char	*str[2];
 
 	str[0] = NULL;
 	str[1] = NULL;
-	limiter = NULL;
-	warn = "minishell: warning: here-document delimited by end-of-file";
+	aux[0] = NULL;
+	aux[1] = "minishell: warning: here-document delimited by end-of-file";
 	nl = "minishell: syntax error near unexpected token `newline'";
 	(*i)++;
 	if (args[++(*i)])
 	{
-		limiter = args[*i];
-		node->infile = get_here_doc(str, 0, limiter, warn);
+		aux[0] = args[*i];
+		node->infile = get_here_doc(prompt, str, 0, aux);
 	}
 	if (!args[*i] || node->infile == -1)
 	{
 		*i = -1;
-		prompt->e_status = 1;
 		if (node->infile != -1)
+		{
 			ft_putendl_fd(nl, 2);
-		prompt->e_status += node->infile != -1;
+			prompt->e_status = 2;
+		}
 	}
 	return (node);
 }

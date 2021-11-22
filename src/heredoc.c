@@ -6,36 +6,30 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 10:17:00 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/19 18:31:26 by mbueno-g         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:00:25 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	minishell_here_fd(char *hdoc_str)
-{
-	int		fd[2];
-	pid_t	pid;
+extern int	g_fds[2][2];
 
-	pipe(fd);
-	pid = fork();
-	if (!pid)
+void	*mini_here_fd(t_prompt *prompt, int fd[2], int auxfd[2])
+{
+	if (pipe(fd) == -1)
+		return (mini_perror(prompt, PIPERR, NULL));
+	if (pipe(auxfd) == -1)
 	{
 		close(fd[READ_END]);
-		if (hdoc_str)
-			write(fd[WRITE_END], hdoc_str, ft_strlen(hdoc_str));
 		close(fd[WRITE_END]);
-		free(hdoc_str);
-		exit(0);
+		return (mini_perror(prompt, PIPERR, NULL));
 	}
-	close(fd[WRITE_END]);
-	free(hdoc_str);
-	return (fd[READ_END]);
+	return ("");
 }
 
-int	get_here_doc(char *str[2], size_t len, char *limit, char *warn)
+char	*get_here_str(char *str[2], size_t len, char *limit, char *warn)
 {
-	char				*temp;
+	char	*temp;
 
 	while (!str[0] || ft_strncmp(str[0], limit, len) || ft_strlen(limit) != len)
 	{
@@ -46,7 +40,6 @@ int	get_here_doc(char *str[2], size_t len, char *limit, char *warn)
 		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
 		str[0] = readline("> ");
-		signal(SIGINT, handle_sigint_child);
 		if (!str[0])
 		{
 			printf("%s (wanted `%s\')\n", warn, limit);
@@ -58,5 +51,40 @@ int	get_here_doc(char *str[2], size_t len, char *limit, char *warn)
 		len = ft_strlen(str[0]) - 1;
 	}
 	free(str[0]);
-	return (minishell_here_fd(str[1]));
+	return (str[1]);
+}
+
+void	here_child(t_prompt *prompt, char *str[2], size_t len, char *aux[2])
+{
+	close(g_fds[0][READ_END]);
+	close(g_fds[1][READ_END]);
+	str[1] = get_here_str(str, len, aux[0], aux[1]);
+	write(g_fds[0][WRITE_END], str[1], ft_strlen(str[1]));
+	free(str[1]);
+	write(g_fds[1][WRITE_END], &prompt->e_status, sizeof(int));
+	close(g_fds[1][WRITE_END]);
+	close(g_fds[0][WRITE_END]);
+	exit(0);
+}
+
+int	get_here_doc(t_prompt *prompt, char *str[2], size_t len, char *aux[2])
+{
+	pid_t	pid;
+
+	if (!mini_here_fd(prompt, g_fds[0], g_fds[1]))
+		return (-1);
+	pid = fork();
+	if (!pid)
+		here_child(prompt, str, len, aux);
+	close(g_fds[0][WRITE_END]);
+	close(g_fds[1][WRITE_END]);
+	waitpid(pid, NULL, 0);
+	read(g_fds[1][READ_END], &prompt->e_status, sizeof(int));
+	close(g_fds[1][READ_END]);
+	if (prompt->e_status)
+	{
+		close(g_fds[0][READ_END]);
+		return (-1);
+	}
+	return (g_fds[0][READ_END]);
 }
