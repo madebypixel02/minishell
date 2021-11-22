@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/21 23:47:36 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/22 13:27:14 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ t_mini	*get_outfile1(t_prompt *prompt, t_mini *node, char **args, int *i)
 		if (node->outfile != -1)
 		{
 			ft_putendl_fd(nl, 2);
-			prompt->e_status = 1;
+			prompt->e_status = 2;
 		}
 		else
-			prompt->e_status = 2;
+			prompt->e_status = 1;
 	}
 	return (node);
 }
@@ -79,10 +79,10 @@ t_mini	*get_outfile2(t_prompt *prompt, t_mini *node, char **args, int *i)
 		if (node->outfile != -1)
 		{
 			ft_putendl_fd(nl, 2);
-			prompt->e_status = 1;
+			prompt->e_status = 2;
 		}
 		else
-			prompt->e_status = 2;
+			prompt->e_status = 1;
 	}
 	return (node);
 }
@@ -104,10 +104,10 @@ t_mini	*get_infile1(t_prompt *prompt, t_mini *node, char **args, int *i)
 		if (node->infile != -1)
 		{
 			ft_putendl_fd(nl, 2);
-			prompt->e_status = 1;
+			prompt->e_status = 2;
 		}
 		else
-			prompt->e_status = 2;
+			prompt->e_status = 1;
 	}
 	return (node);
 }
@@ -133,10 +133,10 @@ t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i)
 	if (!args[*i] || node->infile == -1)
 	{
 		*i = -1;
-		prompt->e_status = 2;
+		prompt->e_status = 1;
 		if (node->infile != -1)
 			ft_putendl_fd(nl, 2);
-		prompt->e_status -= node->infile != -1;
+		prompt->e_status += node->infile != -1;
 	}
 	return (node);
 }

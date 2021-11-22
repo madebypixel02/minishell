@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/21 18:59:32 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/22 13:32:55 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	*check_to_fork(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
 		else if (!pid)
 			child_process(prompt, cmd, fd, pidfd);
 	}
-	else if (node->full_path)
+	else if (node->full_path && access(node->full_path, F_OK) == 0)
 		prompt->e_status = 126;
 	else if (node->full_cmd)
 		prompt->e_status = 127;
