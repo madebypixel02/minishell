@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/22 14:55:39 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/23 17:08:29 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ void	*mini_perror(t_prompt *prompt, int err, char *param)
 		ft_putstr_fd("minishell: No such file or directory: ", 2);
 	else if (err == NPERM)
 		ft_putstr_fd("minishell: permission denied: ", 2);
-	else if (err == PWD)
-		ft_putstr_fd("minishell: pwd: too many arguments\n", 2);
 	else if (err == NCMD)
 		ft_putstr_fd("minishell: command not found: ", 2);
 	else if (err == DUPERR)
@@ -39,6 +37,60 @@ void	*mini_perror(t_prompt *prompt, int err, char *param)
 		ft_putstr_fd("minishell: no memory left on device\n", 2);
 	ft_putendl_fd(param, 2);
 	return (NULL);
+}
+
+int	ft_atoi2(const char *nptr, long *nbr)
+{
+	int		sign;
+
+	sign = 1;
+	*nbr = 0;
+	while (ft_isspace(*nptr))
+		nptr++;
+	if (*nptr == '-')
+		sign = -sign;
+	if (*nptr == '-' || *nptr == '+')
+		nptr++;
+	if (!ft_isdigit(*nptr))
+		return (-1);
+	while (ft_isdigit(*nptr))
+	{
+		*nbr = 10 * *nbr + (*nptr - '0');
+		nptr++;
+	}
+	if (*nptr && !ft_isspace(*nptr))
+		return (-1);
+	*nbr *= sign;
+	return (0);
+}
+
+int	mini_exit(t_list *cmd, int *is_exit)
+{
+	t_mini	*node;
+	long	status[2];
+
+	node = cmd->content;
+	*is_exit = !cmd->next;
+	if (*is_exit)
+		ft_putstr_fd("exit\n", 2);
+	if (!node->full_cmd || !node->full_cmd[1])
+		return (0);
+	status[1] = ft_atoi2(node->full_cmd[1], &status[0]);
+	if (status[1] == -1)
+	{
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(node->full_cmd[1], 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+		return (255);
+	}
+	else if (node->full_cmd[2])
+	{
+		*is_exit = 0;
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		return (1);
+	}
+	status[0] %= 256 + 256 * (status[0] < 0);
+	return (status[0]);
 }
 
 void	free_content(void *content)

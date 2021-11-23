@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 12:08:12 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/22 18:42:35 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/23 17:10:00 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,18 @@ static char	**split_all(char **args, t_prompt *prompt)
 
 static void	*parse_args(char **args, t_prompt *p)
 {
+	int	is_exit;
+
+	is_exit = 0;
 	p->cmds = fill_nodes(p, split_all(args, p), -1);
 	if (!p->cmds)
 		return (p);
-	p->e_status = builtin(p, p->cmds);
+	p->e_status = builtin(p, p->cmds, &is_exit, 0);
 	waitpid((((t_mini *)ft_lstlast(p->cmds)->content))->pid, &p->e_status, 0);
 	if (p->e_status > 255)
 		p->e_status = p->e_status / 255;
-	if (args && p->e_status == -1)
+	if (args && is_exit)
 	{
-		p->e_status = p->e_status != -1;
-		printf("exit\n");
 		ft_lstclear(&p->cmds, free_content);
 		return (NULL);
 	}

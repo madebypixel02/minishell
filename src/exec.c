@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/23 13:11:05 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/23 15:43:52 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
 	int		l;
 	pid_t	pid;
 
-	signal(SIGINT, handle_sigint_child);
-	signal(SIGQUIT, handle_sigquit);
 	pid = getpid();
 	n = cmd->content;
 	l = 0;

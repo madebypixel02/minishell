@@ -6,15 +6,14 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/22 18:48:58 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/23 17:10:09 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	builtin(t_prompt *prompt, t_list *cmd)
+int	builtin(t_prompt *prompt, t_list *cmd, int *is_exit, int n)
 {
-	int		n;
 	char	**a;
 
 	while (cmd)
@@ -24,7 +23,7 @@ int	builtin(t_prompt *prompt, t_list *cmd)
 		if (a)
 			n = ft_strlen(*a);
 		if (a && !ft_strncmp(*a, "exit", n) && n == 4)
-			return (-1);
+			prompt->e_status = mini_exit(cmd, is_exit);
 		else if (!cmd->next && a && !ft_strncmp(*a, "cd", n) && n == 2)
 			prompt->e_status = mini_cd(prompt);
 		else if (!cmd->next && a && !ft_strncmp(*a, "export", n) && n == 6)
@@ -32,7 +31,11 @@ int	builtin(t_prompt *prompt, t_list *cmd)
 		else if (!cmd->next && a && !ft_strncmp(*a, "unset", n) && n == 5)
 			prompt->e_status = mini_unset(prompt);
 		else
+		{
+			signal(SIGINT, handle_sigint_child);
+			signal(SIGQUIT, handle_sigquit);
 			exec_cmd(prompt, cmd);
+		}
 		cmd = cmd->next;
 	}
 	return (prompt->e_status);

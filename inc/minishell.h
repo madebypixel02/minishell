@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/22 18:33:20 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/23 17:09:47 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,12 @@ enum	e_mini_error
 	QUOTE = 1,
 	NDIR = 2,
 	NPERM = 3,
-	PWD = 4,
-	NCMD = 5,
-	DUPERR = 6,
-	FORKERR = 7,
-	PIPERR = 8,
-	PIPENDERR = 9,
-	MEM = 10
+	NCMD = 6,
+	DUPERR = 7,
+	FORKERR = 8,
+	PIPERR = 9,
+	PIPENDERR = 10,
+	MEM = 11
 };
 
 /* Uses readline inside a child process and returns the read line */
@@ -63,7 +62,7 @@ char	*mini_readline(t_prompt *prompt, char *str);
 void	*mini_here_fd(t_prompt *prompt, int fd[2], int auxfd[2]);
 
 /* Handles all builtin functions */
-int		builtin(t_prompt *prompt, t_list *cmd);
+int		builtin(t_prompt *prompt, t_list *cmd, int *is_exit, int n);
 
 /* C implementation of the cd shell command */
 int		mini_cd(t_prompt *prompt);
@@ -79,6 +78,9 @@ int		mini_export(t_prompt *prompt);
 
 /* C implementation of the unset shell command */
 int		mini_unset(t_prompt *prompt);
+
+/* C implementation of the exit shell command */
+int		mini_exit(t_list *cmd, int *is_exit);
 
 /* Splits command string into manageable matrix to store & exec commands */
 void	*check_args(char *out, t_prompt *p);
