@@ -6,7 +6,7 @@
 #    By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/07 16:58:45 by mbueno-g          #+#    #+#              #
-#    Updated: 2021/11/10 18:15:23 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/23 13:13:43 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,6 @@ if [ "$builtin" = "echo" ] || [ "$builtin" = "all" ] ; then
 	exec_test "> hola echo hello"
 	exec_test "echo hola \"'adi \$PWD   os' \$PWD\" 'ddj'abc >> \"hello\" < main.c"
 	exec_test "echo $\"PWD\""
-	exec_test "echo \$\$"
 	exec_test "echo \$''"
 	exec_test "echo \$\"\""
 	exec_test "echo \$"
