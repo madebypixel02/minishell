@@ -4,9 +4,32 @@
 
 ### Table of Contents
 
-🚧 WARNING: Area under Construction! 🚧
+* [Introduction](#introduction)
+	* [What the Shell?](#what-the-shell)
+* [Our Implementation of Minishell](#our-implementation-of-minishell)
+	* [Lexer & Expander](#lexer-&-expander)
+	* [Parser](#parser)
+	* [Executor](#executor)
+* [Extras](#extras)
+* [Roadblocks](#roadblocks)
+* [Installation](#installation)
+* [Demos](#demos)
+* [References](#references)
+* [Summary](#summary)
 
-Here's a small demo of our progress so far:
+
+## Introduction
+
+This project is all about recreating your very own (mini)shell, taking bash as reference. This was our first group project, and I was honored to do it with [@mbueno-g](https://github.com/mbueno-g) :)
+
+
+#### What the Shell?
+
+As we just said, we are asked to implement our own shell, but what is a shell to begin with? If we think (of for example) Linux as a nut or a seashell, the kernel/seed is the core of the nut and has to be surrounded by a cover or shell. Likewise, the shell we are implementing works as a command interpreter communicating with the OS kernel in a secure way, and allows us to perform a number tasks from a command line, namely execute commands, create or delete files or directories, or read and write content of files, among (many) other thins.
+
+## Our Implementation of Minishell
+
+The general idea for this shell is reading a string of commands in a prompt using [readline](https://www.man7.org/linux/man-pages/man3/readline.3.html). Before anything, it is highly recommended to take a deep dive into the [bash manual](https://www.gnu.org/software/bash/manual/bash.html), as it goes over every detail we had to have in mind when doing this project. ``Minishell`` involves heavy parsing of the string read by ``readline``, thus it is crucial to divide the code of the project into different parts: the ``lexer``, the ``expander``, the ``parser``, and lastly the ``executor``.
 
 * ``1.0: Basic stuff working``
 
