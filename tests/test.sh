@@ -6,7 +6,7 @@
 #    By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/07 16:58:45 by mbueno-g          #+#    #+#              #
-#    Updated: 2021/11/23 13:13:43 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/24 13:26:59 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -154,9 +154,9 @@ if [ "$builtin" = "all" ]; then
 fi
 
 if [ $CORRECT -eq $TOTAL ]; then
-	./starstruck.sh
+	./starstruck
 else
-	./sad.sh
+	./sad
 fi
 
 rm -f test1 test2

@@ -6,7 +6,7 @@
 #    By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/07 16:54:53 by mbueno-g          #+#    #+#              #
-#    Updated: 2021/11/10 18:04:11 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/24 13:26:43 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,12 +40,12 @@ fi
 printf $BOLDGREEN"Expected output : \n%.20s\n$(cat -e test2)\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
 
 if (cmp -s "$test1" "$test2") ; then
-	./starstruck.sh
+	./starstruck
 else
 	printf "$BOLDRED\n----------------------------------------- DIFF -----------------------------------------\n\n"
 	diff test1 test2
 	printf $RESET
-	./sad.sh
+	./sad
 fi
 
 rm -f test1 test2
