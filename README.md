@@ -20,7 +20,7 @@ Here's a small demo of our progress so far:
 
 ``3.0: Mostly done, yay :)``
 
-* ![minishell](https://user-images.githubusercontent.com/40824677/142918764-a3fc68c6-aa5e-4f95-91b7-e4878e4248d0.gif)
+![Peek-2021-11-24-12-25](https://user-images.githubusercontent.com/40824677/143232233-4e385114-441f-4e3e-b3ba-477bc75454e1.gif)
 
 
 Available in six different colors:
