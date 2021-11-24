@@ -222,7 +222,7 @@ Note for MacOS: to install a recent version of readline, you need to use homebre
 ```shell
 git clone https://github.com/madebypixel02/minishell.git
 cd minishell
-https://github.com/madebypixel02/libft.git
+git clone https://github.com/madebypixel02/libft.git
 ```
 
 ### Basic Usage
