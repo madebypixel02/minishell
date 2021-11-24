@@ -14,7 +14,7 @@
 * [Builtins](#builtins)
 * [Prompt](#prompt)
 * [Extras](#extras)
-	* [User-Color](#user-color)
+	* [User Color](#user-color)
 	* [Process ID](#process-id)
 	* [Running without Environment](#running-without-environment)
 * [Installation](#installation)
