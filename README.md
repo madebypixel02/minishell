@@ -33,3 +33,8 @@ Available in six different colors:
 ![Screenshot from 2021-11-24 13-08-12](https://user-images.githubusercontent.com/40824677/143235730-e2d7a8ff-d398-4ff0-9a60-b0929ad38152.png)
 
 Note: ``red`` color is reserved for the ``root`` user
+
+![Screenshot from 2021-11-24 13-29-43](https://user-images.githubusercontent.com/40824677/143238700-8878c4f3-4763-4c8f-976e-aae049c9ed57.png)
+
+![Screenshot from 2021-11-24 13-32-04](https://user-images.githubusercontent.com/40824677/143238979-4b8688f7-18ad-4c95-a380-496e5fc2ab17.png)
+
