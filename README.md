@@ -248,7 +248,7 @@ As we developed the project, we recorded some demos of how the project looked. H
 ![minishell](https://user-images.githubusercontent.com/40824677/141684153-e2748818-8a01-4cf8-88a6-5ed2624e2ce6.gif)
 
 
-``v3.0`` Heavily cleaned code, misc fixes, use readline inside a child process, yay :)
+* ``v3.0`` Heavily cleaned code, misc fixes, use readline inside a child process, yay :)
 
 ![minishell](https://user-images.githubusercontent.com/40824677/143232233-4e385114-441f-4e3e-b3ba-477bc75454e1.gif)
 
