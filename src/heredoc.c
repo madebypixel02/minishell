@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 10:17:00 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/22 19:00:25 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/26 09:48:49 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	here_child(t_prompt *prompt, char *str[2], size_t len, char *aux[2])
 	str[1] = get_here_str(str, len, aux[0], aux[1]);
 	write(g_fds[0][WRITE_END], str[1], ft_strlen(str[1]));
 	free(str[1]);
+	prompt->e_status = 0;
 	write(g_fds[1][WRITE_END], &prompt->e_status, sizeof(int));
 	close(g_fds[1][WRITE_END]);
 	close(g_fds[0][WRITE_END]);
@@ -81,7 +82,7 @@ int	get_here_doc(t_prompt *prompt, char *str[2], size_t len, char *aux[2])
 	waitpid(pid, NULL, 0);
 	read(g_fds[1][READ_END], &prompt->e_status, sizeof(int));
 	close(g_fds[1][READ_END]);
-	if (prompt->e_status)
+	if (prompt->e_status == 130)
 	{
 		close(g_fds[0][READ_END]);
 		return (-1);

@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/23 17:09:47 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/26 09:38:19 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ void	*mini_here_fd(t_prompt *prompt, int fd[2], int auxfd[2]);
 
 /* Handles all builtin functions */
 int		builtin(t_prompt *prompt, t_list *cmd, int *is_exit, int n);
+
+/* Checks if the first element in full_cmd is a builtin */
+int		is_builtin(t_mini *n);
 
 /* C implementation of the cd shell command */
 int		mini_cd(t_prompt *prompt);

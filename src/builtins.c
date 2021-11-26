@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/23 17:10:09 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/26 09:39:22 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,30 @@ int	builtin(t_prompt *prompt, t_list *cmd, int *is_exit, int n)
 		cmd = cmd->next;
 	}
 	return (prompt->e_status);
+}
+
+int	is_builtin(t_mini *n)
+{
+	int		l;
+
+	if (!n->full_cmd)
+		return (0);
+	l = ft_strlen(*n->full_cmd);
+	if (!ft_strncmp(*n->full_cmd, "pwd", l) && l == 3)
+		return (1);
+	if (!ft_strncmp(*n->full_cmd, "env", l) && l == 3)
+		return (1);
+	if (!ft_strncmp(*n->full_cmd, "cd", l) && l == 2)
+		return (1);
+	if (!ft_strncmp(*n->full_cmd, "export", l) && l == 6)
+		return (1);
+	if (!ft_strncmp(*n->full_cmd, "unset", l) && l == 5)
+		return (1);
+	if (!ft_strncmp(*n->full_cmd, "echo", l) && l == 4)
+		return (1);
+	if (!ft_strncmp(*n->full_cmd, "exit", l) && l == 4)
+		return (1);
+	return (0);
 }
 
 int	mini_cd(t_prompt *prompt)
@@ -104,25 +128,4 @@ int	mini_echo(t_list *cmd)
 	if (newline)
 		ft_putchar_fd('\n', 1);
 	return (0);
-}
-
-void	child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd)
-{
-	if (n->full_cmd && !ft_strncmp(*n->full_cmd, "pwd", l) && l == 3)
-		prompt->e_status = mini_pwd();
-	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "echo", l) && l == 4)
-		prompt->e_status = mini_echo(cmd);
-	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "env", l) && l == 3)
-	{
-		ft_putmatrix_fd(prompt->envp, 1);
-		prompt->e_status = 0;
-	}
-	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "cd", l) && l == 2)
-		prompt->e_status = mini_cd(prompt);
-	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "export", l) && l == 6)
-		prompt->e_status = mini_export(prompt);
-	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "unset", l) && l == 5)
-		prompt->e_status = mini_unset(prompt);
-	else if (n->full_cmd)
-		execve(n->full_path, n->full_cmd, prompt->envp);
 }

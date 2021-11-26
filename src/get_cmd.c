@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 15:51:24 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/21 17:34:02 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/26 09:42:22 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,29 +42,29 @@ char	*find_command(char **env_path, char *cmd, char *full_path)
 
 void	get_cmd(t_prompt *prompt, t_list *cmd, char **s, char *path)
 {
-	t_mini	*node;
+	t_mini	*n;
 
-	node = cmd->content;
-	if (node->full_cmd && ft_strchr(*node->full_cmd, '/'))
+	n = cmd->content;
+	if (n->full_cmd && ft_strchr(*n->full_cmd, '/'))
 	{
-		s = ft_split(*node->full_cmd, '/');
-		node->full_path = ft_strdup(*node->full_cmd);
-		free(node->full_cmd[0]);
-		node->full_cmd[0] = ft_strdup(s[ft_matrixlen(s) - 1]);
+		s = ft_split(*n->full_cmd, '/');
+		n->full_path = ft_strdup(*n->full_cmd);
+		free(n->full_cmd[0]);
+		n->full_cmd[0] = ft_strdup(s[ft_matrixlen(s) - 1]);
 	}
-	else if (node->full_cmd)
+	else if (!is_builtin(n) && n->full_cmd)
 	{
 		path = mini_getenv("PATH", prompt->envp, 4);
 		s = ft_split(path, ':');
 		free(path);
-		node->full_path = find_command(s, *node->full_cmd, \
-			node->full_path);
-		if (!node->full_path || !node->full_cmd[0] || !node->full_cmd[0][0])
-			mini_perror(prompt, NCMD, *node->full_cmd);
+		n->full_path = find_command(s, *n->full_cmd, \
+			n->full_path);
+		if (!n->full_path || !n->full_cmd[0] || !n->full_cmd[0][0])
+			mini_perror(prompt, NCMD, *n->full_cmd);
 	}
-	if (node->full_path && access(node->full_path, F_OK) == -1)
-		mini_perror(prompt, NDIR, node->full_path);
-	else if (node->full_path && access(node->full_path, X_OK) == -1)
-		mini_perror(prompt, NPERM, node->full_path);
+	if (!is_builtin(n) && n->full_path && access(n->full_path, F_OK) == -1)
+		mini_perror(prompt, NDIR, n->full_path);
+	else if (!is_builtin(n) && n->full_path && access(n->full_path, X_OK) == -1)
+		mini_perror(prompt, NPERM, n->full_path);
 	ft_free_matrix(&s);
 }

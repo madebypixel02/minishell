@@ -6,11 +6,26 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/23 15:43:52 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/26 09:41:09 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd)
+{
+	if (n->full_cmd && !ft_strncmp(*n->full_cmd, "pwd", l) && l == 3)
+		prompt->e_status = mini_pwd();
+	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "echo", l) && l == 4)
+		prompt->e_status = mini_echo(cmd);
+	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "env", l) && l == 3)
+	{
+		ft_putmatrix_fd(prompt->envp, 1);
+		prompt->e_status = 0;
+	}
+	else if (n->full_cmd)
+		execve(n->full_path, n->full_cmd, prompt->envp);
+}
 
 static void	*child_redir(t_prompt *prompt, t_list *cmd, int fd[2])
 {
@@ -58,13 +73,13 @@ void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
 
 void	*check_to_fork(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
 {
-	t_mini	*node;
+	t_mini	*n;
 	pid_t	pid;
 
-	node = cmd->content;
-	if (node->infile == -1 || node->outfile == -1)
+	n = cmd->content;
+	if (n->infile == -1 || n->outfile == -1)
 		return (NULL);
-	if (node->full_path && access(node->full_path, X_OK) == 0)
+	if (is_builtin(n) || (n->full_path && access(n->full_path, X_OK) == 0))
 	{
 		pid = fork();
 		if (pid < 0)
@@ -78,9 +93,9 @@ void	*check_to_fork(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
 		else if (!pid)
 			child_process(prompt, cmd, fd, pidfd);
 	}
-	else if (node->full_path && access(node->full_path, F_OK) == 0)
+	else if (!is_builtin(n) && n->full_path && access(n->full_path, F_OK) == 0)
 		prompt->e_status = 126;
-	else if (node->full_cmd)
+	else if (!is_builtin(n) && n->full_cmd)
 		prompt->e_status = 127;
 	return ("");
 }
