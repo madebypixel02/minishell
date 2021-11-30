@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/30 17:18:29 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/30 17:30:04 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,8 @@ void	*check_to_fork(t_prompt *prompt, t_list *cmd, int fd[2])
 void	*exec_cmd(t_prompt *prompt, t_list *cmd)
 {
 	int		fd[2];
-	t_mini	*node;
 
 	get_cmd(prompt, cmd, NULL, NULL);
-	node = cmd->content;
 	if (pipe(fd) == -1)
 		return (mini_perror(prompt, PIPERR, NULL));
 	if (!check_to_fork(prompt, cmd, fd))
