@@ -10,6 +10,7 @@
 	* [Lexer and Expander](#lexer-and-expander)
 	* [Parser](#parser)
 	* [Executor](#executor)
+	* [Mind Map](#mind-map)
 	* [Global Variable](#global-variable)
 * [Builtins](#builtins)
 * [Prompt](#prompt)
@@ -22,13 +23,6 @@
 	* [Demos](#demos)
 * [References](#references)
 * [Summary](#summary)
-
-
-<!--
-![Concept Map - Frame 5](https://user-images.githubusercontent.com/71781441/144017004-aa68e8d7-5da7-4ece-afc6-b8ab100113df.jpg)
-![Concept Map - Frame 4](https://user-images.githubusercontent.com/71781441/144017016-ef2bb606-c301-42c6-88f1-8ed4339d22cd.jpg) -->
-
-
 
 
 ## Introduction
@@ -135,6 +129,7 @@ cmds:
 		pid: (output of getpid())
 envp: (envp from main)
 e_status: 0 (if last command exits normally)
+
 ```
 
 ### Executor
@@ -143,6 +138,12 @@ With all our data properly on our structs, the ``executer`` has all the necessar
 
 Once all commands have finished running the allocated memory is freed and a new prompt appears to read the next command
 
+### Mind Map
+
+Here is a handy mindmap of our code structure to help you understant everything we mentioned previously
+
+![Concept Map - Frame 5](https://user-images.githubusercontent.com/71781441/144017004-aa68e8d7-5da7-4ece-afc6-b8ab100113df.jpg)
+![Concept Map - Frame 4](https://user-images.githubusercontent.com/71781441/144017016-ef2bb606-c301-42c6-88f1-8ed4339d22cd.jpg)
 
 ### Global Variable
 
@@ -229,7 +230,7 @@ Note for MacOS: to install a recent version of readline, you need to use homebre
 ```shell
 git clone https://github.com/madebypixel02/minishell.git
 cd minishell
-git clone https://github.com/madebypixel02/libft.git
+make
 ```
 
 ### Basic Usage

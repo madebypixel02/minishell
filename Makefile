@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/11/23 13:03:42 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/11/30 16:14:22 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,6 +66,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) -I ~/.brew/opt/readline/include $(CFLAGS) $(CDEBUG) -c $< -o $@
 
 compile_libft:
+	@if [ ! -d "libft" ]; then \
+		git clone https://github.com/madebypixel02/libft.git; \
+	fi
 	@make -C libft
 
 create_dirs:
@@ -81,8 +84,10 @@ run: all
 	@$(LEAKS)./$(NAME)
 
 clean:
-	@$(ECHO) "$(CYAN)Cleaning up object files in $(OBJ_DIR), and $(OBJ_LFT_DIR)...$(DEFAULT)"
-	@make clean -C libft/
+	@$(ECHO) "$(CYAN)Cleaning up object files in $(NAME)...$(DEFAULT)"
+	@if [ -d "libft" ]; then \
+		make clean -C libft/; \
+	fi
 	@$(RM) -r $(OBJ_DIR)
 
 fclean: clean
@@ -90,7 +95,9 @@ fclean: clean
 	@$(RM) $(NAME)
 
 norminette:
-	@make norminette -C libft/
+	@if [ -d "libft" ]; then \
+		make norminette -C libft/; \
+	fi
 	@$(ECHO) "$(CYAN)\nChecking norm for $(NAME)...$(DEFAULT)"
 	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR) inc/
 
