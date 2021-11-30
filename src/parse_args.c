@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 12:08:12 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/23 17:10:00 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/30 17:12:24 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static void	*parse_args(char **args, t_prompt *p)
 	if (!p->cmds)
 		return (p);
 	p->e_status = builtin(p, p->cmds, &is_exit, 0);
-	waitpid((((t_mini *)ft_lstlast(p->cmds)->content))->pid, &p->e_status, 0);
 	if (p->e_status > 255)
 		p->e_status = p->e_status / 255;
 	if (args && is_exit)

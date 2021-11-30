@@ -6,7 +6,7 @@
 /*   By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/22 13:26:10 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/30 17:09:48 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static t_mini	*mini_init(void)
 	mini->full_path = NULL;
 	mini->infile = STDIN_FILENO;
 	mini->outfile = STDOUT_FILENO;
-	mini->pid = -1;
 	return (mini);
 }
 

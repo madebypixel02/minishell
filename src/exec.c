@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/26 09:41:09 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/11/30 17:18:29 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,28 +50,23 @@ static void	*child_redir(t_prompt *prompt, t_list *cmd, int fd[2])
 	return ("");
 }
 
-void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
+void	*child_process(t_prompt *prompt, t_list *cmd, int fd[2])
 {
 	t_mini	*n;
 	int		l;
-	pid_t	pid;
 
-	pid = getpid();
 	n = cmd->content;
 	l = 0;
 	if (n->full_cmd)
 		l = ft_strlen(*n->full_cmd);
 	child_redir(prompt, cmd, fd);
 	close(fd[READ_END]);
-	close(pidfd[READ_END]);
-	write(pidfd[WRITE_END], &pid, sizeof(int));
-	close(pidfd[WRITE_END]);
 	child_builtin(prompt, n, l, cmd);
 	ft_lstclear(&prompt->cmds, free_content);
 	exit(prompt->e_status);
 }
 
-void	*check_to_fork(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
+void	*check_to_fork(t_prompt *prompt, t_list *cmd, int fd[2])
 {
 	t_mini	*n;
 	pid_t	pid;
@@ -86,12 +81,12 @@ void	*check_to_fork(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
 		{
 			close(fd[READ_END]);
 			close(fd[WRITE_END]);
-			close(pidfd[READ_END]);
-			close(pidfd[WRITE_END]);
 			return (mini_perror(prompt, FORKERR, NULL));
 		}
 		else if (!pid)
-			child_process(prompt, cmd, fd, pidfd);
+			child_process(prompt, cmd, fd);
+		if (!cmd->next)
+			waitpid(pid, &prompt->e_status, 0);
 	}
 	else if (!is_builtin(n) && n->full_path && access(n->full_path, F_OK) == 0)
 		prompt->e_status = 126;
@@ -103,24 +98,14 @@ void	*check_to_fork(t_prompt *prompt, t_list *cmd, int fd[2], int pidfd[2])
 void	*exec_cmd(t_prompt *prompt, t_list *cmd)
 {
 	int		fd[2];
-	int		pidfd[2];
 	t_mini	*node;
 
 	get_cmd(prompt, cmd, NULL, NULL);
 	node = cmd->content;
 	if (pipe(fd) == -1)
 		return (mini_perror(prompt, PIPERR, NULL));
-	if (pipe(pidfd) == -1)
-	{
-		close(fd[READ_END]);
-		close(fd[WRITE_END]);
-		return (mini_perror(prompt, PIPERR, NULL));
-	}
-	if (!check_to_fork(prompt, cmd, fd, pidfd))
+	if (!check_to_fork(prompt, cmd, fd))
 		return (NULL);
-	close(pidfd[WRITE_END]);
-	read(pidfd[READ_END], &node->pid, sizeof(int));
-	close(pidfd[READ_END]);
 	close(fd[WRITE_END]);
 	if (cmd->next && !((t_mini *)cmd->next->content)->infile)
 		((t_mini *)cmd->next->content)->infile = fd[READ_END];
