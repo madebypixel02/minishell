@@ -27,7 +27,7 @@
 
 ## Introduction
 
-This project is all about recreating your very own (mini)shell, taking bash (Bourne Again SHell) as reference. This was our first group project, and I was honored to do it with [@mbueno-g](https://github.com/mbueno-g) :)
+This project is all about recreating your very own (mini)shell, taking bash (Bourne Again SHell) as reference. This was our first group project, and I was honored to do it with [@madebypixel02](https://github.com/madebypixel02) :)
 
 
 #### What the Shell?
