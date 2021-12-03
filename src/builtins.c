@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/26 09:39:22 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/03 19:17:27 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	mini_echo(t_list *cmd)
 	argv = node->full_cmd;
 	while (argv && argv[++i])
 	{
-		if (i == 1 && !ft_strncmp(argv[i], "-n", 3))
+		if (!ft_strncmp(argv[i], "-n", 3))
 			newline = 0;
 		else
 		{
