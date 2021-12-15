@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/12/15 15:20:28 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/12/15 17:36:19 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,12 +25,10 @@ SHELL=/bin/bash
 UNAME = $(shell uname -s)
 
 # Properties for MacOS
-ECHO = echo
 CDEBUG = -fsanitize=address
 CHECKER = tests/checker_Mac
 ifeq ($(UNAME), Linux)
 	#Properties for Linux
-	ECHO = echo -e
 	LEAKS = valgrind --leak-check=full --track-fds=yes --trace-children=yes -s -q 
 endif
 
@@ -39,6 +37,7 @@ AR = ar rcs
 CFLAGS = -Wall -Wextra -Werror -MD -g3 
 RM = rm -f
 CC = gcc
+PRINTF = LC_NUMERIC="en_US.UTF-8" printf
 SRC_DIR = src
 SRCB_DIR = srcb
 OBJ_DIR = obj
@@ -56,14 +55,20 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 OBJ_LFT = $(addprefix $(OBJ_LFT_DIR)/, $(SRC_LFT:.c=.o))
 
+# Progress vars
+SRC_COUNT_TOT := $(shell expr $(shell echo -n $(SRC) | wc -w) - $(shell ls $(OBJ_DIR) | grep .o | wc -w))
+SRC_COUNT := 0
+SRC_PCT = $(shell expr 100 \* $(SRC_COUNT) / $(SRC_COUNT_TOT))
+
 all: $(NAME)
 
 $(NAME): create_dirs compile_libft $(OBJ)
 	@$(CC) -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include $(CFLAGS) $(CDEBUG) $(OBJ) $(LIBFT) -lreadline -o $@
-	@$(ECHO) "$(GREEN)$(NAME) is up to date!$(DEFAULT)"
+	@$(PRINTF) "\r%100s\r$(GREEN)$(NAME) is up to date!$(DEFAULT)\n"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@$(ECHO) "Compiling $(BLUE)$<$(DEFAULT)..."
+	@$(eval SRC_COUNT = $(shell expr $(SRC_COUNT) + 1))
+	@printf "\r%100s\r[ %d/%d (%d%%) ] Compiling $(BLUE)$<$(DEFAULT)..." "" $(SRC_COUNT) $(SRC_COUNT_TOT) $(SRC_PCT)
 	@$(CC) -I ~/.brew/opt/readline/include $(CFLAGS) $(CDEBUG) -c $< -o $@
 
 compile_libft:
@@ -85,25 +90,25 @@ run: all
 	@$(LEAKS)./$(NAME)
 
 clean:
-	@$(ECHO) "$(CYAN)Cleaning up object files in $(NAME)...$(DEFAULT)"
+	@$(PRINTF) "$(CYAN)Cleaning up object files in $(NAME)...$(DEFAULT)\n"
 	@if [ -d "libft" ]; then \
 		make clean -C libft/; \
 	fi
 	@$(RM) -r $(OBJ_DIR)
 
 fclean: clean
-	@$(ECHO) "$(CYAN)Removed $(NAME)$(DEFAULT)"
+	@$(PRINTF) "$(CYAN)Removed $(NAME)$(DEFAULT)\n"
 	@$(RM) $(NAME)
 
 norminette:
 	@if [ -d "libft" ]; then \
 		make norminette -C libft/; \
 	fi
-	@$(ECHO) "$(CYAN)\nChecking norm for $(NAME)...$(DEFAULT)"
+	@$(PRINTF) "$(CYAN)\nChecking norm for $(NAME)...$(DEFAULT)\n"
 	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR) inc/
 
 re: fclean all
-	@$(ECHO) "$(YELLOW)Cleaned and Rebuilt Everything for $(NAME)!$(DEFAULT)"
+	@$(PRINTF) "$(YELLOW)Cleaned and Rebuilt Everything for $(NAME)!$(DEFAULT)\n"
 
 git:
 	git add .
