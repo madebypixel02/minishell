@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/12/15 17:52:56 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/12/15 19:16:58 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,8 +107,8 @@ norminette:
 	@$(PRINTF) "$(CYAN)\nChecking norm for $(NAME)...$(DEFAULT)\n"
 	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR) inc/
 
-re: fclean all
-	@$(PRINTF) "$(YELLOW)Cleaned and Rebuilt Everything for $(NAME)!$(DEFAULT)\n"
+re: fclean
+	@make all
 
 git:
 	git add .
