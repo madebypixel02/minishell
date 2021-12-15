@@ -78,7 +78,6 @@ typedef struct s_mini
 {
 	char	**full_cmd;
 	char	*full_path;
-	pid_t	pid;
 	int	infile;
 	int	outfile;
 }		t_mini;
@@ -90,7 +89,6 @@ Here is a short summary of what every variable is used for
 | ``cmds`` | Linked list containing a ``t_mini`` node with all commands separated by pipes |
 | ``full_cmd`` | Equivalent of the typical ``argv``, containing the command name and its parameters when needed |
 | ``full_path`` | If not a builtin, first available path for the executable denoted by ``argv[0]`` from the ``PATH`` variable |
-| ``pid`` | Process id of a child that runs a command |
 | ``infile`` | Which file descriptor to read from when running a command (defaults to ``stdin``) |
 | ``outfile`` | Which file descriptor to write to when running a command (defaults to ``stdout``) |
 | ``envp`` | Up-to-date array containing keys and values for the shell environment |
@@ -120,13 +118,11 @@ cmds:
 		outfile: 1 (redirected to pipe)
 		full_path: NULL (because echo is a builtin)
 		full_cmd: {echo, hello there, how, are, you doing?, pixel, NULL}
-		pid: (output of getpid())
 	cmd 2:
 		infile: 0 (contains output of previous command)
 		outfile: 3 (fd corresponding to the open file 'outfile')
 		full_path: /bin/wc
 		full_cmd: {wc, -l, NULL}
-		pid: (output of getpid())
 envp: (envp from main)
 e_status: 0 (if last command exits normally)
 
