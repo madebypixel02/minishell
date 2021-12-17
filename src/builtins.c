@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/15 19:22:12 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/17 16:32:18 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ int	is_builtin(t_mini *n)
 	int		l;
 
 	if (!n->full_cmd)
+		return (0);
+	if ((n->full_cmd && ft_strchr(*n->full_cmd, '/')) || (n->full_path && \
+		ft_strchr(n->full_path, '/')))
 		return (0);
 	l = ft_strlen(*n->full_cmd);
 	if (!ft_strncmp(*n->full_cmd, "pwd", l) && l == 3)

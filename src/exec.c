@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/30 17:30:04 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/17 16:30:52 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,20 @@
 
 void	child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd)
 {
-	if (n->full_cmd && !ft_strncmp(*n->full_cmd, "pwd", l) && l == 3)
+	if (!is_builtin(n) && n->full_cmd)
+		execve(n->full_path, n->full_cmd, prompt->envp);
+	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "pwd", l) \
+		&& l == 3)
 		prompt->e_status = mini_pwd();
-	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "echo", l) && l == 4)
+	else if (is_builtin(n) && n->full_cmd && \
+		!ft_strncmp(*n->full_cmd, "echo", l) && l == 4)
 		prompt->e_status = mini_echo(cmd);
-	else if (n->full_cmd && !ft_strncmp(*n->full_cmd, "env", l) && l == 3)
+	else if (is_builtin(n) && n->full_cmd && \
+		!ft_strncmp(*n->full_cmd, "env", l) && l == 3)
 	{
 		ft_putmatrix_fd(prompt->envp, 1);
 		prompt->e_status = 0;
 	}
-	else if (n->full_cmd)
-		execve(n->full_path, n->full_cmd, prompt->envp);
 }
 
 static void	*child_redir(t_prompt *prompt, t_list *cmd, int fd[2])
@@ -74,7 +77,7 @@ void	*check_to_fork(t_prompt *prompt, t_list *cmd, int fd[2])
 	n = cmd->content;
 	if (n->infile == -1 || n->outfile == -1)
 		return (NULL);
-	if (is_builtin(n) || (n->full_path && access(n->full_path, X_OK) == 0))
+	if ((n->full_path && access(n->full_path, X_OK) == 0) || is_builtin(n))
 	{
 		pid = fork();
 		if (pid < 0)

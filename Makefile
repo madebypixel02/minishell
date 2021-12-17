@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/12/15 19:50:46 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/12/17 15:59:14 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,7 @@ OBJ_LFT = $(addprefix $(OBJ_LFT_DIR)/, $(SRC_LFT:.c=.o))
 
 # Progress vars
 SRC_COUNT_TOT := $(shell expr $(shell echo -n $(SRC) | wc -w) - $(shell ls -l $(OBJ_DIR) 2>&1 | grep ".o" | wc -l) + 1)
-ifeq ($(shell test $(SRC_COUNT_TOT) -lt 0; echo $$?),0)
+ifeq ($(shell test $(SRC_COUNT_TOT) -le 0; echo $$?),0)
 	SRC_COUNT_TOT := $(shell echo -n $(SRC) | wc -w)
 endif
 SRC_COUNT := 0
