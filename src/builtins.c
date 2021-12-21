@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/17 16:41:57 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/21 16:07:08 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	builtin(t_prompt *prompt, t_list *cmd, int *is_exit, int n)
 			prompt->e_status = mini_unset(prompt);
 		else
 		{
-			signal(SIGINT, handle_sigint_child);
+			signal(SIGINT, SIG_IGN);
 			signal(SIGQUIT, handle_sigquit);
 			exec_cmd(prompt, cmd);
 		}
