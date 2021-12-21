@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:44:53 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/23 15:50:47 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/21 16:15:28 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,5 @@ void	handle_sigint_child(int sig)
 void	handle_sigquit(int sig)
 {
 	if (sig == SIGQUIT)
-		write(1, "Quit: 3\n", 8);
+		write(2, "Quit: 3\n", 8);
 }
