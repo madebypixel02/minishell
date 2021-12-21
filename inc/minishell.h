@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/30 16:43:18 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/21 16:40:16 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_prompt
 {
 	t_list	*cmds;
 	char	**envp;
+	pid_t	pid;
 	int		e_status;
 }			t_prompt;
 

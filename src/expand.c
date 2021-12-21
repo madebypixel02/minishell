@@ -6,11 +6,12 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:17:55 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/14 21:26:49 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/21 16:41:13 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+#include <unistd.h>
 
 char	*expand_path(char *str, int i, int quotes[2], char *var)
 {
@@ -55,7 +56,7 @@ static char	*get_substr_var(char *str, int i, t_prompt *prompt)
 	var = mini_getenv(&str[i], prompt->envp, \
 		ft_strchars_i(&str[i], "\"\'$|>< "));
 	if (!var && str[i] == '$')
-		var = ft_itoa(getpid());
+		var = ft_itoa(prompt->pid);
 	else if (!var && str[i] == '?')
 		var = ft_itoa(prompt->e_status);
 	path = ft_strjoin(aux, var);

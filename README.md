@@ -196,7 +196,7 @@ Note: ``red`` color is reserved for the ``root`` user
 
 ### Process ID
 
-We were told to only expand variables of the form ``$ + alphanumeric chars``. We implemented expansion of ``$$``, which expands to the program's process id (Uses forbidden function [getpid](https://man7.org/linux/man-pages/man2/getpid.2.html))
+We were told to only expand variables of the form ``$ + alphanumeric chars``. We implemented expansion of ``$$``, which expands to the program's process id (mini_getpid())
 
 ![Screenshot from 2021-11-24 18-33-06](https://user-images.githubusercontent.com/40824677/143287427-778538d5-8392-4739-994e-3382f15d803d.png)
 
