@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/12/30 13:43:00 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/30 15:33:40 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	*mini_perror(t_prompt *prompt, int err_type, char *param, int errno)
 	else if (err_type == MEM)
 		ft_putstr_fd("minishell: no memory left on device\n", 2);
 	else if (err_type == IS_DIR)
-		ft_putstr_fd("minishell: is a directory: ", 2);
+		ft_putstr_fd("minishell: Is a directory: ", 2);
 	ft_putendl_fd(param, 2);
 	return (NULL);
 }
