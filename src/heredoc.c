@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 10:17:00 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/26 09:48:49 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/30 13:49:57 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ extern int	g_fds[2][2];
 void	*mini_here_fd(t_prompt *prompt, int fd[2], int auxfd[2])
 {
 	if (pipe(fd) == -1)
-		return (mini_perror(prompt, PIPERR, NULL));
+		return (mini_perror(prompt, PIPERR, NULL, 1));
 	if (pipe(auxfd) == -1)
 	{
 		close(fd[READ_END]);
 		close(fd[WRITE_END]);
-		return (mini_perror(prompt, PIPERR, NULL));
+		return (mini_perror(prompt, PIPERR, NULL, 1));
 	}
 	return ("");
 }

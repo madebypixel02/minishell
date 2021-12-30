@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/21 16:45:40 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/30 13:46:47 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static pid_t	mini_getpid(t_prompt *prompt)
 	pid = fork();
 	if (pid < 0)
 	{
-		mini_perror(prompt, FORKERR, NULL);
+		mini_perror(prompt, FORKERR, NULL, 1);
 		return (-1);
 	}
 	if (!pid)

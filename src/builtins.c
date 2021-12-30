@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/21 16:10:01 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/30 13:47:37 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	mini_cd(t_prompt *prompt)
 		chdir(argv[1]);
 	else if (argv[1])
 	{
-		mini_perror(prompt, NDIR, argv[1]);
+		mini_perror(prompt, NDIR, argv[1], 1);
 		free(pwd);
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/21 16:40:16 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/30 14:46:46 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <dirent.h>
 
 # define READ_END 0
 # define WRITE_END 1
@@ -52,7 +53,8 @@ enum	e_mini_error
 	FORKERR = 8,
 	PIPERR = 9,
 	PIPENDERR = 10,
-	MEM = 11
+	MEM = 11,
+	IS_DIR = 12
 };
 
 /* Uses readline inside a child process and returns the read line */
@@ -118,6 +120,9 @@ t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i);
 /* Executes a non-builtin command according to the info on our list */
 void	*exec_cmd(t_prompt *prompt, t_list *cmd);
 
+/* Checks if conditions are met to perform a fork */
+void	*check_to_fork(t_prompt *prompt, t_list *cmd, int fd[2]);
+
 /* Execute commands inside child process */
 void	child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd);
 
@@ -140,7 +145,7 @@ char	*expand_path(char *str, int i, int quotes[2], char *var);
 int		get_here_doc(t_prompt *prompt, char *str[2], size_t len, char *aux[2]);
 
 /* Prints a custom error message to standard error */
-void	*mini_perror(t_prompt *prompt, int err, char *param);
+void	*mini_perror(t_prompt *prompt, int err_type, char *param, int errno);
 
 /* Retrieves a string with malloc containing the value of an env var */
 char	*mini_getenv(char	*var, char **envp, int n);

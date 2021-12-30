@@ -6,35 +6,35 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/11/23 17:08:29 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/30 13:43:00 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	*mini_perror(t_prompt *prompt, int err, char *param)
+void	*mini_perror(t_prompt *prompt, int err_type, char *param, int errno)
 {
-	prompt->e_status = 1;
-	if (err == PIPENDERR)
-		prompt->e_status = 2;
-	if (err == QUOTE)
+	prompt->e_status = errno;
+	if (err_type == QUOTE)
 		ft_putstr_fd("minishell: error while looking for matching quote\n", 2);
-	else if (err == NDIR)
+	else if (err_type == NDIR)
 		ft_putstr_fd("minishell: No such file or directory: ", 2);
-	else if (err == NPERM)
+	else if (err_type == NPERM)
 		ft_putstr_fd("minishell: permission denied: ", 2);
-	else if (err == NCMD)
+	else if (err_type == NCMD)
 		ft_putstr_fd("minishell: command not found: ", 2);
-	else if (err == DUPERR)
+	else if (err_type == DUPERR)
 		ft_putstr_fd("minishell: dup2 failed\n", 2);
-	else if (err == FORKERR)
+	else if (err_type == FORKERR)
 		ft_putstr_fd("minishell: fork failed\n", 2);
-	else if (err == PIPERR)
+	else if (err_type == PIPERR)
 		ft_putstr_fd("minishell: error creating pipe\n", 2);
-	else if (err == PIPENDERR)
+	else if (err_type == PIPENDERR)
 		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-	else if (err == MEM)
+	else if (err_type == MEM)
 		ft_putstr_fd("minishell: no memory left on device\n", 2);
+	else if (err_type == IS_DIR)
+		ft_putstr_fd("minishell: is a directory: ", 2);
 	ft_putendl_fd(param, 2);
 	return (NULL);
 }

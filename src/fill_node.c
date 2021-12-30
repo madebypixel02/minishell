@@ -6,7 +6,7 @@
 /*   By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/30 17:09:48 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/30 13:48:18 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ static t_mini	*get_params(t_prompt *p, t_mini *node, char **a[2], int *i)
 			node->full_cmd = ft_extend_matrix(node->full_cmd, a[1][*i]);
 		else
 		{
-			mini_perror(p, PIPENDERR, NULL);
+			mini_perror(p, PIPENDERR, NULL, 2);
 			*i = -2;
 		}
 		return (node);
 	}
-	mini_perror(p, PIPENDERR, NULL);
+	mini_perror(p, PIPENDERR, NULL, 2);
 	*i = -2;
 	return (node);
 }

@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 12:08:12 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/17 15:20:57 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/30 13:50:39 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	*check_args(char *out, t_prompt *p)
 	a = ft_cmdtrim(out, " ");
 	free(out);
 	if (!a)
-		mini_perror(p, QUOTE, NULL);
+		mini_perror(p, QUOTE, NULL, 1);
 	if (!a)
 		return ("");
 	p = parse_args(a, p);

@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/22 17:55:18 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/30 13:49:17 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ int	get_fd(t_prompt *prompt, int oldfd, char *path, int flags[2])
 	if (!path)
 		return (-1);
 	if (access(path, F_OK) == -1 && !flags[0])
-		mini_perror(prompt, NDIR, path);
+		mini_perror(prompt, NDIR, path, 127);
 	else if (!flags[0] && access(path, R_OK) == -1)
-		mini_perror(prompt, NPERM, path);
+		mini_perror(prompt, NPERM, path, 126);
 	else if (flags[0] && access(path, W_OK) == -1 && access(path, F_OK) == 0)
-		mini_perror(prompt, NPERM, path);
+		mini_perror(prompt, NPERM, path, 126);
 	if (flags[0] && flags[1])
 		fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0666);
 	else if (flags[0] && !flags[1])

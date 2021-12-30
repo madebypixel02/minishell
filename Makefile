@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2021/12/17 15:59:14 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/12/30 14:46:10 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SHELL=/bin/bash
 UNAME = $(shell uname -s)
 
 # Properties for MacOS
-CDEBUG = -fsanitize=address
+CDEBUG = #-fsanitize=address
 CHECKER = tests/checker_Mac
 ifeq ($(UNAME), Linux)
 	#Properties for Linux

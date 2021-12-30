@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 17:02:33 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/22 18:46:06 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/30 13:50:22 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char	*mini_readline(t_prompt *prompt, char *str)
 		return (NULL);
 	pid = fork();
 	if (pid == -1)
-		mini_perror(prompt, FORKERR, NULL);
+		mini_perror(prompt, FORKERR, NULL, 1);
 	if (!pid)
 		readline_child(prompt, str, out, is_null);
 	close(g_fds[0][WRITE_END]);
