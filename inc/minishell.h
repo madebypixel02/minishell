@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/30 14:46:46 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/31 14:34:39 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ enum	e_mini_error
 	PIPERR = 9,
 	PIPENDERR = 10,
 	MEM = 11,
-	IS_DIR = 12
+	IS_DIR = 12,
+	NOT_DIR = 13
 };
 
 /* Uses readline inside a child process and returns the read line */
