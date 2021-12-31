@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/31 15:18:45 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/31 16:42:26 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,26 +71,27 @@ int	is_builtin(t_mini *n)
 int	mini_cd(t_prompt *prompt)
 {
 	char	**str[2];
+	char	*aux;
 	DIR		*dir;
 
 	prompt->e_status = 0;
 	str[0] = ((t_mini *)prompt->cmds->content)->full_cmd;
-	str[1] = ft_extend_matrix(NULL, mini_getenv("HOME", prompt->envp, 4));
-	if (!str[0][1])
-		return (chdir(str[1][0]));
-	str[1] = ft_extend_matrix(str[1], getcwd(NULL, 0));
-	dir = opendir(str[0][1]);
-	if (dir && access(str[0][1], F_OK) != -1)
-		chdir(str[0][1]);
-	else if (access(str[0][1], F_OK) == -1)
-		mini_perror(prompt, NDIR, str[0][1], 1);
-	else
-		mini_perror(prompt, NOT_DIR, str[0][1], 1);
-	if (dir)
+	aux = mini_getenv("HOME", prompt->envp, 4);
+	if (!aux)
+		aux = ft_strdup("");
+	str[1] = ft_extend_matrix(NULL, aux);
+	free(aux);
+	aux = getcwd(NULL, 0);
+	str[1] = ft_extend_matrix(str[1], aux);
+	free(aux);
+	dir = cd_error(prompt, str);
+	if (str[0][1] && dir)
 		closedir(dir);
 	if (!prompt->e_status)
 		prompt->envp = mini_setenv("OLDPWD", str[1][1], prompt->envp, 6);
-	str[1] = ft_extend_matrix(str[1], getcwd(NULL, 0));
+	aux = getcwd(NULL, 0);
+	str[1] = ft_extend_matrix(str[1], aux);
+	free(aux);
 	prompt->envp = mini_setenv("PWD", str[1][2], prompt->envp, 3);
 	ft_free_matrix(&str[1]);
 	return (prompt->e_status);

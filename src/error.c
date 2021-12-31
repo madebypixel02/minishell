@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/12/31 14:45:25 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/31 16:42:22 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,29 @@ int	mini_exit(t_list *cmd, int *is_exit)
 	}
 	status[0] %= 256 + 256 * (status[0] < 0);
 	return (status[0]);
+}
+
+DIR	*cd_error(t_prompt *prompt, char **str[2])
+{
+	DIR		*dir;
+
+	dir = NULL;
+	if (str[0][1])
+		dir = opendir(str[0][1]);
+	if (!str[0][1] && str[1][0] && !str[1][0][0])
+	{
+		prompt->e_status = 1;
+		ft_putstr_fd("minishell: HOME not set\n", 2);
+	}
+	if (str[1][0] && !str[0][1])
+		prompt->e_status = chdir(str[1][0]) == -1;
+	if (str[0][1] && dir && access(str[0][1], F_OK) != -1)
+		chdir(str[0][1]);
+	else if (str[0][1] && access(str[0][1], F_OK) == -1)
+		mini_perror(prompt, NDIR, str[0][1], 1);
+	else if (str[0][1])
+		mini_perror(prompt, NOT_DIR, str[0][1], 1);
+	return (dir);
 }
 
 void	free_content(void *content)
