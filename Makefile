@@ -71,7 +71,7 @@ $(NAME): create_dirs compile_libft $(OBJ)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(eval SRC_COUNT = $(shell expr $(SRC_COUNT) + 1))
-	@printf "\r%100s\r[ %d/%d (%d%%) ] Compiling $(BLUE)$<$(DEFAULT)..." "" $(SRC_COUNT) $(SRC_COUNT_TOT) $(SRC_PCT)
+	@(PRINTF) "\r%100s\r[ %d/%d (%d%%) ] Compiling $(BLUE)$<$(DEFAULT)..." "" $(SRC_COUNT) $(SRC_COUNT_TOT) $(SRC_PCT)
 	@$(CC) -I ~/.brew/opt/readline/include $(CFLAGS) $(CDEBUG) -c $< -o $@
 
 compile_libft:
