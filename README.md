@@ -2,6 +2,10 @@
 
 *As beautiful as a shell 🐚*
 
+<p align="center">
+  <img src=https://user-images.githubusercontent.com/40824677/149231106-b3b63b76-633f-4618-a5af-c9526bcdd10f.png />
+</p>
+
 ### Table of Contents
 
 * [Introduction](#introduction)
