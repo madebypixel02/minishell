@@ -75,6 +75,7 @@ typedef struct s_prompt
 {
 	t_list	*cmds;
 	char	**envp;
+	pid_t	pid;
 	int	e_status;
 }		t_prompt;
 
@@ -96,6 +97,7 @@ Here is a short summary of what every variable is used for
 | ``infile`` | Which file descriptor to read from when running a command (defaults to ``stdin``) |
 | ``outfile`` | Which file descriptor to write to when running a command (defaults to ``stdout``) |
 | ``envp`` | Up-to-date array containing keys and values for the shell environment |
+| ``pid`` | Process ID of the minishell instance |
 | ``e_status`` | Exit status of the most-recently-executed command |
 
 
@@ -128,6 +130,7 @@ cmds:
 		full_path: /bin/wc
 		full_cmd: {wc, -l, NULL}
 envp: (envp from main)
+pid: process ID of current instance
 e_status: 0 (if last command exits normally)
 
 ```
@@ -140,7 +143,7 @@ Once all commands have finished running the allocated memory is freed and a new 
 
 ### Mind Map
 
-Here is a handy mindmap of our code structure to help you understant everything we mentioned previously
+Here is a handy mindmap of our code structure to help you understand everything we mentioned previously
 
 ![Concept Map - Frame 5](https://user-images.githubusercontent.com/71781441/144017004-aa68e8d7-5da7-4ece-afc6-b8ab100113df.jpg)
 ![Concept Map - Frame 4](https://user-images.githubusercontent.com/71781441/144017016-ef2bb606-c301-42c6-88f1-8ed4339d22cd.jpg)
@@ -200,7 +203,7 @@ Note: ``red`` color is reserved for the ``root`` user
 
 ### Process ID
 
-We were told to only expand variables of the form ``$ + alphanumeric chars``. We implemented expansion of ``$$``, which expands to the program's process id (mini_getpid())
+We were told to only expand variables of the form ``$ + alphanumeric chars``. We implemented expansion of ``$$``, which expands to the program's process id (``mini_getpid()``)
 
 ![Screenshot from 2021-11-24 18-33-06](https://user-images.githubusercontent.com/40824677/143287427-778538d5-8392-4739-994e-3382f15d803d.png)
 
