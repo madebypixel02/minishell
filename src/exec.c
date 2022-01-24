@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/30 14:45:47 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/01/24 17:17:24 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ void	exec_fork(t_prompt *prompt, t_list *cmd, int fd[2])
 	}
 	else if (!pid)
 		child_process(prompt, cmd, fd);
-	if (pid >= 0 && !cmd->next)
-		waitpid(pid, &prompt->e_status, 0);
 }
 
 void	*check_to_fork(t_prompt *prompt, t_list *cmd, int fd[2])
