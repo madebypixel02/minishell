@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2022/01/11 12:21:34 by aperez-b         ###   ########.fr        #
+#    Updated: 2022/01/25 16:45:43 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,11 +39,11 @@ RM = rm -f
 CC = gcc
 PRINTF = LC_NUMERIC="en_US.UTF-8" printf
 SRC_DIR = src
-SRCB_DIR = srcb
 OBJ_DIR = obj
-OBJB_DIR = objb
+BIN_DIR = bin
 LIBFT = libft/bin/libft.a
-NAME = minishell
+BIN = minishell
+NAME = $(BIN_DIR)/$(BIN)
 
 SRC = main.c builtins.c ft_strtrim_all.c exec.c			\
 	  fill_node.c get_params.c ft_cmdtrim.c				\
@@ -67,7 +67,7 @@ all: $(NAME)
 
 $(NAME): create_dirs compile_libft $(OBJ)
 	@$(CC) -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include $(CFLAGS) $(CDEBUG) $(OBJ) $(LIBFT) -lreadline -o $@
-	@$(PRINTF) "\r%100s\r$(GREEN)$(NAME) is up to date!$(DEFAULT)\n"
+	@$(PRINTF) "\r%100s\r$(GREEN)$(BIN) is up to date!$(DEFAULT)\n"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(eval SRC_COUNT = $(shell expr $(SRC_COUNT) + 1))
@@ -82,6 +82,7 @@ compile_libft:
 
 create_dirs:
 	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(BIN_DIR)
 
 compare: all
 	@cd tests && ./compare.sh && cd ..
@@ -90,24 +91,24 @@ test: all
 	@cd tests && ./test.sh && cd ..
 
 run: all
-	@$(LEAKS)./$(NAME)
+	@$(LEAKS)./$(BIN)
 
 clean:
-	@$(PRINTF) "$(CYAN)Cleaning up object files in $(NAME)...$(DEFAULT)\n"
+	@$(PRINTF) "$(CYAN)Cleaning up object files in $(BIN)...$(DEFAULT)\n"
 	@if [ -d "libft" ]; then \
 		make clean -C libft/; \
 	fi
 	@$(RM) -r $(OBJ_DIR)
 
 fclean: clean
-	@$(PRINTF) "$(CYAN)Removed $(NAME)$(DEFAULT)\n"
-	@$(RM) $(NAME)
+	@$(RM) -r $(BIN_DIR)
+	@$(PRINTF) "$(CYAN)Removed $(BIN)$(DEFAULT)\n"
 
 norminette:
 	@if [ -d "libft" ]; then \
 		make norminette -C libft/; \
 	fi
-	@$(PRINTF) "$(CYAN)\nChecking norm for $(NAME)...$(DEFAULT)\n"
+	@$(PRINTF) "$(CYAN)\nChecking norm for $(BIN)...$(DEFAULT)\n"
 	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR) inc/
 
 re: fclean
@@ -121,4 +122,4 @@ git:
 -include $(OBJ_DIR)/*.d
 -include $(OBJB_DIR)/*.d
 
-.PHONY: all clean fclean bonus norminette create_dirs test git re
+.PHONY: all clean fclean norminette create_dirs test git re
