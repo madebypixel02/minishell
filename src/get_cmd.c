@@ -6,12 +6,11 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 15:51:24 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/30 16:27:59 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/01/25 17:25:04 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <dirent.h>
 
 static char	*find_command(char **env_path, char *cmd, char *full_path)
 {
@@ -100,9 +99,7 @@ void	*exec_cmd(t_prompt *prompt, t_list *cmd)
 		return (NULL);
 	close(fd[WRITE_END]);
 	if (cmd->next && !((t_mini *)cmd->next->content)->infile)
-	{
 		((t_mini *)cmd->next->content)->infile = fd[READ_END];
-	}
 	else
 		close(fd[READ_END]);
 	if (((t_mini *)cmd->content)->infile > 2)
