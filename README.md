@@ -238,7 +238,7 @@ make
 
 ### Basic Usage
 
-As per the norm, this project compiles an executable called ``minishell`` (saved inside a ``bin/`` folder), and it is compiled using the ``.c`` files inside the ``src`` folder
+As per the norm, this project compiles an executable called ``minishell`` (saved inside a ``bin/`` folder), and it is compiled using the ``.c`` files inside the ``src/`` folder
 
 This project includes some nice testers which may help users test their minishell project. There are two variants:
 
