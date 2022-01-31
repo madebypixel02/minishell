@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:49:29 by aperez-b          #+#    #+#             */
-/*   Updated: 2022/01/24 17:17:24 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/01/31 12:05:17 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	child_builtin(t_prompt *prompt, t_mini *n, int l, t_list *cmd)
 	else if (is_builtin(n) && n->full_cmd && \
 		!ft_strncmp(*n->full_cmd, "env", l) && l == 3)
 	{
-		ft_putmatrix_fd(prompt->envp, 1);
+		ft_putmatrix_fd(prompt->envp, 1, 1);
 		prompt->e_status = 0;
 	}
 }
