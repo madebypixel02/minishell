@@ -276,3 +276,9 @@ As we developed the project, we recorded some demos of how the project looked. H
 This was our biggest project yet, and it sure was challenging. Co-developing can be tricky, especially the first time you do it on GitHub. We had fun in the process though :)
 
 November 24th, 2021
+
+<p align="center">
+  <a href="https://github.com/madebypixel02/philosophers">&#11013;</a>
+  <a href="https://github.com/madebypixel02/42-Madrid-Cursus">&#127968;</a>
+  <a href="https://github.com/madebypixel02/cub3d">&#10145;</a>
+</p>
