@@ -6,7 +6,7 @@
 /*   By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 17:05:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/30 13:48:18 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/07 21:20:17 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,29 +26,29 @@ static t_mini	*mini_init(void)
 	return (mini);
 }
 
-static t_mini	*get_params(t_prompt *p, t_mini *node, char **a[2], int *i)
+static t_mini	*get_params(t_mini *node, char **a[2], int *i)
 {
 	if (a[0][*i])
 	{
 		if (a[0][*i][0] == '>' && a[0][*i + 1] && a[0][*i + 1][0] == '>')
-			node = get_outfile2(p, node, a[1], i);
+			node = get_outfile2(node, a[1], i);
 		else if (a[0][*i][0] == '>')
-			node = get_outfile1(p, node, a[1], i);
+			node = get_outfile1(node, a[1], i);
 		else if (a[0][*i][0] == '<' && a[0][*i + 1] && \
 			a[0][*i + 1][0] == '<')
-			node = get_infile2(p, node, a[1], i);
+			node = get_infile2(node, a[1], i);
 		else if (a[0][*i][0] == '<')
-			node = get_infile1(p, node, a[1], i);
+			node = get_infile1(node, a[1], i);
 		else if (a[0][*i][0] != '|')
 			node->full_cmd = ft_extend_matrix(node->full_cmd, a[1][*i]);
 		else
 		{
-			mini_perror(p, PIPENDERR, NULL, 2);
+			mini_perror(PIPENDERR, NULL, 2);
 			*i = -2;
 		}
 		return (node);
 	}
-	mini_perror(p, PIPENDERR, NULL, 2);
+	mini_perror(PIPENDERR, NULL, 2);
 	*i = -2;
 	return (node);
 }
@@ -78,7 +78,7 @@ static t_list	*stop_fill(t_list *cmds, char **args, char **temp)
 	return (NULL);
 }
 
-t_list	*fill_nodes(t_prompt *prompt, char **args, int i)
+t_list	*fill_nodes(char **args, int i)
 {
 	t_list	*cmds[2];
 	char	**temp[2];
@@ -95,7 +95,7 @@ t_list	*fill_nodes(t_prompt *prompt, char **args, int i)
 			cmds[1] = ft_lstlast(cmds[0]);
 		}
 		temp[0] = args;
-		cmds[1]->content = get_params(prompt, cmds[1]->content, temp, &i);
+		cmds[1]->content = get_params(cmds[1]->content, temp, &i);
 		if (i < 0)
 			return (stop_fill(cmds[0], args, temp[1]));
 		if (!args[i])

@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 15:51:24 by aperez-b          #+#    #+#             */
-/*   Updated: 2022/01/25 17:25:04 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/07 21:27:00 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static DIR	*cmd_checks(t_prompt *prompt, t_list *cmd, char ***s, char *path)
 		free(path);
 		n->full_path = find_command(*s, *n->full_cmd, n->full_path);
 		if (!n->full_path || !n->full_cmd[0] || !n->full_cmd[0][0])
-			mini_perror(prompt, NCMD, *n->full_cmd, 127);
+			mini_perror(NCMD, *n->full_cmd, 127);
 	}
 	return (dir);
 }
@@ -76,13 +76,13 @@ void	get_cmd(t_prompt *prompt, t_list *cmd, char **s, char *path)
 	n = cmd->content;
 	dir = cmd_checks(prompt, cmd, &s, path);
 	if (!is_builtin(n) && n && n->full_cmd && dir)
-		mini_perror(prompt, IS_DIR, *n->full_cmd, 126);
+		mini_perror(IS_DIR, *n->full_cmd, 126);
 	else if (!is_builtin(n) && n && n->full_path && \
 		access(n->full_path, F_OK) == -1)
-		mini_perror(prompt, NDIR, n->full_path, 127);
+		mini_perror(NDIR, n->full_path, 127);
 	else if (!is_builtin(n) && n && n->full_path && \
 		access(n->full_path, X_OK) == -1)
-		mini_perror(prompt, NPERM, n->full_path, 126);
+		mini_perror(NPERM, n->full_path, 126);
 	if (dir)
 		closedir(dir);
 	ft_free_matrix(&s);
@@ -94,7 +94,7 @@ void	*exec_cmd(t_prompt *prompt, t_list *cmd)
 
 	get_cmd(prompt, cmd, NULL, NULL);
 	if (pipe(fd) == -1)
-		return (mini_perror(prompt, PIPERR, NULL, 1));
+		return (mini_perror(PIPERR, NULL, 1));
 	if (!check_to_fork(prompt, cmd, fd))
 		return (NULL);
 	close(fd[WRITE_END]);

@@ -6,36 +6,42 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2022/03/07 18:00:46 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/07 23:32:02 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static pid_t	mini_getpid(t_prompt *prompt)
+extern int	g_status;
+
+static void	mini_getpid(t_prompt *p)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid < 0)
 	{
-		mini_perror(prompt, FORKERR, NULL, 1);
-		return (-1);
+		mini_perror(FORKERR, NULL, 1);
+		ft_free_matrix(&p->envp);
+		exit(1);
 	}
 	if (!pid)
+	{
+		ft_free_matrix(&p->envp);
 		exit(1);
+	}
 	waitpid(pid, NULL, 0);
-	return (pid - 1);
+	p->pid = pid - 1;
 }
 
-static t_prompt	init_vars(t_prompt prompt, char *str, char **argv, char **envp)
+static t_prompt	init_vars(t_prompt prompt, char *str, char **argv)
 {
 	char	*num;
 
 	str = getcwd(NULL, 0);
 	prompt.envp = mini_setenv("PWD", str, prompt.envp, 3);
 	free(str);
-	str = mini_getenv("SHLVL", envp, 5);
+	str = mini_getenv("SHLVL", prompt.envp, 5);
 	if (!str || ft_atoi(str) <= 0)
 		num = ft_strdup("1");
 	else
@@ -63,9 +69,9 @@ static t_prompt	init_prompt(char **argv, char **envp)
 	str = NULL;
 	prompt.cmds = NULL;
 	prompt.envp = ft_dup_matrix(envp);
-	prompt.e_status = 0;
-	prompt.pid = mini_getpid(&prompt);
-	prompt = init_vars(prompt, str, argv, envp);
+	g_status = 0;
+	mini_getpid(&prompt);
+	prompt = init_vars(prompt, str, argv);
 	return (prompt);
 }
 
@@ -76,19 +82,18 @@ int	main(int argc, char **argv, char **envp)
 	t_prompt			prompt;
 
 	prompt = init_prompt(argv, envp);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 	while (argv && argc)
 	{
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, SIG_IGN);
 		str = mini_getprompt(prompt);
 		if (str)
-			out = mini_readline(&prompt, str);
+			out = readline(str);
 		else
-			out = mini_readline(&prompt, "guest@minishell $ ");
+			out = readline("guest@minishell $ ");
 		free(str);
 		if (!check_args(out, &prompt))
 			break ;
 	}
-	ft_free_matrix(&prompt.envp);
-	exit(prompt.e_status);
+	exit(g_status);
 }

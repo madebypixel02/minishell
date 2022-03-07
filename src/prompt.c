@@ -6,11 +6,13 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 17:02:33 by aperez-b          #+#    #+#             */
-/*   Updated: 2022/03/07 18:11:04 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/07 21:09:39 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+extern int	g_status;
 
 static char	*get_home(t_prompt prompt)
 {
@@ -80,7 +82,7 @@ char	*mini_getprompt(t_prompt prompt)
 	temp = ft_strjoin(temp2, aux);
 	free(aux);
 	free(temp2);
-	if (!prompt.e_status || prompt.e_status == -1)
+	if (!g_status || g_status == -1)
 		temp2 = ft_strjoin(temp, BLUE);
 	else
 		temp2 = ft_strjoin(temp, RED);
@@ -90,44 +92,4 @@ char	*mini_getprompt(t_prompt prompt)
 	temp2 = ft_strjoin(temp, DEFAULT);
 	free(temp);
 	return (temp2);
-}
-
-void	readline_child(char *str, int fd[2], char *out, int is_null)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
-	close(fd[READ_END]);
-	out = readline(str);
-	write(fd[WRITE_END], out, ft_strlen(out));
-	is_null = !out;
-	free(out);
-	close(fd[WRITE_END]);
-	exit(is_null);
-}
-
-char	*mini_readline(t_prompt *prompt, char *str)
-{
-	pid_t	pid;
-	int		is_null;
-	char	*out;
-	int		fd[2];
-
-	is_null = 0;
-	out = NULL;
-	if (!mini_here_fd(prompt, fd))
-		return (NULL);
-	pid = fork();
-	if (pid == -1)
-		mini_perror(prompt, FORKERR, NULL, 1);
-	if (!pid)
-		readline_child(str, fd, out, is_null);
-	close(fd[WRITE_END]);
-	waitpid(pid, &is_null, 0);
-	out = get_next_line(fd[READ_END]);
-	close(fd[READ_END]);
-	if (is_null == 33280)
-		prompt->e_status = 130;
-	if (is_null != 256 && !out)
-		out = ft_strdup("");
-	return (out);
 }

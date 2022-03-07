@@ -6,11 +6,13 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 12:08:12 by aperez-b          #+#    #+#             */
-/*   Updated: 2022/01/24 17:30:15 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/07 21:26:20 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+extern int	g_status;
 
 static char	**split_all(char **args, t_prompt *prompt)
 {
@@ -38,17 +40,17 @@ static void	*parse_args(char **args, t_prompt *p)
 	int	i;
 
 	is_exit = 0;
-	p->cmds = fill_nodes(p, split_all(args, p), -1);
+	p->cmds = fill_nodes(split_all(args, p), -1);
 	if (!p->cmds)
 		return (p);
 	i = ft_lstsize(p->cmds);
-	p->e_status = builtin(p, p->cmds, &is_exit, 0);
+	g_status = builtin(p, p->cmds, &is_exit, 0);
 	while (i-- > 0)
-		waitpid(-1, &p->e_status, 0);
-	if (!is_exit && p->e_status == 13)
-		p->e_status = 0;
-	if (p->e_status > 255)
-		p->e_status = p->e_status / 255;
+		waitpid(-1, &g_status, 0);
+	if (!is_exit && g_status == 13)
+		g_status = 0;
+	if (g_status > 255)
+		g_status = g_status / 255;
 	if (args && is_exit)
 	{
 		ft_lstclear(&p->cmds, free_content);
@@ -72,7 +74,7 @@ void	*check_args(char *out, t_prompt *p)
 	a = ft_cmdtrim(out, " ");
 	free(out);
 	if (!a)
-		mini_perror(p, QUOTE, NULL, 1);
+		mini_perror(QUOTE, NULL, 1);
 	if (!a)
 		return ("");
 	p = parse_args(a, p);

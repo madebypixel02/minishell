@@ -6,11 +6,13 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/31 16:42:26 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/07 21:25:29 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+extern int	g_status;
 
 int	builtin(t_prompt *prompt, t_list *cmd, int *is_exit, int n)
 {
@@ -23,13 +25,13 @@ int	builtin(t_prompt *prompt, t_list *cmd, int *is_exit, int n)
 		if (a)
 			n = ft_strlen(*a);
 		if (a && !ft_strncmp(*a, "exit", n) && n == 4)
-			prompt->e_status = mini_exit(cmd, is_exit);
+			g_status = mini_exit(cmd, is_exit);
 		else if (!cmd->next && a && !ft_strncmp(*a, "cd", n) && n == 2)
-			prompt->e_status = mini_cd(prompt);
+			g_status = mini_cd(prompt);
 		else if (!cmd->next && a && !ft_strncmp(*a, "export", n) && n == 6)
-			prompt->e_status = mini_export(prompt);
+			g_status = mini_export(prompt);
 		else if (!cmd->next && a && !ft_strncmp(*a, "unset", n) && n == 5)
-			prompt->e_status = mini_unset(prompt);
+			g_status = mini_unset(prompt);
 		else
 		{
 			signal(SIGINT, SIG_IGN);
@@ -38,7 +40,7 @@ int	builtin(t_prompt *prompt, t_list *cmd, int *is_exit, int n)
 		}
 		cmd = cmd->next;
 	}
-	return (prompt->e_status);
+	return (g_status);
 }
 
 int	is_builtin(t_mini *n)
@@ -74,7 +76,7 @@ int	mini_cd(t_prompt *prompt)
 	char	*aux;
 	DIR		*dir;
 
-	prompt->e_status = 0;
+	g_status = 0;
 	str[0] = ((t_mini *)prompt->cmds->content)->full_cmd;
 	aux = mini_getenv("HOME", prompt->envp, 4);
 	if (!aux)
@@ -84,17 +86,17 @@ int	mini_cd(t_prompt *prompt)
 	aux = getcwd(NULL, 0);
 	str[1] = ft_extend_matrix(str[1], aux);
 	free(aux);
-	dir = cd_error(prompt, str);
+	dir = cd_error(str);
 	if (str[0][1] && dir)
 		closedir(dir);
-	if (!prompt->e_status)
+	if (!g_status)
 		prompt->envp = mini_setenv("OLDPWD", str[1][1], prompt->envp, 6);
 	aux = getcwd(NULL, 0);
 	str[1] = ft_extend_matrix(str[1], aux);
 	free(aux);
 	prompt->envp = mini_setenv("PWD", str[1][2], prompt->envp, 3);
 	ft_free_matrix(&str[1]);
-	return (prompt->e_status);
+	return (g_status);
 }
 
 int	mini_pwd(void)

@@ -15,6 +15,7 @@
 	* [Parser](#parser)
 	* [Executor](#executor)
 	* [Mind Map](#mind-map)
+	* [Global Variable](#global-variable)
 * [Builtins](#builtins)
 * [Prompt](#prompt)
 * [Extras](#extras)
@@ -70,12 +71,13 @@ output: {echo, "hello      there", how, are, 'you 'doing?, pixel, |, wc, -l, >, 
 The parser is in charge of storing the tokenized string and save it in a useful manner for the executor to use later. Our data structure is managed as follows:
 
 ```C
+int	g_status;
+
 typedef struct s_prompt
 {
 	t_list	*cmds;
 	char	**envp;
 	pid_t	pid;
-	int	e_status;
 }		t_prompt;
 
 typedef struct s_mini
@@ -97,7 +99,7 @@ Here is a short summary of what every variable is used for
 | ``outfile`` | Which file descriptor to write to when running a command (defaults to ``stdout``) |
 | ``envp`` | Up-to-date array containing keys and values for the shell environment |
 | ``pid`` | Process ID of the minishell instance |
-| ``e_status`` | Exit status of the most-recently-executed command |
+| ``g_status`` | Exit status of the most-recently-executed command |
 
 
 After running our lexer and expander, we have a two-dimensional array. Following the previous example, it was the following:
@@ -130,7 +132,7 @@ cmds:
 		full_cmd: {wc, -l, NULL}
 envp: (envp from main)
 pid: process ID of current instance
-e_status: 0 (if last command exits normally)
+g_status: 0 (if last command exits normally)
 
 ```
 
@@ -146,6 +148,10 @@ Here is a handy mindmap of our code structure to help you understand everything 
 
 ![Concept Map - Frame 5](https://user-images.githubusercontent.com/71781441/144017004-aa68e8d7-5da7-4ece-afc6-b8ab100113df.jpg)
 ![Concept Map - Frame 4](https://user-images.githubusercontent.com/71781441/144017016-ef2bb606-c301-42c6-88f1-8ed4339d22cd.jpg)
+
+### Global Variable
+
+For this project we could use one global variable. At first it seemed we were never going to need one, but later it became obvious that it is required. Specifically, it has to do with signals. When you use [signal](https://www.man7.org/linux/man-pages/man7/signal.7.html) to capture ``SIGINT`` (from ``Ctrl-C``) and ``SIGQUIT`` (from ``Ctrl-\``) signals, we have to change the error status, and the ``signal`` function has no obvious way of retrieving the updated exit status that shoud change when either of these signals are captured. To work this around, we added a global variable ``g_status`` that updates the error status when signals are detected.
 
 ## Builtins
 
@@ -253,7 +259,7 @@ As we developed the project, we recorded some demos of how the project looked. H
 ![minishell](https://user-images.githubusercontent.com/40824677/141684153-e2748818-8a01-4cf8-88a6-5ed2624e2ce6.gif)
 
 
-* ``v3.0`` Heavily cleaned code, misc fixes, use readline inside a child process, yay :)
+* ``v3.0`` Heavily cleaned code, misc fixes, ready for submission :)
 
 ![minishell](https://user-images.githubusercontent.com/40824677/143232233-4e385114-441f-4e3e-b3ba-477bc75454e1.gif)
 
