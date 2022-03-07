@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 13:40:47 by aperez-b          #+#    #+#             */
-/*   Updated: 2022/03/07 23:32:02 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/07 23:43:41 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ int	main(int argc, char **argv, char **envp)
 	t_prompt			prompt;
 
 	prompt = init_prompt(argv, envp);
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
 	while (argv && argc)
 	{
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
 		str = mini_getprompt(prompt);
 		if (str)
 			out = readline(str);
