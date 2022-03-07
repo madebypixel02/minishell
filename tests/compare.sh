@@ -6,7 +6,7 @@
 #    By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/07 16:54:53 by mbueno-g          #+#    #+#              #
-#    Updated: 2021/11/24 13:26:43 by aperez-b         ###   ########.fr        #
+#    Updated: 2022/03/07 17:41:22 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ read -p "Enter your command: " var
 
 touch test1 test2
 
-echo "$var" | ../minishell | grep -v "$USER@minishell"* > test1
+echo "$var" | ../bin/minishell | grep -v "$USER@minishell"* > test1
 echo "$var" | /bin/bash > test2
 
 test1="test1"

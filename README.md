@@ -15,7 +15,6 @@
 	* [Parser](#parser)
 	* [Executor](#executor)
 	* [Mind Map](#mind-map)
-	* [Global Variable](#global-variable)
 * [Builtins](#builtins)
 * [Prompt](#prompt)
 * [Extras](#extras)
@@ -147,11 +146,6 @@ Here is a handy mindmap of our code structure to help you understand everything 
 
 ![Concept Map - Frame 5](https://user-images.githubusercontent.com/71781441/144017004-aa68e8d7-5da7-4ece-afc6-b8ab100113df.jpg)
 ![Concept Map - Frame 4](https://user-images.githubusercontent.com/71781441/144017016-ef2bb606-c301-42c6-88f1-8ed4339d22cd.jpg)
-
-### Global Variable
-
-For this project we could use one global variable. At first it seemed we were never going to need one, but later it became obvious that it is required. Specifically, it has to do with signals. When you use [signal](https://www.man7.org/linux/man-pages/man7/signal.7.html) to capture ``SIGINT`` (from ``Ctrl-C``) and ``SIGQUIT`` (from ``Ctrl-\``) signals, we have to change the error status, and the ``signal`` function has no obvious way of retrieving the updated exit status that shoud change when either of these signals are captured. To work this around, we retrieve two pairs of open file descriptors, send the new exit status through the write end of one of the pipes, and close the other pipe ends.
-
 
 ## Builtins
 

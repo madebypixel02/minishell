@@ -6,13 +6,11 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 17:02:33 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/30 13:50:22 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/07 18:11:04 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-int	g_fds[2][2];
 
 static char	*get_home(t_prompt prompt)
 {
@@ -94,19 +92,16 @@ char	*mini_getprompt(t_prompt prompt)
 	return (temp2);
 }
 
-void	readline_child(t_prompt *prompt, char *str, char *out, int is_null)
+void	readline_child(char *str, int fd[2], char *out, int is_null)
 {
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
-	close(g_fds[0][READ_END]);
-	close(g_fds[1][READ_END]);
+	close(fd[READ_END]);
 	out = readline(str);
-	write(g_fds[0][WRITE_END], out, ft_strlen(out));
+	write(fd[WRITE_END], out, ft_strlen(out));
 	is_null = !out;
-	write(g_fds[1][WRITE_END], &prompt->e_status, sizeof(int));
 	free(out);
-	close(g_fds[0][WRITE_END]);
-	close(g_fds[1][WRITE_END]);
+	close(fd[WRITE_END]);
 	exit(is_null);
 }
 
@@ -115,24 +110,24 @@ char	*mini_readline(t_prompt *prompt, char *str)
 	pid_t	pid;
 	int		is_null;
 	char	*out;
+	int		fd[2];
 
 	is_null = 0;
 	out = NULL;
-	if (!mini_here_fd(prompt, g_fds[0], g_fds[1]))
+	if (!mini_here_fd(prompt, fd))
 		return (NULL);
 	pid = fork();
 	if (pid == -1)
 		mini_perror(prompt, FORKERR, NULL, 1);
 	if (!pid)
-		readline_child(prompt, str, out, is_null);
-	close(g_fds[0][WRITE_END]);
-	close(g_fds[1][WRITE_END]);
+		readline_child(str, fd, out, is_null);
+	close(fd[WRITE_END]);
 	waitpid(pid, &is_null, 0);
-	out = get_next_line(g_fds[0][READ_END]);
-	if (!is_null && !out)
+	out = get_next_line(fd[READ_END]);
+	close(fd[READ_END]);
+	if (is_null == 33280)
+		prompt->e_status = 130;
+	if (is_null != 256 && !out)
 		out = ft_strdup("");
-	read(g_fds[1][READ_END], &prompt->e_status, sizeof(int));
-	close(g_fds[0][READ_END]);
-	close(g_fds[1][READ_END]);
 	return (out);
 }

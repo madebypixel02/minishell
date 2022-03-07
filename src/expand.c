@@ -6,12 +6,11 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:17:55 by mbueno-g          #+#    #+#             */
-/*   Updated: 2021/12/21 16:41:13 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/07 17:11:44 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <unistd.h>
 
 char	*expand_path(char *str, int i, int quotes[2], char *var)
 {

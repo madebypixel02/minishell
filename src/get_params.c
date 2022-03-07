@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 19:48:14 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/30 13:49:17 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/07 17:24:49 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ t_mini	*get_infile2(t_prompt *prompt, t_mini *node, char **args, int *i)
 	if (args[++(*i)])
 	{
 		aux[0] = args[*i];
-		node->infile = get_here_doc(prompt, str, 0, aux);
+		node->infile = get_here_doc(prompt, str, aux);
 	}
 	if (!args[*i] || node->infile == -1)
 	{

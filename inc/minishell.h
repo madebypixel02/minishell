@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/12/31 16:29:03 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/07 17:20:01 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ enum	e_mini_error
 char	*mini_readline(t_prompt *prompt, char *str);
 
 /* Opens two sets of pipes and checks if they are opened correctly */
-void	*mini_here_fd(t_prompt *prompt, int fd[2], int auxfd[2]);
+void	*mini_here_fd(t_prompt *prompt, int fd[2]);
 
 /* Handles all builtin functions */
 int		builtin(t_prompt *prompt, t_list *cmd, int *is_exit, int n);
@@ -146,7 +146,7 @@ char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt);
 char	*expand_path(char *str, int i, int quotes[2], char *var);
 
 /* Retrieves a string from standard input, expanding vars when needed */
-int		get_here_doc(t_prompt *prompt, char *str[2], size_t len, char *aux[2]);
+int		get_here_doc(t_prompt *prompt, char *str[2], char *aux[2]);
 
 /* Prints a custom error message to standard error */
 void	*mini_perror(t_prompt *prompt, int err_type, char *param, int errno);

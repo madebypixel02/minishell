@@ -6,7 +6,7 @@
 #    By: mbueno-g <mbueno-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/07 16:58:45 by mbueno-g          #+#    #+#              #
-#    Updated: 2021/11/24 13:26:59 by aperez-b         ###   ########.fr        #
+#    Updated: 2022/03/07 17:41:32 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ CORRECT=0
 clear
 exec_test()
 {
-	echo "$@" | ../minishell | grep -v "$USER@minishell*" > test1
+	echo "$@" | ../bin/minishell | grep -v "$USER@minishell*" > test1
 	echo "$@" | /bin/bash > test2 
 	test1="test1"
 	test2="test2"

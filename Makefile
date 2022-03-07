@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2022/01/25 16:45:43 by aperez-b         ###   ########.fr        #
+#    Updated: 2022/03/07 17:32:30 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,7 @@ test: all
 	@cd tests && ./test.sh && cd ..
 
 run: all
-	@$(LEAKS)./$(BIN)
+	@$(LEAKS)./$(NAME)
 
 clean:
 	@$(PRINTF) "$(CYAN)Cleaning up object files in $(BIN)...$(DEFAULT)\n"
