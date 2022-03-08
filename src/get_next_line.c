@@ -6,12 +6,11 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 10:59:17 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/10 15:50:49 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/08 12:38:52 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/get_next_line.h"
-#include <stdio.h>
 
 char	*get_next_line(int fd)
 {
