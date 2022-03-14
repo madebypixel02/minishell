@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:07 by aperez-b          #+#    #+#             */
-/*   Updated: 2022/03/07 21:25:29 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/14 16:14:50 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,14 @@ int	is_builtin(t_mini *n)
 	return (0);
 }
 
-int	mini_cd(t_prompt *prompt)
+int	mini_cd(t_prompt *p)
 {
 	char	**str[2];
 	char	*aux;
-	DIR		*dir;
 
 	g_status = 0;
-	str[0] = ((t_mini *)prompt->cmds->content)->full_cmd;
-	aux = mini_getenv("HOME", prompt->envp, 4);
+	str[0] = ((t_mini *)p->cmds->content)->full_cmd;
+	aux = mini_getenv("HOME", p->envp, 4);
 	if (!aux)
 		aux = ft_strdup("");
 	str[1] = ft_extend_matrix(NULL, aux);
@@ -86,15 +85,15 @@ int	mini_cd(t_prompt *prompt)
 	aux = getcwd(NULL, 0);
 	str[1] = ft_extend_matrix(str[1], aux);
 	free(aux);
-	dir = cd_error(str);
-	if (str[0][1] && dir)
-		closedir(dir);
+	cd_error(str);
 	if (!g_status)
-		prompt->envp = mini_setenv("OLDPWD", str[1][1], prompt->envp, 6);
+		p->envp = mini_setenv("OLDPWD", str[1][1], p->envp, 6);
 	aux = getcwd(NULL, 0);
+	if (!aux)
+		aux = ft_strdup("");
 	str[1] = ft_extend_matrix(str[1], aux);
 	free(aux);
-	prompt->envp = mini_setenv("PWD", str[1][2], prompt->envp, 3);
+	p->envp = mini_setenv("PWD", str[1][2], p->envp, 3);
 	ft_free_matrix(&str[1]);
 	return (g_status);
 }

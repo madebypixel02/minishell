@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 17:02:33 by aperez-b          #+#    #+#             */
-/*   Updated: 2022/03/07 21:09:39 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/14 16:19:23 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ static char	*get_home(t_prompt prompt)
 	char	*home;
 
 	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		pwd = ft_strdup("∅ ");
 	home = mini_getenv("HOME", prompt.envp, 4);
 	if (home && home[0] && ft_strnstr(pwd, home, ft_strlen(pwd)))
 	{

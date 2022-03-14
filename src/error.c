@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 11:36:47 by mbueno-g          #+#    #+#             */
-/*   Updated: 2022/03/07 21:25:07 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/14 16:05:14 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	mini_exit(t_list *cmd, int *is_exit)
 	return (status[0]);
 }
 
-DIR	*cd_error(char **str[2])
+void	cd_error(char **str[2])
 {
 	DIR		*dir;
 
@@ -117,7 +117,8 @@ DIR	*cd_error(char **str[2])
 		mini_perror(NDIR, str[0][1], 1);
 	else if (str[0][1])
 		mini_perror(NOT_DIR, str[0][1], 1);
-	return (dir);
+	if (str[0][1] && dir)
+		closedir(dir);
 }
 
 void	free_content(void *content)

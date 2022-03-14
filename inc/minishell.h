@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 15:08:50 by aperez-b          #+#    #+#             */
-/*   Updated: 2022/03/07 21:45:23 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/14 16:05:19 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int		is_builtin(t_mini *n);
 int		mini_cd(t_prompt *prompt);
 
 /* Checks for errors and returns whether first arg is a directory */
-DIR		*cd_error(char **str[2]);
+void	cd_error(char **str[2]);
 
 /* C implementation of the pwd shell command */
 int		mini_pwd(void);
