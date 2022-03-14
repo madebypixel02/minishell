@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 10:17:00 by mbueno-g          #+#    #+#             */
-/*   Updated: 2022/03/14 17:16:11 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/14 17:19:55 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	get_here_doc(char *str[2], char *aux[2])
 	}
 	str[1] = get_here_str(str, 0, aux[0], aux[1]);
 	write(fd[WRITE_END], str[1], ft_strlen(str[1]));
+	free(str[1]);
 	close(fd[WRITE_END]);
 	if (g_status == 130)
 	{
