@@ -6,7 +6,7 @@
 /*   By: mbueno-g <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 10:17:00 by mbueno-g          #+#    #+#             */
-/*   Updated: 2022/03/07 23:43:21 by aperez-b         ###   ########.fr       */
+/*   Updated: 2022/03/14 17:16:11 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	*get_here_str(char *str[2], size_t len, char *limit, char *warn)
 {
 	char	*temp;
 
-	g_status = 0;
 	while (g_status != 130 && (!str[0] || ft_strncmp(str[0], limit, len) \
 		|| ft_strlen(limit) != len))
 	{
@@ -45,14 +44,15 @@ int	get_here_doc(char *str[2], char *aux[2])
 {
 	int		fd[2];
 
+	g_status = 0;
 	if (pipe(fd) == -1)
 	{
 		mini_perror(PIPERR, NULL, 1);
 		return (-1);
 	}
-	close(fd[WRITE_END]);
 	str[1] = get_here_str(str, 0, aux[0], aux[1]);
-	write(fd[READ_END], str[1], ft_strlen(str[1]));
+	write(fd[WRITE_END], str[1], ft_strlen(str[1]));
+	close(fd[WRITE_END]);
 	if (g_status == 130)
 	{
 		close(fd[READ_END]);
