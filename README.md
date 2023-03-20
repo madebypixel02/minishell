@@ -138,7 +138,7 @@ g_status: 0 (if last command exits normally)
 
 ### Executor
 
-With all our data properly on our structs, the ``executer`` has all the necessary information to execute commands. For this part we use separate processess to execute either our builtins or other commands inside child processes that redirect ``stdin`` and ``stdout`` in the same way we did with our previous [pipex](https://github.com/madebypixel02/pipex) project. If we are given a full path (e.g. ``/bin/ls``) then we do not need to look for the full path of the command and can execute directly with [execve](https://www.man7.org/linux/man-pages/man2/execve.2.html). If we are given a relative path then we use the ``PATH`` environment variable to determine the ``full_path`` of a command. After all commands have started running, we retrieve the exit status of the most recently executed command with the help of [waitpid](https://linux.die.net/man/2/waitpid)
+With all our data properly on our structs, the ``executer`` has all the necessary information to execute commands. For this part we use separate processess to execute either our builtins or other commands inside child processes that redirect ``stdin`` and ``stdout`` in the same way we did with our previous [pipex](https://gitlab.com/madebypixel02/pipex) project. If we are given a full path (e.g. ``/bin/ls``) then we do not need to look for the full path of the command and can execute directly with [execve](https://www.man7.org/linux/man-pages/man2/execve.2.html). If we are given a relative path then we use the ``PATH`` environment variable to determine the ``full_path`` of a command. After all commands have started running, we retrieve the exit status of the most recently executed command with the help of [waitpid](https://linux.die.net/man/2/waitpid)
 
 Once all commands have finished running the allocated memory is freed and a new prompt appears to read the next command
 
@@ -231,7 +231,7 @@ Note for MacOS: to install a recent version of readline, you need to use homebre
 * Cloning the Repositories
 
 ```shell
-git clone https://github.com/madebypixel02/minishell.git
+git clone https://gitlab.com/madebypixel02/minishell.git
 cd minishell
 make
 ```
