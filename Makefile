@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/22 13:38:18 by aperez-b          #+#    #+#              #
-#    Updated: 2022/06/23 17:53:43 by aperez-b         ###   ########.fr        #
+#    Updated: 2023/04/08 14:44:56 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,13 +37,15 @@ AR = ar rcs
 CFLAGS = -Wall -Wextra -Werror -MD -g3 
 RM = rm -f
 CC = gcc
-PRINTF = LC_NUMERIC="en_US.UTF-8" printf
+PRINTF = printf
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
 LIBFT = libft/bin/libft.a
 BIN = minishell
 NAME = $(BIN_DIR)/$(BIN)
+LIBFT_DIR = libft
+LIBFT_SRC = $(shell [ -d libft ] && ls libft/src*/*.c)
 
 SRC = main.c builtins.c ft_strtrim_all.c exec.c			\
 	  fill_node.c get_params.c ft_cmdtrim.c				\
@@ -65,24 +67,18 @@ SRC_PCT = $(shell expr 100 \* $(SRC_COUNT) / $(SRC_COUNT_TOT))
 
 all: $(NAME)
 
-$(NAME): create_dirs compile_libft $(OBJ)
+$(NAME): $(LIBFT) $(OBJ) | $(BIN_DIR)
 	@$(CC) -L /usr/local/opt/readline/lib -I /usr/local/opt/readline/include -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include $(CFLAGS) $(CDEBUG) $(OBJ) $(LIBFT) -lreadline -o $@
 	@$(PRINTF) "\r%100s\r$(GREEN)$(BIN) is up to date!$(DEFAULT)\n"
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	@$(eval SRC_COUNT = $(shell expr $(SRC_COUNT) + 1))
 	@$(PRINTF) "\r%100s\r[ %d/%d (%d%%) ] Compiling $(BLUE)$<$(DEFAULT)..." "" $(SRC_COUNT) $(SRC_COUNT_TOT) $(SRC_PCT)
 	@$(CC) -I ~/.brew/opt/readline/include -I /usr/local/opt/readline/include $(CFLAGS) $(CDEBUG) -c $< -o $@
 
-compile_libft:
-	@if [ ! -d "libft" ]; then \
-		git clone https://gitlab.com/madebypixel02/libft.git; \
-	fi
-	@make -C libft
-
-create_dirs:
-	@mkdir -p $(OBJ_DIR)
-	@mkdir -p $(BIN_DIR)
+$(LIBFT): $(LIBFT_SRC) | $(LIBFT_DIR) $(BIN_DIR)
+	@make all -C libft
+	@$(AR) $(NAME) $(LIBFT)
 
 compare: all
 	@cd tests && ./compare.sh && cd ..
@@ -93,23 +89,33 @@ test: all
 run: all
 	@$(LEAKS)./$(NAME)
 
-clean:
-	@$(PRINTF) "$(CYAN)Cleaning up object files in $(BIN)...$(DEFAULT)\n"
-	@if [ -d "libft" ]; then \
-		make clean -C libft/; \
-	fi
+clean: | $(LIBFT_DIR)
+	@$(PRINTF) "$(CYAN)Cleaning up object files in $(NAME)...$(DEFAULT)\n"
+	@make clean -C libft
 	@$(RM) -r $(OBJ_DIR)
 
 fclean: clean
 	@$(RM) -r $(BIN_DIR)
-	@$(PRINTF) "$(CYAN)Removed $(BIN)$(DEFAULT)\n"
+	$(RM) $(LIBFT)
+	@$(PRINTF) "$(CYAN)Removed $(LIBFT)$(DEFAULT)\n"
+	@$(PRINTF) "$(CYAN)Removed $(NAME)$(DEFAULT)\n"
 
-norminette:
-	@if [ -d "libft" ]; then \
-		make norminette -C libft/; \
-	fi
+norminette: | $(LIBFT_DIR)
 	@$(PRINTF) "$(CYAN)\nChecking norm for $(BIN)...$(DEFAULT)\n"
-	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR) inc/
+	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR) $(INC_DIR)
+	@make norminette -C libft
+
+$(LIBFT_DIR):
+	@git clone https://gitlab.com/madebypixel02/libft.git
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+$(OBJB_DIR):
+	@mkdir -p $(OBJB_DIR)
+
+$(BIN_DIR):
+	@mkdir -p $(BIN_DIR)
 
 re: fclean
 	@make all
@@ -122,4 +128,4 @@ git:
 -include $(OBJ_DIR)/*.d
 -include $(OBJB_DIR)/*.d
 
-.PHONY: all clean fclean norminette create_dirs test git re
+.PHONY: all clean fclean norminette test compare run git re
